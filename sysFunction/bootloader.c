@@ -1,675 +1,349 @@
 #include "bootloader.h"
+
+#include "crc_utils.h"
 #include "ROM.h"
+#include "ymodem.h"
 
-#include <ctype.h>
-#include <stddef.h>
-#include <stdlib.h>
+#define BOOT_VECTOR_RELOC_SIZE  0x200U
 
-typedef enum {
-    YMODEM_WAIT_HEADER = 0U,
-    YMODEM_RECEIVE_DATA,
-    YMODEM_WAIT_EOT,
-    YMODEM_WAIT_END_PACKET,
-    YMODEM_DONE
-} ymodem_state_t;
+static boot_control_block_t g_boot;
+boot_slot_t g_running_slot = BOOT_SLOT_INVALID;
 
-static boot_control_block_t g_boot_control;
-static boot_slot_t g_running_slot = BOOT_SLOT_INVALID;
 
-static const char *bootloader_slot_name(boot_slot_t slot)
+// 槽位名字只用于状态显示，别参与逻辑判断
+static const char *slot_name(boot_slot_t slot)
 {
-    if (slot == BOOT_SLOT_A) {
-        return "slotA";
-    }
-
-    if (slot == BOOT_SLOT_B) {
-        return "slotB";
-    }
-
-    return "none";
+    return (slot == BOOT_SLOT_A) ? "slotA" :
+           (slot == BOOT_SLOT_B) ? "slotB" : "none";
 }
 
-static uint32_t bootloader_crc32_update(uint32_t crc, const uint8_t *data, uint32_t len)
+// 根据槽位取 APP 起始地址
+static uint32_t slot_addr(boot_slot_t slot)
 {
-    for (uint32_t i = 0U; i < len; i++) {
-        crc ^= data[i];
-        for (uint32_t bit = 0U; bit < 8U; bit++) {
-            if ((crc & 1U) != 0U) {
-                crc = (crc >> 1U) ^ 0xEDB88320U;
-            } else {
-                crc >>= 1U;
-            }
-        }
-    }
-    return crc;
+    return (slot == BOOT_SLOT_B) ? BOOT_SLOT_B_ADDR : BOOT_SLOT_A_ADDR;
 }
 
-static uint32_t bootloader_crc32_buffer(const uint8_t *data, uint32_t len)
-{
-    uint32_t crc = 0xFFFFFFFFU;
-    crc = bootloader_crc32_update(crc, data, len);
-    return crc ^ 0xFFFFFFFFU;
-}
-
-static uint32_t bootloader_control_checksum(const boot_control_block_t *control)
-{
-    const uint8_t *bytes = (const uint8_t *)control;
-    uint32_t length = (uint32_t)offsetof(boot_control_block_t, checksum);
-    return bootloader_crc32_buffer(bytes, length);
-}
-
-static uint32_t bootloader_image_crc32(uint32_t addr, uint32_t len)
-{
-    uint32_t crc = 0xFFFFFFFFU;
-    const uint8_t *image = (const uint8_t *)addr;
-
-    while (len > 0U) {
-        uint32_t chunk = (len > 256U) ? 256U : len;
-        crc = bootloader_crc32_update(crc, image, chunk);
-        image += chunk;
-        len -= chunk;
-    }
-
-    return crc ^ 0xFFFFFFFFU;
-}
-
-static uint16_t bootloader_crc16_ccitt(const uint8_t *data, uint32_t len)
-{
-    uint16_t crc = 0U;
-
-    for (uint32_t i = 0U; i < len; i++) {
-        crc ^= (uint16_t)data[i] << 8;
-        for (uint32_t bit = 0U; bit < 8U; bit++) {
-            if ((crc & 0x8000U) != 0U) {
-                crc = (uint16_t)((crc << 1U) ^ 0x1021U);
-            } else {
-                crc <<= 1U;
-            }
-        }
-    }
-
-    return crc;
-}
-
-static void bootloader_send_byte(uint8_t byte)
-{
-    uint16_t value = byte;
-    USART1_SendData(&value, 1U);
-}
-
-static void bootloader_send_char(char ch)
-{
-    bootloader_send_byte((uint8_t)ch);
-}
-
-static const char *bootloader_trim(char *text)
-{
-    while ((*text == '\r') || (*text == '\n') || (*text == ' ') || (*text == '\t')) {
-        text++;
-    }
-
-    size_t len = strlen(text);
-    while ((len > 0U) && ((text[len - 1U] == '\r') || (text[len - 1U] == '\n') || (text[len - 1U] == ' ') || (text[len - 1U] == '\t'))) {
-        text[--len] = '\0';
-    }
-
-    return text;
-}
-
-static void bootloader_to_lower(char *text)
-{
-    while (*text != '\0') {
-        *text = (char)tolower((unsigned char)*text);
-        text++;
-    }
-}
-
-static uint32_t bootloader_slot_address(boot_slot_t slot)
-{
-    return (slot == BOOT_SLOT_A) ? BOOT_SLOT_A_ADDR : BOOT_SLOT_B_ADDR;
-}
-
-static boot_slot_t bootloader_other_slot(boot_slot_t slot)
-{
-    return (slot == BOOT_SLOT_A) ? BOOT_SLOT_B : BOOT_SLOT_A;
-}
-
-static bool bootloader_is_slot_valid(boot_slot_t slot)
-{
-    return (slot == BOOT_SLOT_A) || (slot == BOOT_SLOT_B);
-}
-
-static uint32_t bootloader_slot_index(boot_slot_t slot)
+// A/B记录存在数组里，这里把枚举转成下标
+static uint32_t slot_idx(boot_slot_t slot)
 {
     return (slot == BOOT_SLOT_B) ? 1U : 0U;
 }
 
-static bool bootloader_vector_is_valid(uint32_t slot_addr)
+//换solt
+static boot_slot_t other_slot(boot_slot_t slot)
 {
-    uint32_t stack_pointer = *(volatile uint32_t *)slot_addr;
-    uint32_t reset_handler = *(volatile uint32_t *)(slot_addr + 4U);
+    return (slot == BOOT_SLOT_B) ? BOOT_SLOT_A : BOOT_SLOT_B;
+}
 
-    if ((stack_pointer < 0x20000000U) || (stack_pointer > 0x20030000U) || ((stack_pointer & 0x3U) != 0U)) {
+//A/B
+static bool slot_ok(boot_slot_t slot)
+{
+    return (slot == BOOT_SLOT_A) || (slot == BOOT_SLOT_B);
+}
+
+
+// 控制块校验只算 checksum 前面的字段
+static uint32_t control_crc(const boot_control_block_t *control)
+{
+    return crc32_buffer((const uint8_t *)control, (uint32_t)offsetof(boot_control_block_t, checksum));
+}
+
+// 粗略判断 APP 向量表：栈顶要像 SRAM，复位入口要像 Flash 里的 Thumb 地址
+static bool vector_ok(uint32_t addr)
+{
+    uint32_t sp = *(volatile uint32_t *)addr;
+    uint32_t pc = *(volatile uint32_t *)(addr + 4U);
+
+    if ((sp < 0x20000000U) || (sp > 0x20030000U) || ((sp & 3U) != 0U)) {
         return false;
     }
 
-    if ((reset_handler < ROM_FLASH_BASE) || (reset_handler >= (ROM_FLASH_BASE + ROM_FLASH_SIZE)) || ((reset_handler & 0x1U) == 0U)) {
+    if ((pc < ROM_FLASH_BASE) || (pc >= (ROM_FLASH_BASE + ROM_FLASH_SIZE)) || ((pc & 1U) == 0U)) {
         return false;
     }
 
     return true;
 }
 
-static void bootloader_control_defaults(void)
+// APP 通常按 slotA 地址编译
+// 同一个 bin 写到 slotB 后，复位入口可能仍指向 slotA，这里跳转前做一次地址换算
+static uint32_t slot_reset_pc(boot_slot_t slot)
 {
-    memset(&g_boot_control, 0, sizeof(g_boot_control));
-    g_boot_control.magic = BOOT_CONTROL_MAGIC;
-    g_boot_control.version = BOOT_CONTROL_VERSION;
-    g_boot_control.active_slot = BOOT_SLOT_A;
-    g_boot_control.previous_slot = BOOT_SLOT_A;
-    g_boot_control.pending_slot = BOOT_SLOT_INVALID;
-    g_boot_control.trial_pending = 0U;
-    g_boot_control.checksum = bootloader_control_checksum(&g_boot_control);
+    uint32_t base = slot_addr(slot);
+    uint32_t pc = *(volatile uint32_t *)(base + 4U);
+
+    if ((slot == BOOT_SLOT_B) &&
+        (pc >= BOOT_SLOT_A_ADDR) &&
+        (pc < (BOOT_SLOT_A_ADDR + BOOT_SLOT_SIZE))) {
+        pc = BOOT_SLOT_B_ADDR + (pc - BOOT_SLOT_A_ADDR);
+    }
+
+    return pc;
 }
 
-static bool bootloader_control_save(void)
+
+// 修正跳转到 B 的向量表
+static void relocate_b_vectors(void)
 {
-    g_boot_control.checksum = bootloader_control_checksum(&g_boot_control);
+    static uint8_t page_buf[ROM_PAGE_SIZE];
+
+    // 第一页搬到 RAM 里
+    memcpy(page_buf, (const void *)BOOT_SLOT_B_ADDR, sizeof(page_buf));
+
+    for (uint32_t off = 4U; off < BOOT_VECTOR_RELOC_SIZE; off += 4U) {
+        uint32_t val;
+
+        memcpy(&val, &page_buf[off], sizeof(val));
+
+        // 修正落在 slotA 范围内的函数入口
+        if ((val >= BOOT_SLOT_A_ADDR) && (val < (BOOT_SLOT_A_ADDR + BOOT_SLOT_SIZE))) {
+            uint32_t fixed = BOOT_SLOT_B_ADDR + (val - BOOT_SLOT_A_ADDR);
+            memcpy(&page_buf[off], &fixed, sizeof(fixed));
+        }
+    }
+
+// 改完后擦掉 B 槽第一页，再整页写回
+
+    if (ROM_erase_range(BOOT_SLOT_B_ADDR, ROM_PAGE_SIZE)) {
+        (void)ROM_buffer_write(BOOT_SLOT_B_ADDR, page_buf, sizeof(page_buf));
+    }
+}
+
+// 参数区
+
+// 参数区无效时的默认状态：先认为 A 是默认稳定槽
+static void control_default(void)
+{
+    memset(&g_boot, 0, sizeof(g_boot));
+    g_boot.magic = BOOT_CONTROL_MAGIC;
+    g_boot.version = BOOT_CONTROL_VERSION;
+    g_boot.active_slot = BOOT_SLOT_A;
+    g_boot.previous_slot = BOOT_SLOT_A;
+    g_boot.checksum = control_crc(&g_boot);
+}
+
+// 首次上电
+static bool control_sanitize(void)
+{
+    bool changed = false;
+
+    // active/previous 都必须是明确的 A/B
+    if (!slot_ok((boot_slot_t)g_boot.active_slot)) {
+        g_boot.active_slot = BOOT_SLOT_A;
+        changed = true;
+    }
+
+    if (!slot_ok((boot_slot_t)g_boot.previous_slot)) {
+        g_boot.previous_slot = g_boot.active_slot;
+        changed = true;
+    }
+
+    for (uint32_t i = 0U; i < BOOT_SLOT_COUNT; i++) {
+        boot_slot_record_t *rec = &g_boot.slot[i];
+
+        // valid 只能是 0 或 1；擦除态 0xFFFFFFFF 直接当空记录处理
+        if ((rec->valid != 0U) && (rec->valid != 1U)) {
+            memset(rec, 0, sizeof(*rec));
+            changed = true;
+            continue;
+        }
+
+        // 请size/crc/version
+        if ((rec->valid == 0U) &&
+            ((rec->size != 0U) || (rec->crc32 != 0U) || (rec->version != 0U))) {
+            memset(rec, 0, sizeof(*rec));
+            changed = true;
+            continue;
+        }
+
+        // 标记有效但大小错
+        if ((rec->valid == 1U) && ((rec->size == 0U) || (rec->size > BOOT_SLOT_SIZE))) {
+            memset(rec, 0, sizeof(*rec));
+            changed = true;
+        }
+    }
+
+    return changed;
+}
+
+// 保存控制块：先算校验，再擦参数页，再写回
+static bool control_save(void)
+{
+    g_boot.checksum = control_crc(&g_boot);
     if (!ROM_erase_range(BOOT_PARAM_ADDR, BOOT_PARAM_SIZE)) {
         return false;
     }
-
-    return ROM_buffer_write(BOOT_PARAM_ADDR, (const uint8_t *)&g_boot_control, sizeof(g_boot_control));
+    return ROM_buffer_write(BOOT_PARAM_ADDR, (const uint8_t *)&g_boot, sizeof(g_boot));
 }
 
-static void bootloader_control_load(void)
+// 读取控制块：校验失败就恢复默认，绝不拿随机 Flash 字节当状态
+static void control_load(void)
 {
-    memcpy(&g_boot_control, (const void *)BOOT_PARAM_ADDR, sizeof(g_boot_control));
+    bool need_save = false;
 
-    if ((g_boot_control.magic != BOOT_CONTROL_MAGIC) ||
-        (g_boot_control.version != BOOT_CONTROL_VERSION) ||
-        (g_boot_control.checksum != bootloader_control_checksum(&g_boot_control))) {
-        bootloader_control_defaults();
-        (void)bootloader_control_save();
+    //读
+    memcpy(&g_boot, (const void *)BOOT_PARAM_ADDR, sizeof(g_boot));
+    if ((g_boot.magic != BOOT_CONTROL_MAGIC) ||
+        (g_boot.version != BOOT_CONTROL_VERSION) ||
+        (g_boot.checksum != control_crc(&g_boot))) {
+        control_default();
+        need_save = true;
+    }
+
+    // 即使 checksum 对，也再清洗一次字段，防止旧版本结构留下脏值
+    if (control_sanitize()) {
+        need_save = true;
+    }
+
+    // 只有真的修过状态，才擦写参数页
+    if (need_save) {
+        control_save();
     }
 }
 
-static uint32_t bootloader_slot_base(boot_slot_t slot)
-{
-    return bootloader_slot_address(slot);
-}
+// 启动选择
 
-static uint32_t bootloader_slot_limit(boot_slot_t slot)
+// 严格按记录校验：valid、size、向量表、CRC 都要过
+static bool slot_record_ok(boot_slot_t slot)
 {
-    (void)slot;
-    return BOOT_SLOT_SIZE;
-}
+    boot_slot_record_t *rec;
 
-static bool bootloader_validate_slot_record(boot_slot_t slot)
-{
-    boot_slot_record_t *record = &g_boot_control.slot[bootloader_slot_index(slot)];
-
-    if ((record->valid == 0U) || (record->size == 0U) || (record->size > BOOT_SLOT_SIZE)) {
+    if (!slot_ok(slot)) {
         return false;
     }
 
-    uint32_t slot_addr = bootloader_slot_base(slot);
-    uint32_t calculated_crc = bootloader_image_crc32(slot_addr, record->size);
-    return (calculated_crc == record->crc32) && bootloader_vector_is_valid(slot_addr);
-}
-
-static bool bootloader_validate_slot_runtime(boot_slot_t slot)
-{
-    if (!bootloader_is_slot_valid(slot)) {
+    rec = &g_boot.slot[slot_idx(slot)];
+    if ((rec->valid != 1U) || (rec->size == 0U) || (rec->size > BOOT_SLOT_SIZE)) {
         return false;
     }
 
-    if (bootloader_validate_slot_record(slot)) {
-        return true;
-    }
-
-    return bootloader_vector_is_valid(bootloader_slot_base(slot));
+    return vector_ok(slot_addr(slot)) && (crc32_flash(slot_addr(slot), rec->size) == rec->crc32);
 }
 
-static boot_slot_t bootloader_stable_slot(void)
+// 能启动/有完整记录/向量表
+static bool slot_can_boot(boot_slot_t slot)
 {
-    boot_slot_t stable = (g_boot_control.pending_slot <= BOOT_SLOT_B) ?
-                         (boot_slot_t)g_boot_control.previous_slot :
-                         (boot_slot_t)g_boot_control.active_slot;
+    return slot_ok(slot) && (slot_record_ok(slot) || vector_ok(slot_addr(slot)));
+}
 
-    if (bootloader_is_slot_valid(stable) && bootloader_validate_slot_runtime(stable)) {
-        return stable;
+// 选择要启动的 APP，正常走 active，坏了就换另一个
+static boot_slot_t boot_pick_and_save(void)
+{
+    boot_slot_t active = (boot_slot_t)g_boot.active_slot;
+    boot_slot_t backup = other_slot(active);
+    
+    if (slot_can_boot(active)) {
+        return active;
     }
 
-    if (bootloader_validate_slot_runtime(BOOT_SLOT_A)) {
+    if (slot_can_boot(backup)) {
+        return backup;
+    }
+
+    if (slot_can_boot(BOOT_SLOT_A)) {
         return BOOT_SLOT_A;
     }
 
-    if (bootloader_validate_slot_runtime(BOOT_SLOT_B)) {
+    if (slot_can_boot(BOOT_SLOT_B)) {
         return BOOT_SLOT_B;
     }
 
     return BOOT_SLOT_INVALID;
 }
 
-static boot_slot_t bootloader_select_boot_slot(void)
+// //////////////////////////跳转和下载结果////////////////////////////////////
+
+//关中断、换向量表、换 MSP，然后调用 APP Reset_Handler
+static void jump_raw(uint32_t addr, uint32_t pc)
 {
-    if (g_boot_control.pending_slot <= BOOT_SLOT_B) {
-        boot_slot_t pending = (boot_slot_t)g_boot_control.pending_slot;
-        boot_slot_t rollback = (boot_slot_t)g_boot_control.previous_slot;
-
-        if (!bootloader_validate_slot_record(pending)) {
-            g_boot_control.pending_slot = BOOT_SLOT_INVALID;
-            g_boot_control.trial_pending = 0U;
-
-            if (bootloader_validate_slot_runtime(rollback)) {
-                g_boot_control.active_slot = rollback;
-                g_boot_control.previous_slot = rollback;
-            }
-
-            (void)bootloader_control_save();
-        } else if (g_boot_control.trial_pending != 0U) {
-            g_boot_control.active_slot = pending;
-            g_boot_control.trial_pending--;
-            (void)bootloader_control_save();
-            return pending;
-        }
-
-        if (bootloader_validate_slot_runtime(rollback)) {
-            g_boot_control.active_slot = rollback;
-            g_boot_control.pending_slot = BOOT_SLOT_INVALID;
-            g_boot_control.previous_slot = rollback;
-            g_boot_control.trial_pending = 0U;
-            (void)bootloader_control_save();
-            return rollback;
-        }
-
-        if (bootloader_validate_slot_runtime(pending)) {
-            g_boot_control.active_slot = pending;
-            g_boot_control.previous_slot = pending;
-            g_boot_control.pending_slot = BOOT_SLOT_INVALID;
-            g_boot_control.trial_pending = 0U;
-            (void)bootloader_control_save();
-            return pending;
-        }
-    }
-
-    boot_slot_t active = (g_boot_control.active_slot <= BOOT_SLOT_B) ? (boot_slot_t)g_boot_control.active_slot : BOOT_SLOT_A;
-    if (bootloader_validate_slot_runtime(active)) {
-        return active;
-    }
-
-    boot_slot_t alternate = bootloader_other_slot(active);
-    if (bootloader_validate_slot_runtime(alternate)) {
-        g_boot_control.previous_slot = active;
-        g_boot_control.active_slot = alternate;
-        g_boot_control.pending_slot = BOOT_SLOT_INVALID;
-        g_boot_control.trial_pending = 0U;
-        (void)bootloader_control_save();
-        return alternate;
-    }
-
-    return BOOT_SLOT_INVALID;
-}
-
-static void bootloader_jump_common(uint32_t slot_addr)
-{
-    uint32_t stack_pointer = *(volatile uint32_t *)slot_addr;
-    uint32_t reset_handler = *(volatile uint32_t *)(slot_addr + 4U);
+    uint32_t sp = *(volatile uint32_t *)addr;
 
     __disable_irq();
     SysTick->CTRL = 0U;
     SysTick->LOAD = 0U;
     SysTick->VAL = 0U;
 
-    for (uint32_t index = 0U; index < 8U; index++) {
-        NVIC->ICER[index] = 0xFFFFFFFFU;
-        NVIC->ICPR[index] = 0xFFFFFFFFU;
+    for (uint32_t i = 0U; i < 8U; i++) {
+        NVIC->ICER[i] = 0xFFFFFFFFU;
+        NVIC->ICPR[i] = 0xFFFFFFFFU;
     }
 
-    SCB->VTOR = slot_addr;
-    __set_MSP(stack_pointer);
-
-    ((void (*)(void))reset_handler)();
+    // VTOR 指向当前槽，所以 APP 不需要自己再设置中断向量表
+    SCB->VTOR = addr;
+    __set_MSP(sp);
+    ((void (*)(void))pc)();
 }
 
-static void bootloader_parse_header(const uint8_t *payload, uint32_t payload_len, boot_image_info_t *info)
+// 下载成功后更新solt记录
+static bool save_download_result(boot_slot_t slot, const boot_image_info_t *info)
 {
-    memset(info, 0, sizeof(*info));
+    boot_slot_record_t *rec = &g_boot.slot[slot_idx(slot)];
+    uint32_t old_ver = rec->version;
 
-    uint32_t index = 0U;
-    while ((index < payload_len) && (payload[index] != 0U) && (payload[index] != ' ')) {
-        if (index < (sizeof(info->name) - 1U)) {
-            info->name[index] = (char)payload[index];
-        }
-        index++;
-    }
-    info->name[sizeof(info->name) - 1U] = '\0';
+    memset(rec, 0, sizeof(*rec));
+    rec->valid = 1U;
+    rec->size = info->size;
+    rec->crc32 = info->crc32;
+    rec->version = old_ver + 1U;
+    strncpy(rec->name, info->name, sizeof(rec->name) - 1U);
 
-    while ((index < payload_len) && ((payload[index] == 0U) || (payload[index] == ' '))) {
-        index++;
-    }
 
-    char size_text[32];
-    memset(size_text, 0, sizeof(size_text));
-    uint32_t size_index = 0U;
-    while ((index < payload_len) && (payload[index] != 0U) && (payload[index] != ' ') && (size_index < (sizeof(size_text) - 1U))) {
-        size_text[size_index++] = (char)payload[index++];
-    }
-    info->size = (uint32_t)strtoul(size_text, NULL, 10);
+    g_boot.previous_slot = slot;
+    g_boot.active_slot = slot;
+    return control_save();
 }
 
-static bool bootloader_receive_frame(uint8_t *frame, uint16_t *frame_len, uint32_t timeout_ms)
+////////////////////////////////////OLED//////////////////////////////////
+
+// 简单阻塞延时，只用于下载结果停留一会儿
+static void boot_delay_ms(uint32_t ms)
 {
     uint32_t start = GetTick();
 
-    while (usart1_rx_flag == 0U) {
-        if ((GetTick() - start) >= timeout_ms) {
-            return false;
-        }
+    while ((GetTick() - start) < ms) {
     }
-
-    __disable_irq();
-    *frame_len = usart1_rx_len;
-    if (*frame_len >= MYDMA_USART1_RX_BUF_LEN) {
-        *frame_len = MYDMA_USART1_RX_BUF_LEN - 1U;
-    }
-
-    memcpy(frame, (const void *)usart1_rx_buffer, *frame_len);
-    frame[*frame_len] = 0U;
-    USART1_ClearRxBuf();
-    __enable_irq();
-
-    return true;
 }
 
-static boot_status_t bootloader_ymodem_receive(boot_slot_t slot, boot_image_info_t *image_info)
+// 等待 YMODEM 发送
+static void show_download_wait(boot_slot_t slot)
 {
-    const uint32_t slot_addr = bootloader_slot_base(slot);
-    const uint32_t slot_limit = bootloader_slot_limit(slot);
-    ymodem_state_t state = YMODEM_WAIT_HEADER;
-    static uint8_t frame[MYDMA_USART1_RX_BUF_LEN];
-    uint32_t expected_sequence = 1U;
-    uint32_t received_size = 0U;
-    uint32_t expected_size = 0U;
-    uint32_t image_crc = 0xFFFFFFFFU;
-    uint8_t header_retry = 0U;
-    uint8_t eot_seen = 0U;
-
-    if (!ROM_erase_range(slot_addr, slot_limit)) {
-        return BOOT_STATUS_FLASH;
-    }
-
-    USART1_ClearRxBuf();
-    usart1_rx_flag = 0U;
-    bootloader_send_char('C');
-
-    while (state != YMODEM_DONE) {
-        uint16_t frame_len = 0U;
-
-        if (!bootloader_receive_frame(frame, &frame_len, 15000U)) {
-            if (state == YMODEM_WAIT_HEADER) {
-                if (header_retry++ < 5U) {
-                    bootloader_send_char('C');
-                    continue;
-                }
-            }
-            return BOOT_STATUS_TIMEOUT;
-        }
-
-        if ((frame_len >= 2U) && (frame[0] == 0x18U) && (frame[1] == 0x18U)) {
-            return BOOT_STATUS_CANCEL;
-        }
-
-        if ((frame_len == 1U) && (frame[0] == 0x04U)) {
-            if (state == YMODEM_RECEIVE_DATA) {
-                bootloader_send_byte(0x15U);
-                state = YMODEM_WAIT_EOT;
-                eot_seen = 1U;
-                continue;
-            }
-
-            if ((state == YMODEM_WAIT_EOT) && (eot_seen != 0U)) {
-                bootloader_send_byte(0x06U);
-                bootloader_send_char('C');
-                state = YMODEM_WAIT_END_PACKET;
-                continue;
-            }
-
-            bootloader_send_byte(0x15U);
-            continue;
-        }
-
-        if ((frame_len < 5U) || ((frame[0] != 0x01U) && (frame[0] != 0x02U))) {
-            bootloader_send_byte(0x15U);
-            continue;
-        }
-
-        uint32_t payload_len = (frame[0] == 0x01U) ? 128U : 1024U;
-        uint32_t packet_len = payload_len + 5U;
-        if (frame_len < packet_len) {
-            bootloader_send_byte(0x15U);
-            continue;
-        }
-
-        uint8_t sequence = frame[1];
-        uint8_t sequence_inverse = frame[2];
-        if ((uint8_t)(sequence ^ sequence_inverse) != 0xFFU) {
-            bootloader_send_byte(0x15U);
-            continue;
-        }
-
-        uint16_t received_crc = (uint16_t)((uint16_t)frame[packet_len - 2U] << 8) | frame[packet_len - 1U];
-        uint16_t calculated_crc = bootloader_crc16_ccitt(&frame[3], payload_len);
-        if (received_crc != calculated_crc) {
-            bootloader_send_byte(0x15U);
-            continue;
-        }
-
-        const uint8_t *payload = &frame[3];
-
-        if ((state == YMODEM_WAIT_HEADER) && (sequence == 0U)) {
-            bootloader_parse_header(payload, payload_len, image_info);
-            expected_size = image_info->size;
-
-            if ((expected_size == 0U) || (expected_size > BOOT_SLOT_SIZE)) {
-                return BOOT_STATUS_RANGE;
-            }
-
-            image_crc = 0xFFFFFFFFU;
-            expected_sequence = 1U;
-            state = YMODEM_RECEIVE_DATA;
-            bootloader_send_byte(0x06U);
-            bootloader_send_char('C');
-            continue;
-        }
-
-        if ((state == YMODEM_WAIT_END_PACKET) && (sequence == 0U) && (payload[0] == 0U)) {
-            bootloader_send_byte(0x06U);
-            state = YMODEM_DONE;
-            continue;
-        }
-
-        if (state != YMODEM_RECEIVE_DATA) {
-            bootloader_send_byte(0x15U);
-            continue;
-        }
-
-        if (sequence == expected_sequence) {
-            uint32_t remaining = expected_size - received_size;
-            uint32_t chunk = (remaining > payload_len) ? payload_len : remaining;
-
-            if (chunk > 0U) {
-                image_crc = bootloader_crc32_update(image_crc, payload, chunk);
-
-                if (!ROM_buffer_write(slot_addr + received_size, payload, chunk)) {
-                    return BOOT_STATUS_FLASH;
-                }
-
-                received_size += chunk;
-            }
-
-            expected_sequence++;
-            bootloader_send_byte(0x06U);
-
-            if (received_size >= expected_size) {
-                state = YMODEM_WAIT_EOT;
-            }
-            continue;
-        }
-
-        if (sequence == (uint8_t)(expected_sequence - 1U)) {
-            bootloader_send_byte(0x06U);
-            continue;
-        }
-
-        bootloader_send_byte(0x15U);
-    }
-
-    if (received_size != expected_size) {
-        return BOOT_STATUS_PROTOCOL;
-    }
-
-    image_info->size = expected_size;
-    image_info->crc32 = image_crc ^ 0xFFFFFFFFU;
-    return BOOT_STATUS_OK;
+    OLED_Clear();
+    OLED_Printf(0, 0, 16, "YMODEM WAIT");
+    OLED_Printf(0, 16, 16, "%s", slot_name(slot));
+    OLED_Refresh();
 }
 
-static bool bootloader_apply_download_result(boot_slot_t slot, const boot_image_info_t *image_info)
+// 下载结束后的简短结果页：状态码、最后帧信息、接收进度
+static void show_download_result(boot_slot_t slot, boot_status_t ret, const boot_image_info_t *info)
 {
-    boot_slot_record_t *record = &g_boot_control.slot[bootloader_slot_index(slot)];
-    uint32_t previous_active = (uint32_t)bootloader_stable_slot();
-    uint32_t next_version = record->version + 1U;
-
-    if (!bootloader_is_slot_valid((boot_slot_t)previous_active)) {
-        previous_active = g_boot_control.active_slot;
-    }
-
-    memset(record, 0, sizeof(*record));
-    record->valid = 1U;
-    record->size = image_info->size;
-    record->crc32 = image_info->crc32;
-    record->version = next_version;
-    strncpy(record->name, image_info->name, sizeof(record->name) - 1U);
-
-    g_boot_control.previous_slot = previous_active;
-    g_boot_control.active_slot = slot;
-    g_boot_control.pending_slot = slot;
-    g_boot_control.trial_pending = BOOT_TRIAL_ONCE;
-
-    return bootloader_control_save();
+    (void)slot;
+    (void)info;
+    OLED_Clear();
+    OLED_Printf(0, 0, 16, "T%u R%lu B%lu",
+                (unsigned)ret,
+                (unsigned long)ymodem_debug_raw_len,
+                (unsigned long)ymodem_debug_bad);
+    OLED_Printf(0, 16, 16, "%lu/%lu",
+                (unsigned long)ymodem_debug_recv,
+                (unsigned long)ymodem_debug_expect);
+    OLED_Refresh();
 }
 
+///////////////////////////////////// 对外接口///////////////////////////////////////////
+
+// bootloader 初始化：读取并修正参数区状态
 void bootloader_init(void)
 {
-    bootloader_control_load();
+    control_load();
     g_running_slot = BOOT_SLOT_INVALID;
 }
 
-void bootloader_print_status(void)
-{
-    boot_slot_t stable = bootloader_stable_slot();
-
-    printf("\r\n[BOOT] active=%s pending=%s previous=%s stable=%s trial=%lu\r\n",
-           bootloader_slot_name((boot_slot_t)g_boot_control.active_slot),
-           bootloader_slot_name((boot_slot_t)g_boot_control.pending_slot),
-           bootloader_slot_name((boot_slot_t)g_boot_control.previous_slot),
-           bootloader_slot_name(stable),
-           (unsigned long)g_boot_control.trial_pending);
-    printf("[BOOT] slotA size=%lu crc=0x%08lX valid=%lu ver=%lu name=%s\r\n",
-           (unsigned long)g_boot_control.slot[0].size,
-           (unsigned long)g_boot_control.slot[0].crc32,
-           (unsigned long)g_boot_control.slot[0].valid,
-           (unsigned long)g_boot_control.slot[0].version,
-           g_boot_control.slot[0].name);
-    printf("[BOOT] slotB size=%lu crc=0x%08lX valid=%lu ver=%lu name=%s\r\n",
-           (unsigned long)g_boot_control.slot[1].size,
-           (unsigned long)g_boot_control.slot[1].crc32,
-           (unsigned long)g_boot_control.slot[1].valid,
-           (unsigned long)g_boot_control.slot[1].version,
-           g_boot_control.slot[1].name);
-}
-
-boot_slot_t bootloader_get_download_slot(void)
-{
-    boot_slot_t stable = bootloader_stable_slot();
-
-    if (stable == BOOT_SLOT_A) {
-        return BOOT_SLOT_B;
-    }
-
-    if (stable == BOOT_SLOT_B) {
-        return BOOT_SLOT_A;
-    }
-
-    if (!bootloader_validate_slot_runtime(BOOT_SLOT_A)) {
-        return BOOT_SLOT_A;
-    }
-
-    return BOOT_SLOT_B;
-}
-
-boot_status_t bootloader_download_slot(boot_slot_t slot, boot_image_info_t *info)
-{
-    if (!bootloader_is_slot_valid(slot) || (info == NULL)) {
-        return BOOT_STATUS_RANGE;
-    }
-
-    if (info->name[0] == '\0') {
-        strncpy(info->name, "app.bin", sizeof(info->name) - 1U);
-    }
-
-    boot_status_t status = bootloader_ymodem_receive(slot, info);
-    if (status != BOOT_STATUS_OK) {
-        return status;
-    }
-
-    if (!bootloader_vector_is_valid(bootloader_slot_base(slot))) {
-        return BOOT_STATUS_ERROR;
-    }
-
-    if (bootloader_image_crc32(bootloader_slot_base(slot), info->size) != info->crc32) {
-        return BOOT_STATUS_CRC;
-    }
-
-    if (!bootloader_apply_download_result(slot, info)) {
-        return BOOT_STATUS_FLASH;
-    }
-
-    return BOOT_STATUS_OK;
-}
-
-void bootloader_jump_to_slot(boot_slot_t slot)
-{
-    if (!bootloader_validate_slot_runtime(slot)) {
-        printf("\r\n[BOOT] slot %u is invalid\r\n", (unsigned)slot);
-        return;
-    }
-
-    g_running_slot = slot;
-    bootloader_jump_common(bootloader_slot_base(slot));
-}
-
-void bootloader_commit_active_slot(void)
-{
-    bootloader_control_load();
-    if (bootloader_is_slot_valid(g_running_slot)) {
-        g_boot_control.active_slot = g_running_slot;
-    } else if (g_boot_control.pending_slot <= BOOT_SLOT_B) {
-        g_boot_control.active_slot = g_boot_control.pending_slot;
-    }
-
-    g_boot_control.previous_slot = g_boot_control.active_slot;
-    g_boot_control.pending_slot = BOOT_SLOT_INVALID;
-    g_boot_control.trial_pending = 0U;
-    (void)bootloader_control_save();
-}
-
+// 正常启动
 bool bootloader_boot_default(void)
 {
-    boot_slot_t slot = bootloader_select_boot_slot();
+    boot_slot_t slot = boot_pick_and_save();
 
-    if (slot == BOOT_SLOT_INVALID) {
+    if (!slot_ok(slot)) {
         return false;
     }
 
@@ -677,133 +351,123 @@ bool bootloader_boot_default(void)
     return true;
 }
 
-static void bootloader_handle_command(char *command)
+// 调试用状态打印
+void bootloader_print_status(void)
 {
-    command = (char *)bootloader_trim(command);
-    bootloader_to_lower(command);
-
-    if ((strcmp(command, "status") == 0) || (strcmp(command, "info") == 0)) {
-        bootloader_print_status();
-        return;
-    }
-
-    if ((strcmp(command, "help") == 0) || (strcmp(command, "?") == 0)) {
-        printf("\r\nCommands: status, download, download a, download b, boot a, boot b, commit, rollback\r\n");
-        return;
-    }
-
-    if (strcmp(command, "commit") == 0) {
-        bootloader_commit_active_slot();
-        printf("\r\n[BOOT] committed current slot\r\n");
-        return;
-    }
-
-    if (strcmp(command, "rollback") == 0) {
-        boot_slot_t rollback = (boot_slot_t)g_boot_control.previous_slot;
-        if (bootloader_is_slot_valid(rollback)) {
-            g_boot_control.active_slot = rollback;
-            g_boot_control.pending_slot = BOOT_SLOT_INVALID;
-            g_boot_control.trial_pending = 0U;
-            (void)bootloader_control_save();
-            printf("\r\n[BOOT] rollback to %s\r\n", bootloader_slot_name(rollback));
-            bootloader_jump_to_slot(rollback);
-            return;
-        }
-
-        printf("\r\n[BOOT] rollback slot invalid\r\n");
-        return;
-    }
-
-    if (strcmp(command, "boot a") == 0) {
-        bootloader_jump_to_slot(BOOT_SLOT_A);
-        return;
-    }
-
-    if (strcmp(command, "boot b") == 0) {
-        bootloader_jump_to_slot(BOOT_SLOT_B);
-        return;
-    }
-
-    if ((strcmp(command, "download") == 0) || (strcmp(command, "ymodem") == 0)) {
-        boot_slot_t target = bootloader_get_download_slot();
-        boot_image_info_t info;
-
-        memset(&info, 0, sizeof(info));
-        printf("\r\n[BOOT] start YMODEM download to %s\r\n", bootloader_slot_name(target));
-        boot_status_t status = bootloader_download_slot(target, &info);
-        if (status == BOOT_STATUS_OK) {
-            printf("\r\n[BOOT] download ok: %s size=%lu crc=0x%08lX\r\n", info.name, (unsigned long)info.size, (unsigned long)info.crc32);
-            printf("[BOOT] jump to %s, call commit after app self-check\r\n", bootloader_slot_name(target));
-            bootloader_jump_to_slot(target);
-        } else {
-            printf("\r\n[BOOT] download failed: %u\r\n", (unsigned)status);
-        }
-        return;
-    }
-
-    if ((strcmp(command, "download a") == 0) || (strcmp(command, "ymodem a") == 0)) {
-        if (bootloader_stable_slot() == BOOT_SLOT_A) {
-            printf("\r\n[BOOT] slotA is current stable app, use plain 'download' first\r\n");
-            return;
-        }
-
-        boot_image_info_t info;
-        memset(&info, 0, sizeof(info));
-        printf("\r\n[BOOT] start YMODEM download to slotA\r\n");
-        boot_status_t status = bootloader_download_slot(BOOT_SLOT_A, &info);
-        if (status == BOOT_STATUS_OK) {
-            printf("\r\n[BOOT] download ok: %s size=%lu crc=0x%08lX\r\n", info.name, (unsigned long)info.size, (unsigned long)info.crc32);
-            printf("[BOOT] call commit after app self-check\r\n");
-            bootloader_jump_to_slot(BOOT_SLOT_A);
-        } else {
-            printf("\r\n[BOOT] download failed: %u\r\n", (unsigned)status);
-        }
-        return;
-    }
-
-    if ((strcmp(command, "download b") == 0) || (strcmp(command, "ymodem b") == 0)) {
-        if (bootloader_stable_slot() == BOOT_SLOT_B) {
-            printf("\r\n[BOOT] slotB is current stable app, use plain 'download' first\r\n");
-            return;
-        }
-
-        boot_image_info_t info;
-        memset(&info, 0, sizeof(info));
-        printf("\r\n[BOOT] start YMODEM download to slotB\r\n");
-        boot_status_t status = bootloader_download_slot(BOOT_SLOT_B, &info);
-        if (status == BOOT_STATUS_OK) {
-            printf("\r\n[BOOT] download ok: %s size=%lu crc=0x%08lX\r\n", info.name, (unsigned long)info.size, (unsigned long)info.crc32);
-            printf("[BOOT] call commit after app self-check\r\n");
-            bootloader_jump_to_slot(BOOT_SLOT_B);
-        } else {
-            printf("\r\n[BOOT] download failed: %u\r\n", (unsigned)status);
-        }
-        return;
-    }
-
-    printf("\r\n[BOOT] unknown command: %s\r\n", command);
+    printf("\r\n[BOOT] active=%s prev=%s\r\n",
+           slot_name((boot_slot_t)g_boot.active_slot),
+           slot_name((boot_slot_t)g_boot.previous_slot));
+    printf("[BOOT] A valid=%lu size=%lu ver=%lu\r\n",
+           (unsigned long)g_boot.slot[0].valid,
+           (unsigned long)g_boot.slot[0].size,
+           (unsigned long)g_boot.slot[0].version);
+    printf("[BOOT] B valid=%lu size=%lu ver=%lu\r\n",
+           (unsigned long)g_boot.slot[1].valid,
+           (unsigned long)g_boot.slot[1].size,
+           (unsigned long)g_boot.slot[1].version);
 }
 
+// 选择本次下载目标槽
+boot_slot_t bootloader_get_download_slot(void)
+{
+    boot_slot_t active = (boot_slot_t)g_boot.active_slot;
+
+    // 空板写 slotA；之后，下另一边
+    if (slot_ok(active) && slot_can_boot(active)) {
+        return other_slot(active);
+    }
+
+    if (slot_can_boot(BOOT_SLOT_A)) {
+        return BOOT_SLOT_B;
+    }
+
+    if (slot_can_boot(BOOT_SLOT_B)) {
+        return BOOT_SLOT_A;
+    }
+
+    return BOOT_SLOT_A;
+}
+
+// 下载一个 APP 到指定槽，并做向量表、CRC、槽记录这些收尾
+boot_status_t bootloader_download_slot(boot_slot_t slot, boot_image_info_t *info)
+{
+    boot_status_t ret;
+
+    if (!slot_ok(slot) || (info == NULL)) {
+        return BOOT_STATUS_RANGE;
+    }
+
+    // YMODEM 负责收文件和写入 slot 对应 Flash
+    ret = ymodem_receive_image(slot_addr(slot), BOOT_SLOT_SIZE, info);
+    if (ret != BOOT_STATUS_OK) {
+        return ret;
+    }
+
+    // b补向量表
+    if (slot == BOOT_SLOT_B) {
+        relocate_b_vectors();
+        info->crc32 = crc32_flash(slot_addr(slot), info->size);
+    }
+
+    // 起始向量不对，下载了也不跳
+    if (!vector_ok(slot_addr(slot))) {
+        return BOOT_STATUS_ERROR;
+    }
+
+    // 整体算一遍 Flash CRC
+    if (crc32_flash(slot_addr(slot), info->size) != info->crc32) {
+        return BOOT_STATUS_CRC;
+    }
+
+    // 更新参数区
+    if (!save_download_result(slot, info)) {
+        return BOOT_STATUS_FLASH;
+    }
+
+    return BOOT_STATUS_OK;
+}
+
+// 跳转到app,设置 VTOR/MSP
+void bootloader_jump_to_slot(boot_slot_t slot)
+{
+    uint32_t pc;
+
+    if (!slot_can_boot(slot)) {
+        printf("\r\n[BOOT] %s invalid\r\n", slot_name(slot));
+        return;
+    }
+
+    pc = slot_reset_pc(slot);
+    g_running_slot = slot;
+    jump_raw(slot_addr(slot), pc);
+}
+// 自动升级入口：等待 YMODEM，成功跳新槽，失败回旧槽
 void bootloader_console(void)
 {
-    printf("\r\n[BOOT] console ready\r\n");
-    printf("[BOOT] type 'help' for commands\r\n");
-    printf("[BOOT] normal update path: send 'download', write inactive slot, commit after app self-check\r\n");
-    bootloader_print_status();
-
+    // 名字先保留给旧调用者；现在它实际是“等待 YMODEM 升级”
     while (1) {
-        if (usart1_rx_flag != 0U) {
-            char command[USART1_RX_BUF_LEN];
-            memcpy(command, (const void *)usart1_rx_buffer, sizeof(command));
-            command[sizeof(command) - 1U] = '\0';
-            USART1_ClearRxBuf();
-            bootloader_handle_command(command);
+        boot_image_info_t info;
+        boot_slot_t slot = bootloader_get_download_slot();
+        boot_status_t ret;
+
+        memset(&info, 0, sizeof(info));
+
+        // 进入 bootloader 后直接等 YMODEM，不再要求输入 download 命令
+        //
+        show_download_wait(slot);
+        ret = bootloader_download_slot(slot, &info);
+        show_download_result(slot, ret, &info);
+
+        // 成功
+        if (ret == BOOT_STATUS_OK) 
+        {
+            boot_delay_ms(2000U);
+            bootloader_jump_to_slot(slot);
+        } 
+        else
+        {
+            boot_delay_ms(2000U);
+            (void)bootloader_boot_default();
         }
     }
 }
-
-
-
-
-
-

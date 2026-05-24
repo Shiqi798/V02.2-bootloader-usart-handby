@@ -437,16 +437,6 @@
               <FilePath>..\Driver\HardWare\OLED\OLEDfont.h</FilePath>
             </File>
             <File>
-              <FileName>sdcard.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Driver\HardWare\SDCARD\sdcard.c</FilePath>
-            </File>
-            <File>
-              <FileName>sdcard.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Driver\HardWare\SDCARD\sdcard.h</FilePath>
-            </File>
-            <File>
               <FileName>USART.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Driver\HardWare\USART\USART.c</FilePath>

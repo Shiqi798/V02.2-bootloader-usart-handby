@@ -106,38 +106,20 @@ void cmd_parse(void)
 void cmd_parse_test(void)
 {
     printf("\r\n=====system selftest=====\r\n");
-    if ((spi_flash_read_id() == FLASH_ID) && (sd_init() == SD_OK))
+    if (spi_flash_read_id() == FLASH_ID)
     {
         printf("flash............OK\r\n");
-        printf("sd card............OK\r\n");
         printf("flash ID: 0x%X\r\n", spi_flash_read_id());
-        printf("TF card memory: %lu KB\r\n", sd_card_capacity_get());
         rtc_show_time();
         file_write_log(TEST_SUCCESS); // 记录测试成功日志
-    }
-    else if ((spi_flash_read_id() == FLASH_ID) && (sd_init() != SD_OK))
-    {
-        printf("flash............OK\r\n");
-        printf("sd card............ERROR\r\n");
-        printf("flash ID: 0x%X\r\n", spi_flash_read_id());
-        printf("can not find TF card\r\n");
-        rtc_show_time();
-        file_write_log(TEST_TF_FAIL); // 记录tf测试失败日志
-    }
-    else if ((spi_flash_read_id() != FLASH_ID) && (sd_init() == SD_OK))
-    {
-        printf("flash............ERROR\r\n");
-        printf("sd card............OK\r\n");
-        printf("TF card memory: %lu KB\r\n", sd_card_capacity_get());
-        rtc_show_time();
-        file_write_log(TEST_FLASH_FAIL); // 记录flash测试失败日志
     }
     else
     {
         printf("flash............ERROR\r\n");
-        printf("sd card............ERROR\r\n");
+        printf("flash ID: 0x%X\r\n", spi_flash_read_id());
+        printf("can not find flash\r\n");
         rtc_show_time();
-        file_write_log(TEST_FAIL); // 记录测试失败日志
+        file_write_log(TEST_FLASH_FAIL); // 记录flash测试失败日志
     } 
     printf("\r\n=====system selftest=====\r\n");
     cmd_parse_init(); // 处理完指令后清空缓冲区

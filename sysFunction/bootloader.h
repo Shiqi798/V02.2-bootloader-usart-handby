@@ -11,7 +11,6 @@
 #define BOOT_SLOT_COUNT          2U
 #define BOOT_CONTROL_MAGIC       0x424F4F54U
 #define BOOT_CONTROL_VERSION     0x00010001U
-#define BOOT_TRIAL_ONCE          1U
 
 typedef enum {
 	BOOT_SLOT_A = 0U,
@@ -24,9 +23,11 @@ typedef enum {
 	BOOT_STATUS_TIMEOUT,
 	BOOT_STATUS_ERROR,
 	BOOT_STATUS_PROTOCOL,
+
 	BOOT_STATUS_CRC,
 	BOOT_STATUS_FLASH,
 	BOOT_STATUS_RANGE,
+
 	BOOT_STATUS_CANCEL
 } boot_status_t;
 
@@ -43,8 +44,8 @@ typedef struct {
 	uint32_t version;
 	uint32_t active_slot;
 	uint32_t previous_slot;
-	uint32_t pending_slot;
-	uint32_t trial_pending;
+	// 预留两个位置，后面想恢复自检/回滚时用
+	uint32_t reserved[2];
 	boot_slot_record_t slot[BOOT_SLOT_COUNT];
 	uint32_t checksum;
 } boot_control_block_t;
@@ -61,7 +62,6 @@ void bootloader_init(void);
 bool bootloader_boot_default(void);
 void bootloader_console(void);
 void bootloader_print_status(void);
-void bootloader_commit_active_slot(void);
 void bootloader_jump_to_slot(boot_slot_t slot);
 boot_status_t bootloader_download_slot(boot_slot_t slot, boot_image_info_t *info);
 boot_slot_t bootloader_get_download_slot(void);

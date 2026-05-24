@@ -43,7 +43,7 @@ extern uint16_t g_hide_line;
 void file_get_time_text(char *buf, size_t len);
 void file_log_set(void);
 void file_mgr_init(void);
-void file_write_sample(void);
+void file_write_sample(void); 
 void file_write_overlimit(void);
 void file_write_hide(void);
 void file_write_log(char *cmd);
