@@ -1,0 +1,246 @@
+version: "4.1"
+name: TASK
+type: ARM
+deviceName: GD32F470VE
+packDir: .pack/GigaDevice/GD32F4xx_DFP.3.0.3
+srcDirs: []
+virtualFolder:
+  name: <virtual_root>
+  files: []
+  folders:
+    - name: User
+      files:
+        - path: ../../User/gd32f4xx_it.c
+        - path: ../../User/main.c
+        - path: ../../User/systick.c
+      folders: []
+    - name: Hardware
+      files:
+        - path: ../../Driver/HardWare/KEY/Key.c
+        - path: ../../Driver/HardWare/KEY/Key.h
+        - path: ../../Driver/HardWare/LED/LED.c
+        - path: ../../Driver/HardWare/LED/LED.h
+        - path: ../../Driver/HardWare/OLED/OLED.c
+        - path: ../../Driver/HardWare/OLED/OLED.h
+        - path: ../../Driver/HardWare/OLED/OLEDfont.h
+        - path: ../../Driver/HardWare/SDCARD/sdcard.c
+        - path: ../../Driver/HardWare/SDCARD/sdcard.h
+        - path: ../../Driver/HardWare/USART/USART.c
+        - path: ../../Driver/HardWare/USART/USART.h
+        - path: ../../Driver/Fatfs/diskio.c
+        - path: ../../Driver/Fatfs/ff.c
+        - path: ../../Driver/HardWare/ROM/ROM.c
+        - path: ../../Driver/HardWare/ROM/ROM.h
+      folders: []
+    - name: HeaderFiles
+      files:
+        - path: ../../Driver/HeaderFiles/HeaderFiles.h
+      folders: []
+    - name: Start
+      files:
+        - path: ../../Driver/Start/CMSIS/GD/GD32F4xx/Source/ARM/startup_gd32f450_470.s
+      folders: []
+    - name: System
+      files:
+        - path: ../../Driver/System/myDMA.c
+        - path: ../../Driver/System/myDMA.h
+      folders: []
+    - name: Library
+      files:
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_crc.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_dma.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_exmc.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_exti.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_fmc.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_fwdgt.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_gpio.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_i2c.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_misc.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_rcu.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_sdio.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_spi.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_syscfg.c
+        - path: ../../Driver/Library/GD32F4xx_standard_peripheral/Source/gd32f4xx_usart.c
+      folders: []
+    - name: CMSIS
+      files:
+        - path: ../../Driver/Start/CMSIS/GD/GD32F4xx/Source/system_gd32f4xx.c
+      folders: []
+    - name: sysFunction
+      files:
+        - path: ../../sysFunction/Function.c
+        - path: ../../sysFunction/Function.h
+        - path: ../../sysfunction/file_mgr.c
+        - path: ../../sysfunction/file_mgr.h
+        - path: ../../sysFunction/bootloader.c
+        - path: ../../sysFunction/bootloader.h
+      folders: []
+dependenceList: []
+outDir: build
+miscInfo:
+  uid: 6aeb921ebbc577910e62256db8ea787d
+targets:
+  TASK:
+    cppPreprocessAttrs:
+      defineList:
+        - USE_STDPERIPH_DRIVER
+        - GD32F470
+      incList:
+        - .
+        - ../../Driver/HardWare/KEY
+        - ../../Driver/HardWare/LED
+        - ../../Driver/HardWare/OLED
+        - ../../Driver/HardWare/RTC
+        - ../../Driver/HardWare/SDCARD
+        - ../../Driver/HardWare/SPI_FLASH
+        - ../../Driver/HardWare/USART
+        - ../../Driver/HeaderFiles
+        - ../../Driver/Library
+        - ../../Driver/Start/CMSIS
+        - ../../Driver/Start/Startup
+        - ../../Driver/System/ADC
+        - ../../Driver/System/TIM6
+        - ../../User
+        - ../../Driver/Library/GD32F4xx_standard_peripheral/Include
+        - ../../Driver/Library/GD32F4xx_standard_peripheral/Source
+        - ../../Driver/Start/CMSIS/GD/GD32F4xx/Include
+        - ../../Driver/Start/CMSIS/GD/GD32F4xx/Source
+        - ../../sysFunction
+        - ../../Driver/Fatfs
+        - ../../Driver/System
+        - .cmsis/include
+        - ../RTE/_TASK
+        - ../../Driver/HardWare/ROM
+      libList: []
+    excludeList: []
+    settings: {}
+    toolchain: AC5
+    toolchainConfigMap:
+      AC5:
+        archExtensions: ""
+        cpuType: Cortex-M4
+        floatingPointHardware: single
+        options:
+          version: 4
+          afterBuildTasks: []
+          asm-compiler:
+            defines: []
+          beforeBuildTasks: []
+          c/cpp-compiler:
+            CXX_FLAGS: --diag_suppress=1 --diag_suppress=1295
+            C_FLAGS: --diag_suppress=1 --diag_suppress=1295
+            c99-mode: true
+            one-elf-section-per-function: true
+            optimization: level-0
+            warnings: all-warnings
+          global:
+            output-debug-info: enable
+            use-microLIB: true
+          linker:
+            $outputTaskExcludes:
+              - .bin
+            output-format: elf
+            ro-base: "0x08000000"
+            rw-base: "0x20000000"
+            xo-base: ""
+        scatterFilePath: ""
+        storageLayout:
+          RAM:
+            - id: 1
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 2
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 3
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 1
+              isChecked: true
+              mem:
+                size: "0x30000"
+                startAddr: "0x20000000"
+              noInit: false
+              tag: IRAM
+            - id: 2
+              isChecked: false
+              mem:
+                size: "0x10000"
+                startAddr: "0x10000000"
+              noInit: false
+              tag: IRAM
+          ROM:
+            - id: 1
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 2
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 3
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 1
+              isChecked: true
+              isStartup: true
+              mem:
+                size: "0x8000"
+                startAddr: "0x8000000"
+              tag: IROM
+            - id: 2
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: IROM
+        useCustomScatterFile: false
+    uploadConfigMap:
+      JLink:
+        baseAddr: ""
+        bin: ""
+        cpuInfo:
+          cpuName: "null"
+          vendor: "null"
+        otherCmds: ""
+        proType: 1
+        speed: 8000
+      OpenOCD:
+        baseAddr: "0x08000000"
+        bin: ""
+        interface: stlink
+        target: stm32f4x
+      STLink:
+        address: "0x8000000"
+        bin: ""
+        elFile: None
+        optionBytes: .eide/task.st.option.bytes.ini
+        otherCmds: ""
+        proType: SWD
+        resetMode: default
+        runAfterProgram: true
+        speed: 4000
+    uploader: OpenOCD
