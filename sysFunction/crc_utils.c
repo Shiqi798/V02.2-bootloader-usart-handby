@@ -10,13 +10,13 @@ uint32_t crc32_step(uint32_t crc, const uint8_t *data, uint32_t len)
         }
     }
 
-    return crc;
+    return crc;  
 }
 
 uint32_t crc32_buffer(const uint8_t *data, uint32_t len)
 {
     // 对完整缓冲区计算标准 CRC32
-    return crc32_step(0xFFFFFFFFU, data, len) ^ 0xFFFFFFFFU;
+    return crc32_step(0xFFFFFFFFU, data, len) ^ 0xFFFFFFFFU;  
 }
 
 uint32_t crc32_flash(uint32_t addr, uint32_t len)
