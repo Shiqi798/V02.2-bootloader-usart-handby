@@ -26,8 +26,8 @@
 #define UNHIDE_DATA "unhide data"
 
 #define app_buf_size 256U
-#define APP_FLASH_ADDR BOOT_SLOT_B_ADDR
-#define APP_FLASH_SIZE BOOT_SLOT_SIZE
+#define APP_FLASH_ADDR BOOT_APP_ADDR
+#define APP_FLASH_SIZE BOOT_APP_SIZE
 
 extern char g_sample_file[64];      // sample 文件名（含路径）
 extern uint16_t g_sample_line;       // sample 已写行数

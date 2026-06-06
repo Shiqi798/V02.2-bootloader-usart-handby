@@ -72,8 +72,8 @@ virtualFolder:
         - path: ../../sysFunction/bootloader.h
         - path: ../../sysFunction/crc_utils.c
         - path: ../../sysFunction/crc_utils.h
-        - path: ../../sysFunction/ymodem.c
-        - path: ../../sysFunction/ymodem.h
+        - path: ../../sysFunction/raw_download.c
+        - path: ../../sysFunction/raw_download.h
       folders: []
 dependenceList: []
 outDir: build
@@ -207,7 +207,7 @@ targets:
               isChecked: true
               isStartup: true
               mem:
-                size: "0x8000"
+                size: "0x10000"
                 startAddr: "0x8000000"
               tag: IROM
             - id: 2

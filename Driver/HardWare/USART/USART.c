@@ -83,7 +83,7 @@ void USART1_Init(void)
 
     // 第2步：USART1 基本参数配置
     usart_deinit(USART1);
-    usart_baudrate_set(USART1, 9600);
+    usart_baudrate_set(USART1, 115200);
     usart_word_length_set(USART1, USART_WL_8BIT);
     usart_stop_bit_set(USART1, USART_STB_1BIT);
     usart_parity_config(USART1, USART_PM_NONE);

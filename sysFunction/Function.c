@@ -16,7 +16,7 @@ void sysFunction_Init(void)
 
 void sysFunction_loop(void)
 {
-    if (!sysFunction_ShouldEnterBoot())
+    if (!bootloader_update_requested() && !sysFunction_ShouldEnterBoot())
     {
         if (bootloader_boot_default()) {
             while (1) {
@@ -24,8 +24,8 @@ void sysFunction_loop(void)
         }
 
     }
-
-    OLED_Printf(0, 0, 16, "BOOTLOADER\r\n");
+    OLED_Printf(0, 0, 16, "2026639584");
+    OLED_Printf(0, 16, 16, "Bootloader");
     OLED_Refresh();
     bootloader_console();
 }
@@ -47,7 +47,7 @@ static bool sysFunction_ShouldEnterBoot(void)
 {
     uint32_t start = GetTick();
 
-    while (GetTick() - start < 2000U)
+    while (GetTick() - start < 5000U)
     {
         if (gpio_input_bit_get(GPIOE, GPIO_PIN_15) == 0) {
             return true;
