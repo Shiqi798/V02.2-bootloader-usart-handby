@@ -18,8 +18,6 @@ virtualFolder:
       files:
         - path: ../../Driver/HardWare/KEY/Key.c
         - path: ../../Driver/HardWare/KEY/Key.h
-        - path: ../../Driver/HardWare/LED/LED.c
-        - path: ../../Driver/HardWare/LED/LED.h
         - path: ../../Driver/HardWare/OLED/OLED.c
         - path: ../../Driver/HardWare/OLED/OLED.h
         - path: ../../Driver/HardWare/OLED/OLEDfont.h

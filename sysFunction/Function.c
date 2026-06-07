@@ -2,7 +2,6 @@
 
 void nvic_config(void);
 uint8_t is_power_on_reset(void);
-static bool sysFunction_ShouldEnterBoot(void);
 
 void sysFunction_Init(void)
 {
@@ -10,23 +9,27 @@ void sysFunction_Init(void)
     USART1_Init();
     OLED_Init();
 //    LED_Init();
-//    Key_Init();
     bootloader_init();
 }
 
 void sysFunction_loop(void)
 {
-    if (!bootloader_update_requested() && !sysFunction_ShouldEnterBoot())
-    {
+    OLED_Printf(0, 0, 16, "2026639584");
+    OLED_Printf(0, 16, 16, "Bootloader");
+    OLED_Refresh();
+
+    if (!bootloader_update_requested()) {
+        uint32_t start = GetTick();
+
+        /* 等待5秒，显示bootloader信息后跳转到app */
+        while (GetTick() - start < 5000U);
+
         if (bootloader_boot_default()) {
             while (1) {
             }
         }
-
     }
-    OLED_Printf(0, 0, 16, "2026639584");
-    OLED_Printf(0, 16, 16, "Bootloader");
-    OLED_Refresh();
+
     bootloader_console();
 }
 void nvic_config(void)
@@ -43,16 +46,3 @@ uint8_t is_power_on_reset(void)
     return ret;
 }
 
-static bool sysFunction_ShouldEnterBoot(void)
-{
-    uint32_t start = GetTick();
-
-    while (GetTick() - start < 5000U)
-    {
-        if (gpio_input_bit_get(GPIOE, GPIO_PIN_15) == 0) {
-            return true;
-        }
-    }
-
-    return false;
-}
