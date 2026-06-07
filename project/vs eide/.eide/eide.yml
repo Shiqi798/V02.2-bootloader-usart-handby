@@ -60,17 +60,6 @@ virtualFolder:
       files:
         - path: ../../Driver/Start/CMSIS/GD/GD32F4xx/Source/system_gd32f4xx.c
       folders: []
-    - name: sysFunction
-      files:
-        - path: ../../sysFunction/Function.c
-        - path: ../../sysFunction/Function.h
-        - path: ../../sysFunction/bootloader.c
-        - path: ../../sysFunction/bootloader.h
-        - path: ../../sysFunction/crc_utils.c
-        - path: ../../sysFunction/crc_utils.h
-        - path: ../../sysFunction/raw_download.c
-        - path: ../../sysFunction/raw_download.h
-      folders: []
     - name: Protocol
       files:
         - path: ../../Protocol/boot_crc.c
@@ -78,16 +67,20 @@ virtualFolder:
         - path: ../../Protocol/boot_protocol.c
         - path: ../../Protocol/boot_protocol.h
       folders: []
-    - name: FunctionLayer
+    - name: Function
       files:
         - path: ../../Function/boot_app.c
         - path: ../../Function/boot_app.h
         - path: ../../Function/boot_flow.c
         - path: ../../Function/boot_flow.h
+        - path: ../../Function/function.c
+        - path: ../../Function/function.h
         - path: ../../Function/boot_param.c
         - path: ../../Function/boot_param.h
         - path: ../../Function/boot_upgrade.c
         - path: ../../Function/boot_upgrade.h
+        - path: ../../Function/raw_download.c
+        - path: ../../Function/raw_download.h
       folders: []
 dependenceList: []
 outDir: build
@@ -119,7 +112,6 @@ targets:
         - ../../Driver/Library/GD32F4xx_standard_peripheral/Source
         - ../../Driver/Start/CMSIS/GD/GD32F4xx/Include
         - ../../Driver/Start/CMSIS/GD/GD32F4xx/Source
-        - ../../sysFunction
         - ../../Protocol
         - ../../Function
         - ../../Driver/Fatfs

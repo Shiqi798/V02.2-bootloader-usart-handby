@@ -4,11 +4,13 @@
 #include "gd32f4xx_dma.h"
 #include "gd32f4xx_usart.h"
 
+//========================== 向量表校验 ==========================
+
+//SP在RAM范围，PC在Flash范围，排除空Flash
 bool boot_app_vector_ok(uint32_t addr)
 {
     uint32_t sp = *(volatile uint32_t *)addr;
     uint32_t pc = *(volatile uint32_t *)(addr + 4U);
-
     return (sp >= 0x20000000U) &&
            (sp <= 0x20030000U) &&
            ((sp & 3U) == 0U) &&
@@ -27,12 +29,15 @@ bool boot_app_backup_can_restore(void)
     return boot_app_vector_ok(BOOT_BACKUP_ADDR);
 }
 
+//------
+//跳转
+
 void boot_app_jump_raw(uint32_t addr)
 {
     uint32_t sp = *(volatile uint32_t *)addr;
     uint32_t pc = *(volatile uint32_t *)(addr + 4U);
 
-    //跳转前把Bootloader现场清掉，避免USART/DMA中断带进App
+    //注意：跳转前必须清干净外设，否则app一进去就被boot的中断搞死
     __disable_irq();
     usart_interrupt_disable(USART1, USART_INT_IDLE);
     usart_dma_receive_config(USART1, USART_RECEIVE_DMA_DISABLE);
@@ -47,7 +52,6 @@ void boot_app_jump_raw(uint32_t addr)
         NVIC->ICER[i] = 0xFFFFFFFFU;
         NVIC->ICPR[i] = 0xFFFFFFFFU;
     }
-
     SCB->VTOR = addr;
     __DSB();
     __ISB();

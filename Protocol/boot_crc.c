@@ -1,5 +1,8 @@
 #include "boot_crc.h"
 
+//================== CRC ==================
+
+/* CRC32（赛题固件校验用） */
 uint32_t boot_crc32_step(uint32_t crc, const uint8_t *data, uint32_t len)
 {
     for (uint32_t i = 0U; i < len; i++) {
@@ -22,6 +25,7 @@ uint32_t boot_crc32_flash(uint32_t addr, uint32_t len)
     return boot_crc32_buffer((const uint8_t *)addr, len);
 }
 
+/* CRC16（赛题帧校验用） */
 uint16_t boot_crc16_ccitt(const uint8_t *data, uint32_t len)
 {
     uint16_t crc = 0U;

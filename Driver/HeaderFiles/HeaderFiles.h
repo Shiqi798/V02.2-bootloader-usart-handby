@@ -24,11 +24,7 @@
 #include "SPI_FLASH.h"
 //#include "LED.h"
 //#include "Key.h"
-#include "bootloader.h"
 #include "myDMA.h"
-/************************sysFunction************************/
-#include "Function.h"
-#include "crc_utils.h"
 
 
 

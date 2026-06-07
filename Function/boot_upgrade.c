@@ -6,7 +6,9 @@
 #include "ROM.h"
 
 #include <string.h>
-////升级流程
+
+//================== 升级相关 ==================
+
 #define BOOT_IMAGE_MAGIC0 0x5AU
 #define BOOT_IMAGE_MAGIC1 0xA5U
 #define BOOT_IMAGE_MAGIC2 0xC3U
@@ -53,7 +55,7 @@ bool boot_upgrade_prepare_stage(boot_upgrade_ctx_t *ctx)
         return true;
     }
 
-    //暂存区接收raw bin前先整区擦掉，避免上次残留影响魔术字/向量表判断
+    //先擦一遍，以免上次的脏数据干扰魔术字判断
     if (!ROM_erase_range(BOOT_STAGE_ADDR, BOOT_STAGE_SIZE)) {
         return false;
     }

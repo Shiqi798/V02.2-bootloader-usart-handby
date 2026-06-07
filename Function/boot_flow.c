@@ -4,27 +4,38 @@
 #include "boot_param.h"
 #include "boot_protocol.h"
 #include "boot_upgrade.h"
+#include "systick.h"
 #include "USART.h"
 
 void OLED_Clear(void);
 void OLED_Refresh(void);
 void OLED_Printf(int16_t X, int16_t Y, uint8_t FontSize, char *format, ...);
 
+//=============== 常量 ===============
+
 #define BOOT_TEAM_ID_TEXT "2026639584"
 #define BOOT_MODE_TEXT "Bootloader"
 #define BOOT_WAIT_APP_MS 10000U
 #define BOOT_FRAME_POLL_MS 100U
 
+//事件
 typedef enum {
     BOOT_FLOW_EVENT_NONE = 0U,
     BOOT_FLOW_EVENT_KEEP_WAITING,
     BOOT_FLOW_EVENT_IMAGE_STAGED
 } boot_flow_event_t;
 
+//--------------------------------
+//静态变量
+
 static boot_param_t g_boot_param;
 static boot_upgrade_ctx_t g_upgrade_ctx;
 static bool g_suppress_next_bad_frame = false;
 
+//--------------------------------
+//内部函数
+
+//赛题要求：OLED显示队伍编号和Bootloader
 static void boot_flow_show_oled(void)
 {
     OLED_Clear();
@@ -36,7 +47,6 @@ static void boot_flow_show_oled(void)
 static void boot_flow_send_query_id(uint16_t command)
 {
     uint8_t content[2];
-
     content[0] = (uint8_t)(g_boot_param.device_id >> 8);
     content[1] = (uint8_t)g_boot_param.device_id;
     boot_proto_send_frame(g_boot_param.device_id, BOOT_PROTO_FRAME_RESP,
@@ -46,11 +56,11 @@ static void boot_flow_send_query_id(uint16_t command)
 static void boot_flow_send_query_baud(uint16_t command)
 {
     uint8_t content = g_boot_param.baud_code;
-
     boot_proto_send_frame(g_boot_param.device_id, BOOT_PROTO_FRAME_RESP,
                           command, &content, 1U);
 }
 
+//帧处理：0101/0112/0502/0503/心跳
 static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
 {
     boot_proto_frame_t frame;
@@ -58,25 +68,24 @@ static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
 
     status = boot_proto_wait_frame(timeout_ms, g_boot_param.device_id, &frame);
 
-    if (status == BOOT_PROTO_FRAME_NONE) {
+    if (status == BOOT_PROTO_FRAME_NONE)
         return BOOT_FLOW_EVENT_NONE;
-    }
-    if (status == BOOT_PROTO_FRAME_ID_MISMATCH) {
+    if (status == BOOT_PROTO_FRAME_ID_MISMATCH)
         return BOOT_FLOW_EVENT_KEEP_WAITING;
-    }
 
     if (status == BOOT_PROTO_FRAME_BAD) {
         if (g_suppress_next_bad_frame) {
             g_suppress_next_bad_frame = false;
             return BOOT_FLOW_EVENT_KEEP_WAITING;
         }
-
+        //printf("bad frame\r\n");
         boot_proto_send_error(g_boot_param.device_id, BOOT_PROTO_CMD_ERROR);
         return BOOT_FLOW_EVENT_KEEP_WAITING;
     }
 
     g_suppress_next_bad_frame = false;
 
+    //心跳回复
     if ((frame.frame_type == BOOT_PROTO_FRAME_HEART) &&
         (frame.command == BOOT_PROTO_CMD_BROADCAST)) {
         boot_proto_send_heartbeat(g_boot_param.device_id);
@@ -99,12 +108,10 @@ static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
 
     case BOOT_PROTO_CMD_UPGRADE_READY: {
         boot_status_t ret;
-
         if (frame.content_len != 0U) {
             boot_proto_send_error(g_boot_param.device_id, frame.command);
             break;
         }
-
         boot_flow_show_oled();
         ret = boot_upgrade_receive_stage_image(&g_upgrade_ctx);
         if (ret == BOOT_STATUS_OK) {
@@ -112,7 +119,6 @@ static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
             g_suppress_next_bad_frame = true;
             return BOOT_FLOW_EVENT_IMAGE_STAGED;
         }
-
         boot_proto_send_error(g_boot_param.device_id, frame.command);
         (void)boot_upgrade_prepare_stage(&g_upgrade_ctx);
         g_suppress_next_bad_frame = true;
@@ -121,18 +127,15 @@ static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
 
     case BOOT_PROTO_CMD_UPGRADE_EXEC: {
         boot_status_t ret;
-
         if (frame.content_len != 0U) {
             boot_proto_send_error(g_boot_param.device_id, frame.command);
             break;
         }
-
         if (!g_upgrade_ctx.pending_valid) {
             boot_proto_send_error(g_boot_param.device_id, frame.command);
             break;
         }
-
-        //升级前先把OK发完，Flash搬运会卡一段时间
+        //先把OK发了再搬运，Flash擦写会卡一会儿
         boot_proto_send_ok(g_boot_param.device_id, frame.command);
 
         boot_flow_show_oled();
@@ -140,7 +143,6 @@ static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
         if (ret == BOOT_STATUS_OK) {
             boot_app_jump_raw(BOOT_APP_ADDR);
         }
-
         boot_flow_show_oled();
         break;
     }
@@ -149,10 +151,10 @@ static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
         boot_proto_send_error(g_boot_param.device_id, BOOT_PROTO_CMD_ERROR);
         break;
     }
-
     return BOOT_FLOW_EVENT_KEEP_WAITING;
 }
 
+//只在10/7/4/1秒时打印
 static void boot_flow_print_wait_prompt(uint32_t remaining_sec, uint32_t *last_printed)
 {
     if (((remaining_sec == 10U) ||
@@ -165,9 +167,12 @@ static void boot_flow_print_wait_prompt(uint32_t remaining_sec, uint32_t *last_p
     }
 }
 
+//=================== 公共接口 ===================
+
 void boot_flow_init(void)
 {
     (void)boot_param_load(&g_boot_param);
+    //printf("boot_flag=0x%02X\r\n", g_boot_param.boot_flag);
     boot_upgrade_init(&g_upgrade_ctx);
     boot_proto_rx_enable();
 }
@@ -177,21 +182,21 @@ bool boot_flow_update_requested(void)
     return g_boot_param.boot_flag == BOOT_FLAG_UPDATE;
 }
 
+//先试主区，主区坏了试备份
 bool boot_flow_boot_default(void)
 {
     if (boot_app_can_boot()) {
         boot_app_jump_raw(BOOT_APP_ADDR);
         return true;
     }
-
     if (boot_upgrade_restore_backup_to_app()) {
         boot_app_jump_raw(BOOT_APP_ADDR);
         return true;
     }
-
     return false;
 }
 
+//控制台主循环
 void boot_flow_console(void)
 {
     uint32_t start;
@@ -212,7 +217,6 @@ void boot_flow_console(void)
     start = GetTick();
     while (1) {
         boot_flow_event_t event;
-
         if (countdown_active) {
             uint32_t elapsed = GetTick() - start;
             uint32_t remaining = (elapsed >= BOOT_WAIT_APP_MS) ? 0U : (10U - (elapsed / 1000U));
@@ -221,22 +225,24 @@ void boot_flow_console(void)
             event = boot_flow_process_frame_once(BOOT_FRAME_POLL_MS);
 
             if (event == BOOT_FLOW_EVENT_IMAGE_STAGED) {
+                //收到0502，停掉倒计时等0503
                 countdown_active = false;
             }
 
             if (elapsed >= BOOT_WAIT_APP_MS) {
+                //倒计时结束，清标志跳app
                 if (g_boot_param.boot_flag == BOOT_FLAG_UPDATE) {
                     (void)boot_param_set_boot_flag(&g_boot_param, BOOT_FLAG_NORMAL);
                 }
-
                 if (boot_flow_boot_default()) {
                     while (1) {
                     }
                 }
-
+                //app挂了，继续等指令
                 countdown_active = false;
             }
         } else {
+            //倒计时结束或已经暂存完，无限等
             (void)boot_flow_process_frame_once(1000U);
         }
     }

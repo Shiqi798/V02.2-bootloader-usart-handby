@@ -1,5 +1,7 @@
 #include "HeaderFiles.h"
+#include "function.h"
 
+//系统节拍，1ms递增
 volatile uint32_t sys_tick = 0;
 
 void SysTick_Handler(void)
@@ -14,7 +16,7 @@ uint32_t GetTick(void)
 
 int main(void)
 {
-    sysFunction_Init();
-    sysFunction_loop();
+    boot_entry_init();
+    boot_entry_loop();
 
 }

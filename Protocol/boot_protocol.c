@@ -8,6 +8,9 @@
 
 uint32_t GetTick(void);
 
+//==================== 协议层 ====================
+
+//ASCII帧最大长度（含空格），超过会截断
 #define BOOT_PROTO_ASCII_MAX 128U
 #define BOOT_PROTO_RAW_MAX   64U
 #define BOOT_PROTO_MIN_LEN   13U
@@ -139,6 +142,8 @@ static void proto_append_hex_byte(char *out, uint32_t *pos, uint8_t value)
     out[(*pos)++] = hex[value & 0x0FU];
 }
 
+////////////////////////////接收接口////////////////////////////
+
 void boot_proto_rx_enable(void)
 {
     USART1_ClearRxBuf();
@@ -179,6 +184,8 @@ boot_proto_frame_status_t boot_proto_wait_frame(uint32_t timeout_ms,
 
     return BOOT_PROTO_FRAME_NONE;
 }
+
+////////////////////////////发送接口////////////////////////////
 
 void boot_proto_send_frame(uint16_t device_id,
                            uint8_t frame_type,

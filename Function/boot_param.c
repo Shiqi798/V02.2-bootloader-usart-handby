@@ -1,14 +1,17 @@
 #include "boot_param.h"
 
+#include "boot_app.h"
 #include "boot_crc.h"
 #include "ROM.h"
 
 #include <stddef.h>
 #include <string.h>
 
+////////////////////////参数校验//////////////////////
+
 uint32_t boot_param_checksum(const boot_param_t *param)
 {
-    //当前工程先沿用旧实现，文档里的CRC32后面再统一
+    //crc16
     return (uint32_t)boot_crc16_modbus((const uint8_t *)param,
                                        (uint32_t)offsetof(boot_param_t, checksum));
 }
@@ -40,6 +43,8 @@ void boot_param_default(boot_param_t *param)
     param->boot_flag = BOOT_FLAG_NORMAL;
     param->checksum = boot_param_checksum(param);
 }
+
+////////////////////////////参数读写////////////////////////////
 
 bool boot_param_save(boot_param_t *param)
 {

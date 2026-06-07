@@ -5,14 +5,17 @@
 #include "ROM.h"
 #include "USART.h"
 #include "gd32f4xx_usart.h"
+#include "systick.h"
 
 #include <string.h>
 
+//================== raw bin接收 ==================
+
+//等第一字节最多3分钟，之后3秒无数据认为结束
 #define RAW_FIRST_BYTE_TIMEOUT_MS  180000U
 #define RAW_END_SILENCE_MS           3000U
 
-uint32_t GetTick(void);
-
+//DMA环形缓冲区的当前读位置
 static uint32_t raw_dma_pos(void)
 {
     uint32_t pos = get_usart1_rx_len();
@@ -40,7 +43,7 @@ boot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_
     memset(word, 0xFF, sizeof(word));
     strncpy(info->name, "raw.bin", sizeof(info->name) - 1U);
 
-    //raw模式不解析协议，只从USART DMA里把bin捞出来
+    /* raw模式不解析协议，只从USART DMA里把bin捞出来 */
     usart_interrupt_disable(USART1, USART_INT_IDLE);
     USART1_ClearRxBuf();
     reset_usart1_rx_dma();
@@ -96,7 +99,7 @@ boot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_
         return BOOT_STATUS_TIMEOUT;
     }
 
-    //Flash按word写，最后不足4字节用0xFF补齐但不算进固件长度
+    /* Flash按word写，最后不足4字节用0xFF补齐但不算进固件长度 */
     if (word_len != 0U) {
         while (word_len < sizeof(word)) {
             word[word_len++] = 0xFFU;
