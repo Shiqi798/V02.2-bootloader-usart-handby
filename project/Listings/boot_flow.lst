@@ -1,0 +1,856 @@
+L 1 "..\Function\boot_flow.c"
+N#include "boot_flow.h"
+L 1 "..\Function\boot_flow.h" 1
+N#ifndef __BOOT_FLOW_H
+N#define __BOOT_FLOW_H
+N
+N#include "bootloader.h"
+L 1 "..\sysFunction\bootloader.h" 1
+N#ifndef __BOOTLOADER_H
+N#define __BOOTLOADER_H
+N
+N#include <stdbool.h>
+L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h" 1
+N/* stdbool.h: ISO/IEC 9899:1999 (C99), section 7.16 */
+N
+N/* Copyright (C) ARM Ltd., 2002
+N * All rights reserved
+N * RCS $Revision$
+N * Checkin $Date$
+N * Revising $Author: drodgman $
+N */
+N
+N#ifndef __bool_true_false_are_defined
+N#define __bool_true_false_are_defined 1
+N#define __ARMCLIB_VERSION 5060034
+N
+N  #ifndef __cplusplus /* In C++, 'bool', 'true' and 'false' and keywords */
+N    #define bool _Bool
+N    #define true 1
+N    #define false 0
+N  #else
+S    #ifdef __GNUC__
+S      /* GNU C++ supports direct inclusion of stdbool.h to provide C99
+S         compatibility by defining _Bool */
+S      #define _Bool bool
+S    #endif
+N  #endif
+N
+N#endif /* __bool_true_false_are_defined */
+N
+L 5 "..\sysFunction\bootloader.h" 2
+N#include <stdint.h>
+L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h" 1
+N/* Copyright (C) ARM Ltd., 1999,2014 */
+N/* All rights reserved */
+N
+N/*
+N * RCS $Revision$
+N * Checkin $Date$
+N * Revising $Author: agrant $
+N */
+N
+N#ifndef __stdint_h
+N#define __stdint_h
+N#define __ARMCLIB_VERSION 5060034
+N
+N  #ifdef __INT64_TYPE__
+S    /* armclang predefines '__INT64_TYPE__' and '__INT64_C_SUFFIX__' */
+S    #define __INT64 __INT64_TYPE__
+N  #else
+N    /* armcc has builtin '__int64' which can be used in --strict mode */
+N    #define __INT64 __int64
+N    #define __INT64_C_SUFFIX__ ll
+N  #endif
+N  #define __PASTE2(x, y) x ## y
+N  #define __PASTE(x, y) __PASTE2(x, y)
+N  #define __INT64_C(x)  __ESCAPE__(__PASTE(x, __INT64_C_SUFFIX__))
+N  #define __UINT64_C(x)  __ESCAPE__(__PASTE(x ## u, __INT64_C_SUFFIX__))
+N  #if defined(__clang__) || (defined(__ARMCC_VERSION) && !defined(__STRICT_ANSI__))
+X  #if 0L || (1L && !0L)
+N    /* armclang and non-strict armcc allow 'long long' in system headers */
+N    #define __LONGLONG long long
+N  #else
+S    /* strict armcc has '__int64' */
+S    #define __LONGLONG __int64
+N  #endif
+N
+N  #ifndef __STDINT_DECLS
+N  #define __STDINT_DECLS
+N
+N    #undef __CLIBNS
+N
+N    #ifdef __cplusplus
+S      namespace std {
+S          #define __CLIBNS std::
+S          extern "C" {
+N    #else
+N      #define __CLIBNS
+N    #endif  /* __cplusplus */
+N
+N
+N/*
+N * 'signed' is redundant below, except for 'signed char' and if
+N * the typedef is used to declare a bitfield.
+N */
+N
+N    /* 7.18.1.1 */
+N
+N    /* exact-width signed integer types */
+Ntypedef   signed          char int8_t;
+Ntypedef   signed short     int int16_t;
+Ntypedef   signed           int int32_t;
+Ntypedef   signed       __INT64 int64_t;
+Xtypedef   signed       __int64 int64_t;
+N
+N    /* exact-width unsigned integer types */
+Ntypedef unsigned          char uint8_t;
+Ntypedef unsigned short     int uint16_t;
+Ntypedef unsigned           int uint32_t;
+Ntypedef unsigned       __INT64 uint64_t;
+Xtypedef unsigned       __int64 uint64_t;
+N
+N    /* 7.18.1.2 */
+N
+N    /* smallest type of at least n bits */
+N    /* minimum-width signed integer types */
+Ntypedef   signed          char int_least8_t;
+Ntypedef   signed short     int int_least16_t;
+Ntypedef   signed           int int_least32_t;
+Ntypedef   signed       __INT64 int_least64_t;
+Xtypedef   signed       __int64 int_least64_t;
+N
+N    /* minimum-width unsigned integer types */
+Ntypedef unsigned          char uint_least8_t;
+Ntypedef unsigned short     int uint_least16_t;
+Ntypedef unsigned           int uint_least32_t;
+Ntypedef unsigned       __INT64 uint_least64_t;
+Xtypedef unsigned       __int64 uint_least64_t;
+N
+N    /* 7.18.1.3 */
+N
+N    /* fastest minimum-width signed integer types */
+Ntypedef   signed           int int_fast8_t;
+Ntypedef   signed           int int_fast16_t;
+Ntypedef   signed           int int_fast32_t;
+Ntypedef   signed       __INT64 int_fast64_t;
+Xtypedef   signed       __int64 int_fast64_t;
+N
+N    /* fastest minimum-width unsigned integer types */
+Ntypedef unsigned           int uint_fast8_t;
+Ntypedef unsigned           int uint_fast16_t;
+Ntypedef unsigned           int uint_fast32_t;
+Ntypedef unsigned       __INT64 uint_fast64_t;
+Xtypedef unsigned       __int64 uint_fast64_t;
+N
+N    /* 7.18.1.4 integer types capable of holding object pointers */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+Stypedef   signed       __INT64 intptr_t;
+Stypedef unsigned       __INT64 uintptr_t;
+N#else
+Ntypedef   signed           int intptr_t;
+Ntypedef unsigned           int uintptr_t;
+N#endif
+N
+N    /* 7.18.1.5 greatest-width integer types */
+Ntypedef   signed     __LONGLONG intmax_t;
+Xtypedef   signed     long long intmax_t;
+Ntypedef unsigned     __LONGLONG uintmax_t;
+Xtypedef unsigned     long long uintmax_t;
+N
+N
+N#if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS)
+X#if !0L || 0L
+N
+N    /* 7.18.2.1 */
+N
+N    /* minimum values of exact-width signed integer types */
+N#define INT8_MIN                   -128
+N#define INT16_MIN                -32768
+N#define INT32_MIN          (~0x7fffffff)   /* -2147483648 is unsigned */
+N#define INT64_MIN  __INT64_C(~0x7fffffffffffffff) /* -9223372036854775808 is unsigned */
+N
+N    /* maximum values of exact-width signed integer types */
+N#define INT8_MAX                    127
+N#define INT16_MAX                 32767
+N#define INT32_MAX            2147483647
+N#define INT64_MAX  __INT64_C(9223372036854775807)
+N
+N    /* maximum values of exact-width unsigned integer types */
+N#define UINT8_MAX                   255
+N#define UINT16_MAX                65535
+N#define UINT32_MAX           4294967295u
+N#define UINT64_MAX __UINT64_C(18446744073709551615)
+N
+N    /* 7.18.2.2 */
+N
+N    /* minimum values of minimum-width signed integer types */
+N#define INT_LEAST8_MIN                   -128
+N#define INT_LEAST16_MIN                -32768
+N#define INT_LEAST32_MIN          (~0x7fffffff)
+N#define INT_LEAST64_MIN  __INT64_C(~0x7fffffffffffffff)
+N
+N    /* maximum values of minimum-width signed integer types */
+N#define INT_LEAST8_MAX                    127
+N#define INT_LEAST16_MAX                 32767
+N#define INT_LEAST32_MAX            2147483647
+N#define INT_LEAST64_MAX  __INT64_C(9223372036854775807)
+N
+N    /* maximum values of minimum-width unsigned integer types */
+N#define UINT_LEAST8_MAX                   255
+N#define UINT_LEAST16_MAX                65535
+N#define UINT_LEAST32_MAX           4294967295u
+N#define UINT_LEAST64_MAX __UINT64_C(18446744073709551615)
+N
+N    /* 7.18.2.3 */
+N
+N    /* minimum values of fastest minimum-width signed integer types */
+N#define INT_FAST8_MIN           (~0x7fffffff)
+N#define INT_FAST16_MIN          (~0x7fffffff)
+N#define INT_FAST32_MIN          (~0x7fffffff)
+N#define INT_FAST64_MIN  __INT64_C(~0x7fffffffffffffff)
+N
+N    /* maximum values of fastest minimum-width signed integer types */
+N#define INT_FAST8_MAX             2147483647
+N#define INT_FAST16_MAX            2147483647
+N#define INT_FAST32_MAX            2147483647
+N#define INT_FAST64_MAX  __INT64_C(9223372036854775807)
+N
+N    /* maximum values of fastest minimum-width unsigned integer types */
+N#define UINT_FAST8_MAX            4294967295u
+N#define UINT_FAST16_MAX           4294967295u
+N#define UINT_FAST32_MAX           4294967295u
+N#define UINT_FAST64_MAX __UINT64_C(18446744073709551615)
+N
+N    /* 7.18.2.4 */
+N
+N    /* minimum value of pointer-holding signed integer type */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define INTPTR_MIN INT64_MIN
+N#else
+N#define INTPTR_MIN INT32_MIN
+N#endif
+N
+N    /* maximum value of pointer-holding signed integer type */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define INTPTR_MAX INT64_MAX
+N#else
+N#define INTPTR_MAX INT32_MAX
+N#endif
+N
+N    /* maximum value of pointer-holding unsigned integer type */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define UINTPTR_MAX UINT64_MAX
+N#else
+N#define UINTPTR_MAX UINT32_MAX
+N#endif
+N
+N    /* 7.18.2.5 */
+N
+N    /* minimum value of greatest-width signed integer type */
+N#define INTMAX_MIN  __ESCAPE__(~0x7fffffffffffffffll)
+N
+N    /* maximum value of greatest-width signed integer type */
+N#define INTMAX_MAX  __ESCAPE__(9223372036854775807ll)
+N
+N    /* maximum value of greatest-width unsigned integer type */
+N#define UINTMAX_MAX __ESCAPE__(18446744073709551615ull)
+N
+N    /* 7.18.3 */
+N
+N    /* limits of ptrdiff_t */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define PTRDIFF_MIN INT64_MIN
+S#define PTRDIFF_MAX INT64_MAX
+N#else
+N#define PTRDIFF_MIN INT32_MIN
+N#define PTRDIFF_MAX INT32_MAX
+N#endif
+N
+N    /* limits of sig_atomic_t */
+N#define SIG_ATOMIC_MIN (~0x7fffffff)
+N#define SIG_ATOMIC_MAX   2147483647
+N
+N    /* limit of size_t */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define SIZE_MAX UINT64_MAX
+N#else
+N#define SIZE_MAX UINT32_MAX
+N#endif
+N
+N    /* limits of wchar_t */
+N    /* NB we have to undef and redef because they're defined in both
+N     * stdint.h and wchar.h */
+N#undef WCHAR_MIN
+N#undef WCHAR_MAX
+N
+N#if defined(__WCHAR32) || (defined(__ARM_SIZEOF_WCHAR_T) && __ARM_SIZEOF_WCHAR_T == 4)
+X#if 0L || (0L && __ARM_SIZEOF_WCHAR_T == 4)
+S  #define WCHAR_MIN   0
+S  #define WCHAR_MAX   0xffffffffU
+N#else
+N  #define WCHAR_MIN   0
+N  #define WCHAR_MAX   65535
+N#endif
+N
+N    /* limits of wint_t */
+N#define WINT_MIN (~0x7fffffff)
+N#define WINT_MAX 2147483647
+N
+N#endif /* __STDC_LIMIT_MACROS */
+N
+N#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS)
+X#if !0L || 0L
+N
+N    /* 7.18.4.1 macros for minimum-width integer constants */
+N#define INT8_C(x)   (x)
+N#define INT16_C(x)  (x)
+N#define INT32_C(x)  (x)
+N#define INT64_C(x)  __INT64_C(x)
+N
+N#define UINT8_C(x)  (x ## u)
+N#define UINT16_C(x) (x ## u)
+N#define UINT32_C(x) (x ## u)
+N#define UINT64_C(x) __UINT64_C(x)
+N
+N    /* 7.18.4.2 macros for greatest-width integer constants */
+N#define INTMAX_C(x)  __ESCAPE__(x ## ll)
+N#define UINTMAX_C(x) __ESCAPE__(x ## ull)
+N
+N#endif /* __STDC_CONSTANT_MACROS */
+N
+N    #ifdef __cplusplus
+S         }  /* extern "C" */
+S      }  /* namespace std */
+N    #endif /* __cplusplus */
+N  #endif /* __STDINT_DECLS */
+N
+N  #ifdef __cplusplus
+S    #ifndef __STDINT_NO_EXPORTS
+S      using ::std::int8_t;
+S      using ::std::int16_t;
+S      using ::std::int32_t;
+S      using ::std::int64_t;
+S      using ::std::uint8_t;
+S      using ::std::uint16_t;
+S      using ::std::uint32_t;
+S      using ::std::uint64_t;
+S      using ::std::int_least8_t;
+S      using ::std::int_least16_t;
+S      using ::std::int_least32_t;
+S      using ::std::int_least64_t;
+S      using ::std::uint_least8_t;
+S      using ::std::uint_least16_t;
+S      using ::std::uint_least32_t;
+S      using ::std::uint_least64_t;
+S      using ::std::int_fast8_t;
+S      using ::std::int_fast16_t;
+S      using ::std::int_fast32_t;
+S      using ::std::int_fast64_t;
+S      using ::std::uint_fast8_t;
+S      using ::std::uint_fast16_t;
+S      using ::std::uint_fast32_t;
+S      using ::std::uint_fast64_t;
+S      using ::std::intptr_t;
+S      using ::std::uintptr_t;
+S      using ::std::intmax_t;
+S      using ::std::uintmax_t;
+S    #endif
+N  #endif /* __cplusplus */
+N
+N#undef __INT64
+N#undef __LONGLONG
+N
+N#endif /* __stdint_h */
+N
+N/* end of stdint.h */
+L 6 "..\sysFunction\bootloader.h" 2
+N
+N#define BOOTLOADER_SIZE          0x00010000U
+N#define BOOT_PARAM_ADDR          0x08010000U
+N#define BOOT_PARAM_SIZE          0x00001000U
+N#define BOOT_APP_ADDR            0x08011000U
+N#define BOOT_APP_SIZE            0x00020000U
+N#define BOOT_BACKUP_ADDR         0x08031000U
+N#define BOOT_BACKUP_SIZE         0x00020000U
+N#define BOOT_STAGE_ADDR          0x08051000U
+N#define BOOT_STAGE_SIZE          0x00020000U
+N
+N#define BOOT_CONTROL_MAGIC       0x424F4F54U
+N#define BOOT_DEFAULT_DEVICE_ID   0x0001U
+N
+N#define BOOT_BAUD_4800           0x11U
+N#define BOOT_BAUD_9600           0x12U
+N#define BOOT_BAUD_19200          0x13U
+N#define BOOT_BAUD_115200         0x14U
+N#define BOOT_DEFAULT_BAUD_CODE   BOOT_BAUD_115200
+N
+N#define BOOT_FLAG_NORMAL         0x00U
+N#define BOOT_FLAG_UPDATE         0xA5U
+N
+Ntypedef struct {
+N    uint32_t magic;
+N    uint16_t device_id;
+N    uint8_t baud_code;
+N    uint8_t boot_flag;
+N    uint32_t checksum;
+N} boot_param_t;
+N
+Ntypedef enum {
+N    BOOT_STATUS_OK = 0U,
+N    BOOT_STATUS_TIMEOUT,
+N    BOOT_STATUS_ERROR,
+N    BOOT_STATUS_CRC,
+N    BOOT_STATUS_FLASH,
+N    BOOT_STATUS_RANGE
+N} boot_status_t;
+N
+Ntypedef struct {
+N    char name[32];
+N    uint32_t size;
+N    uint32_t crc32;
+N} boot_image_info_t;
+N
+Nuint32_t GetTick(void);
+N
+Nvoid bootloader_init(void);
+Nbool bootloader_update_requested(void);
+X_Bool bootloader_update_requested(void);
+Nbool bootloader_boot_default(void);
+X_Bool bootloader_boot_default(void);
+Nvoid bootloader_console(void);
+N
+N#endif
+L 5 "..\Function\boot_flow.h" 2
+N
+Nvoid boot_flow_init(void);
+Nbool boot_flow_update_requested(void);
+X_Bool boot_flow_update_requested(void);
+Nbool boot_flow_boot_default(void);
+X_Bool boot_flow_boot_default(void);
+Nvoid boot_flow_console(void);
+N
+N#endif
+L 2 "..\Function\boot_flow.c" 2
+N
+N#include "boot_app.h"
+L 1 "..\Function\boot_app.h" 1
+N#ifndef __BOOT_APP_H
+N#define __BOOT_APP_H
+N
+N#include "bootloader.h"
+N
+Nbool boot_app_vector_ok(uint32_t addr);
+X_Bool boot_app_vector_ok(uint32_t addr);
+Nbool boot_app_can_boot(void);
+X_Bool boot_app_can_boot(void);
+Nbool boot_app_backup_can_restore(void);
+X_Bool boot_app_backup_can_restore(void);
+Nvoid boot_app_jump_raw(uint32_t addr);
+N
+N#endif
+L 4 "..\Function\boot_flow.c" 2
+N#include "boot_param.h"
+L 1 "..\Function\boot_param.h" 1
+N#ifndef __BOOT_PARAM_H
+N#define __BOOT_PARAM_H
+N
+N#include "bootloader.h"
+N
+Nuint32_t boot_param_checksum(const boot_param_t *param);
+N
+Nbool boot_param_device_id_ok(uint16_t device_id);
+X_Bool boot_param_device_id_ok(uint16_t device_id);
+Nbool boot_param_baud_code_ok(uint8_t baud_code);
+X_Bool boot_param_baud_code_ok(uint8_t baud_code);
+Nbool boot_param_boot_flag_ok(uint8_t boot_flag);
+X_Bool boot_param_boot_flag_ok(uint8_t boot_flag);
+N
+Nvoid boot_param_default(boot_param_t *param);
+Nbool boot_param_save(boot_param_t *param);
+X_Bool boot_param_save(boot_param_t *param);
+Nbool boot_param_load(boot_param_t *param);
+X_Bool boot_param_load(boot_param_t *param);
+Nbool boot_param_set_boot_flag(boot_param_t *param, uint8_t boot_flag);
+X_Bool boot_param_set_boot_flag(boot_param_t *param, uint8_t boot_flag);
+N
+N#endif
+L 5 "..\Function\boot_flow.c" 2
+N#include "boot_protocol.h"
+L 1 "..\Protocol\boot_protocol.h" 1
+N#ifndef __BOOT_PROTOCOL_H
+N#define __BOOT_PROTOCOL_H
+N
+N#include <stdbool.h>
+N#include <stdint.h>
+N
+N/* 赛题协议固定字段 */
+N#define BOOT_PROTO_START        0xA5B6U
+N#define BOOT_PROTO_END          0xB6A5U
+N#define BOOT_PROTO_VERSION      0x02U
+N#define BOOT_PROTO_BROADCAST_ID 0xFFFFU
+N
+N/* 帧类型 */
+N#define BOOT_PROTO_FRAME_CMD    0x01U
+N#define BOOT_PROTO_FRAME_RESP   0x02U
+N#define BOOT_PROTO_FRAME_HEART  0x05U
+N#define BOOT_PROTO_FRAME_ERROR  0xFFU
+N
+N/* Bootloader 当前关心的命令 */
+N#define BOOT_PROTO_CMD_QUERY_ID   0x0111U
+N#define BOOT_PROTO_CMD_QUERY_BAUD 0x0112U
+N#define BOOT_PROTO_CMD_UPGRADE_READY 0x0502U
+N#define BOOT_PROTO_CMD_UPGRADE_EXEC  0x0503U
+N#define BOOT_PROTO_CMD_HEARTBEAT     0x8888U
+N#define BOOT_PROTO_CMD_BROADCAST     0xFFFFU
+N#define BOOT_PROTO_CMD_ERROR         0xEEEEU
+N
+N#define BOOT_PROTO_CONTENT_MAX 16U
+N
+Ntypedef struct {
+N    uint16_t device_id;
+N    uint8_t frame_type;
+N    uint16_t command;
+N    uint8_t content_len;
+N    uint8_t content[BOOT_PROTO_CONTENT_MAX];
+X    uint8_t content[16U];
+N} boot_proto_frame_t;
+N
+Ntypedef enum {
+N    BOOT_PROTO_FRAME_NONE = 0U,
+N    BOOT_PROTO_FRAME_OK,
+N    BOOT_PROTO_FRAME_BAD,
+N    BOOT_PROTO_FRAME_ID_MISMATCH
+N} boot_proto_frame_status_t;
+N
+Nvoid boot_proto_rx_enable(void);
+Nboot_proto_frame_status_t boot_proto_wait_frame(uint32_t timeout_ms,
+N                                                uint16_t local_device_id,
+N                                                boot_proto_frame_t *frame);
+N
+Nvoid boot_proto_send_frame(uint16_t device_id,
+N                           uint8_t frame_type,
+N                           uint16_t command,
+N                           const uint8_t *content,
+N                           uint8_t content_len);
+Nvoid boot_proto_send_ok(uint16_t device_id, uint16_t command);
+Nvoid boot_proto_send_error(uint16_t device_id, uint16_t command);
+Nvoid boot_proto_send_heartbeat(uint16_t device_id);
+N
+N#endif
+L 6 "..\Function\boot_flow.c" 2
+N#include "boot_upgrade.h"
+L 1 "..\Function\boot_upgrade.h" 1
+N#ifndef __BOOT_UPGRADE_H
+N#define __BOOT_UPGRADE_H
+N
+N#include "bootloader.h"
+N#include "boot_param.h"
+N
+N#define BOOT_IMAGE_MAGIC_SIZE 4U
+N
+Ntypedef struct {
+N    boot_image_info_t pending_image;
+N    bool pending_valid;
+X    _Bool pending_valid;
+N    bool stage_erased;
+X    _Bool stage_erased;
+N} boot_upgrade_ctx_t;
+N
+Nvoid boot_upgrade_init(boot_upgrade_ctx_t *ctx);
+Nbool boot_upgrade_prepare_stage(boot_upgrade_ctx_t *ctx);
+X_Bool boot_upgrade_prepare_stage(boot_upgrade_ctx_t *ctx);
+Nbool boot_upgrade_staged_image_ok(const boot_image_info_t *info);
+X_Bool boot_upgrade_staged_image_ok(const boot_image_info_t *info);
+N
+Nboot_status_t boot_upgrade_receive_stage_image(boot_upgrade_ctx_t *ctx);
+Nboot_status_t boot_upgrade_execute(boot_upgrade_ctx_t *ctx, boot_param_t *param);
+N
+Nbool boot_upgrade_backup_app(void);
+X_Bool boot_upgrade_backup_app(void);
+Nbool boot_upgrade_restore_backup_to_app(void);
+X_Bool boot_upgrade_restore_backup_to_app(void);
+N
+N#endif
+L 7 "..\Function\boot_flow.c" 2
+N
+Nvoid OLED_Clear(void);
+Nvoid OLED_Refresh(void);
+Nvoid OLED_Printf(int16_t X, int16_t Y, uint8_t FontSize, char *format, ...);
+Nvoid rs485_printf(const char *fmt, ...);
+N
+N#define BOOT_TEAM_ID_TEXT "2026639584"
+N#define BOOT_MODE_TEXT "Bootloader"
+N#define BOOT_WAIT_APP_MS 10000U
+N#define BOOT_FRAME_POLL_MS 100U
+N
+Ntypedef enum {
+N    BOOT_FLOW_EVENT_NONE = 0U,
+N    BOOT_FLOW_EVENT_KEEP_WAITING,
+N    BOOT_FLOW_EVENT_IMAGE_STAGED
+N} boot_flow_event_t;
+N
+Nstatic boot_param_t g_boot_param;
+Nstatic boot_upgrade_ctx_t g_upgrade_ctx;
+Nstatic bool g_suppress_next_bad_frame = false;
+Xstatic _Bool g_suppress_next_bad_frame = 0;
+N
+Nstatic void boot_flow_show_oled(void)
+N{
+N    OLED_Clear();
+N    OLED_Printf(0, 0, 16, BOOT_TEAM_ID_TEXT);
+X    OLED_Printf(0, 0, 16, "2026639584");
+N    OLED_Printf(0, 16, 16, BOOT_MODE_TEXT);
+X    OLED_Printf(0, 16, 16, "Bootloader");
+N    OLED_Refresh();
+N}
+N
+Nstatic void boot_flow_send_query_id(uint16_t command)
+N{
+N    uint8_t content[2];
+N
+N    content[0] = (uint8_t)(g_boot_param.device_id >> 8);
+N    content[1] = (uint8_t)g_boot_param.device_id;
+N    boot_proto_send_frame(g_boot_param.device_id, BOOT_PROTO_FRAME_RESP,
+X    boot_proto_send_frame(g_boot_param.device_id, 0x02U,
+N                          command, content, sizeof(content));
+N}
+N
+Nstatic void boot_flow_send_query_baud(uint16_t command)
+N{
+N    uint8_t content = g_boot_param.baud_code;
+N
+N    boot_proto_send_frame(g_boot_param.device_id, BOOT_PROTO_FRAME_RESP,
+X    boot_proto_send_frame(g_boot_param.device_id, 0x02U,
+N                          command, &content, 1U);
+N}
+N
+Nstatic boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
+N{
+N    boot_proto_frame_t frame;
+N    boot_proto_frame_status_t status;
+N
+N    status = boot_proto_wait_frame(timeout_ms, g_boot_param.device_id, &frame);
+N
+N    if (status == BOOT_PROTO_FRAME_NONE) {
+N        return BOOT_FLOW_EVENT_NONE;
+N    }
+N    if (status == BOOT_PROTO_FRAME_ID_MISMATCH) {
+N        return BOOT_FLOW_EVENT_KEEP_WAITING;
+N    }
+N
+N    if (status == BOOT_PROTO_FRAME_BAD) {
+N        if (g_suppress_next_bad_frame) {
+N            g_suppress_next_bad_frame = false;
+X            g_suppress_next_bad_frame = 0;
+N            return BOOT_FLOW_EVENT_KEEP_WAITING;
+N        }
+N
+N        boot_proto_send_error(g_boot_param.device_id, BOOT_PROTO_CMD_ERROR);
+X        boot_proto_send_error(g_boot_param.device_id, 0xEEEEU);
+N        return BOOT_FLOW_EVENT_KEEP_WAITING;
+N    }
+N
+N    g_suppress_next_bad_frame = false;
+X    g_suppress_next_bad_frame = 0;
+N
+N    if ((frame.frame_type == BOOT_PROTO_FRAME_HEART) &&
+X    if ((frame.frame_type == 0x05U) &&
+N        (frame.command == BOOT_PROTO_CMD_BROADCAST)) {
+X        (frame.command == 0xFFFFU)) {
+N        boot_proto_send_heartbeat(g_boot_param.device_id);
+N        return BOOT_FLOW_EVENT_KEEP_WAITING;
+N    }
+N
+N    if (frame.frame_type != BOOT_PROTO_FRAME_CMD) {
+X    if (frame.frame_type != 0x01U) {
+N        boot_proto_send_error(g_boot_param.device_id, BOOT_PROTO_CMD_ERROR);
+X        boot_proto_send_error(g_boot_param.device_id, 0xEEEEU);
+N        return BOOT_FLOW_EVENT_KEEP_WAITING;
+N    }
+N
+N    switch (frame.command) {
+N    case BOOT_PROTO_CMD_QUERY_ID:
+X    case 0x0111U:
+N        boot_flow_send_query_id(frame.command);
+N        break;
+N
+N    case BOOT_PROTO_CMD_QUERY_BAUD:
+X    case 0x0112U:
+N        boot_flow_send_query_baud(frame.command);
+N        break;
+N
+N    case BOOT_PROTO_CMD_UPGRADE_READY: {
+X    case 0x0502U: {
+N        boot_status_t ret;
+N
+N        if (frame.content_len != 0U) {
+N            boot_proto_send_error(g_boot_param.device_id, frame.command);
+N            break;
+N        }
+N
+N        boot_flow_show_oled();
+N        ret = boot_upgrade_receive_stage_image(&g_upgrade_ctx);
+N        if (ret == BOOT_STATUS_OK) {
+N            boot_proto_send_ok(g_boot_param.device_id, frame.command);
+N            g_suppress_next_bad_frame = true;
+X            g_suppress_next_bad_frame = 1;
+N            return BOOT_FLOW_EVENT_IMAGE_STAGED;
+N        }
+N
+N        boot_proto_send_error(g_boot_param.device_id, frame.command);
+N        (void)boot_upgrade_prepare_stage(&g_upgrade_ctx);
+N        g_suppress_next_bad_frame = true;
+X        g_suppress_next_bad_frame = 1;
+N        break;
+N    }
+N
+N    case BOOT_PROTO_CMD_UPGRADE_EXEC: {
+X    case 0x0503U: {
+N        boot_status_t ret;
+N
+N        if (frame.content_len != 0U) {
+N            boot_proto_send_error(g_boot_param.device_id, frame.command);
+N            break;
+N        }
+N
+N        if (!g_upgrade_ctx.pending_valid) {
+N            boot_proto_send_error(g_boot_param.device_id, frame.command);
+N            break;
+N        }
+N
+N        //升级前先把OK发完，Flash搬运会卡一段时间
+N        boot_proto_send_ok(g_boot_param.device_id, frame.command);
+N
+N        boot_flow_show_oled();
+N        ret = boot_upgrade_execute(&g_upgrade_ctx, &g_boot_param);
+N        if (ret == BOOT_STATUS_OK) {
+N            boot_app_jump_raw(BOOT_APP_ADDR);
+X            boot_app_jump_raw(0x08011000U);
+N        }
+N
+N        boot_flow_show_oled();
+N        break;
+N    }
+N
+N    default:
+N        boot_proto_send_error(g_boot_param.device_id, BOOT_PROTO_CMD_ERROR);
+X        boot_proto_send_error(g_boot_param.device_id, 0xEEEEU);
+N        break;
+N    }
+N
+N    return BOOT_FLOW_EVENT_KEEP_WAITING;
+N}
+N
+Nstatic void boot_flow_print_wait_prompt(uint32_t remaining_sec, uint32_t *last_printed)
+N{
+N    if (((remaining_sec == 10U) ||
+N         (remaining_sec == 7U) ||
+N         (remaining_sec == 4U) ||
+N         (remaining_sec == 1U)) &&
+N        (*last_printed != remaining_sec)) {
+N        rs485_printf("wait for start Application(%lus)......\r\n", (unsigned long)remaining_sec);
+N        *last_printed = remaining_sec;
+N    }
+N}
+N
+Nvoid boot_flow_init(void)
+N{
+N    (void)boot_param_load(&g_boot_param);
+N    boot_upgrade_init(&g_upgrade_ctx);
+N    boot_proto_rx_enable();
+N}
+N
+Nbool boot_flow_update_requested(void)
+X_Bool boot_flow_update_requested(void)
+N{
+N    return g_boot_param.boot_flag == BOOT_FLAG_UPDATE;
+X    return g_boot_param.boot_flag == 0xA5U;
+N}
+N
+Nbool boot_flow_boot_default(void)
+X_Bool boot_flow_boot_default(void)
+N{
+N    if (boot_app_can_boot()) {
+N        boot_app_jump_raw(BOOT_APP_ADDR);
+X        boot_app_jump_raw(0x08011000U);
+N        return true;
+X        return 1;
+N    }
+N
+N    if (boot_upgrade_restore_backup_to_app()) {
+N        boot_app_jump_raw(BOOT_APP_ADDR);
+X        boot_app_jump_raw(0x08011000U);
+N        return true;
+X        return 1;
+N    }
+N
+N    return false;
+X    return 0;
+N}
+N
+Nvoid boot_flow_console(void)
+N{
+N    uint32_t start;
+N    uint32_t last_printed = 0xFFFFFFFFU;
+N    bool countdown_active = true;
+X    _Bool countdown_active = 1;
+N
+N    g_suppress_next_bad_frame = false;
+X    g_suppress_next_bad_frame = 0;
+N    g_upgrade_ctx.pending_valid = false;
+X    g_upgrade_ctx.pending_valid = 0;
+N
+N    boot_flow_show_oled();
+N
+N    (void)boot_upgrade_prepare_stage(&g_upgrade_ctx);
+N
+N    boot_flow_show_oled();
+N
+N    rs485_printf("using command to interrupt start Application\r\n");
+N
+N    start = GetTick();
+N    while (1) {
+N        boot_flow_event_t event;
+N
+N        if (countdown_active) {
+N            uint32_t elapsed = GetTick() - start;
+N            uint32_t remaining = (elapsed >= BOOT_WAIT_APP_MS) ? 0U : (10U - (elapsed / 1000U));
+X            uint32_t remaining = (elapsed >= 10000U) ? 0U : (10U - (elapsed / 1000U));
+N
+N            boot_flow_print_wait_prompt(remaining, &last_printed);
+N            event = boot_flow_process_frame_once(BOOT_FRAME_POLL_MS);
+X            event = boot_flow_process_frame_once(100U);
+N
+N            if (event == BOOT_FLOW_EVENT_IMAGE_STAGED) {
+N                countdown_active = false;
+X                countdown_active = 0;
+N            }
+N
+N            if (elapsed >= BOOT_WAIT_APP_MS) {
+X            if (elapsed >= 10000U) {
+N                if (g_boot_param.boot_flag == BOOT_FLAG_UPDATE) {
+X                if (g_boot_param.boot_flag == 0xA5U) {
+N                    (void)boot_param_set_boot_flag(&g_boot_param, BOOT_FLAG_NORMAL);
+X                    (void)boot_param_set_boot_flag(&g_boot_param, 0x00U);
+N                }
+N
+N                if (boot_flow_boot_default()) {
+N                    while (1) {
+N                    }
+N                }
+N
+N                countdown_active = false;
+X                countdown_active = 0;
+N            }
+N        } else {
+N            (void)boot_flow_process_frame_once(1000U);
+N        }
+N    }
+N}

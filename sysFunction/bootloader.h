@@ -1,7 +1,8 @@
 #ifndef __BOOTLOADER_H
 #define __BOOTLOADER_H
 
-#include "HeaderFiles.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 #define BOOTLOADER_SIZE          0x00010000U
 #define BOOT_PARAM_ADDR          0x08010000U

@@ -13134,29 +13134,7 @@ typedef struct {
     uint32_t ctl;
 } rom_sector_t;
 
-static const rom_sector_t g_rom_sector[] = {
-    {0x08000000U, 0x08004000U, (((0xFFFFFFFFUL << (3)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(7)))) & ((uint32_t)(0))<< 3)},
-    {0x08004000U, 0x08008000U, (((0xFFFFFFFFUL << (3)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(7)))) & ((uint32_t)(1))<< 3)},
-    {0x08008000U, 0x0800C000U, (((0xFFFFFFFFUL << (3)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(7)))) & ((uint32_t)(2))<< 3)},
-    {0x0800C000U, 0x08010000U, (((0xFFFFFFFFUL << (3)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(7)))) & ((uint32_t)(3))<< 3)},
-    {0x08010000U, 0x08020000U, (((0xFFFFFFFFUL << (3)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(7)))) & ((uint32_t)(4))<< 3)},
-    {0x08020000U, 0x08040000U, (((0xFFFFFFFFUL << (3)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(7)))) & ((uint32_t)(5))<< 3)},
-    {0x08040000U, 0x08060000U, (((0xFFFFFFFFUL << (3)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(7)))) & ((uint32_t)(6))<< 3)},
-    {0x08060000U, 0x08080000U, (((0xFFFFFFFFUL << (3)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(7)))) & ((uint32_t)(7))<< 3)},
-};
-
-
-
-static uint32_t rom_sector_ctl_from_addr(uint32_t addr)
-{
-    for (uint32_t i = 0U; i < (sizeof(g_rom_sector) / sizeof(g_rom_sector[0])); i++) {
-        if ((addr >= g_rom_sector[i].start) && (addr < g_rom_sector[i].end)) {
-            return g_rom_sector[i].ctl;
-        }
-    }
-
-    return 0xFFFFFFFFU;
-}
+#line 36 "..\\Driver\\HardWare\\ROM\\ROM.c"
 
 static void rom_clear_status_flags(void)
 {
@@ -13239,7 +13217,7 @@ _Bool ROM_erase_range(uint32_t start_addr, uint32_t size)
         rom_clear_status_flags();
     }
     fmc_lock();
-#line 131 "..\\Driver\\HardWare\\ROM\\ROM.c"
+#line 133 "..\\Driver\\HardWare\\ROM\\ROM.c"
     return 1;
 }
 

@@ -1,9 +1,13 @@
 .\objects\raw_download.o: ..\sysFunction\raw_download.c
 .\objects\raw_download.o: ..\sysFunction\raw_download.h
-.\objects\raw_download.o: ..\Driver\HeaderFiles\HeaderFiles.h
+.\objects\raw_download.o: ..\sysFunction\bootloader.h
+.\objects\raw_download.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\raw_download.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\raw_download.o: ..\Protocol\boot_crc.h
+.\objects\raw_download.o: ..\Driver\System\myDMA.h
+.\objects\raw_download.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_dma.h
 .\objects\raw_download.o: ..\Driver\Start\CMSIS\GD\GD32F4xx\Include\gd32f4xx.h
 .\objects\raw_download.o: ..\Driver\Start\CMSIS\core_cm4.h
-.\objects\raw_download.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\raw_download.o: ..\Driver\Start\CMSIS\core_cmInstr.h
 .\objects\raw_download.o: ..\Driver\Start\CMSIS\core_cmFunc.h
 .\objects\raw_download.o: ..\Driver\Start\CMSIS\core_cm4_simd.h
@@ -40,4 +44,5 @@
 .\objects\raw_download.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_exmc.h
 .\objects\raw_download.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_ipa.h
 .\objects\raw_download.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_tli.h
-.\objects\raw_download.o: ..\User\systick.h
+.\objects\raw_download.o: ..\Driver\HardWare\ROM\ROM.h
+.\objects\raw_download.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\string.h

@@ -71,6 +71,24 @@ virtualFolder:
         - path: ../../sysFunction/raw_download.c
         - path: ../../sysFunction/raw_download.h
       folders: []
+    - name: Protocol
+      files:
+        - path: ../../Protocol/boot_crc.c
+        - path: ../../Protocol/boot_crc.h
+        - path: ../../Protocol/boot_protocol.c
+        - path: ../../Protocol/boot_protocol.h
+      folders: []
+    - name: FunctionLayer
+      files:
+        - path: ../../Function/boot_app.c
+        - path: ../../Function/boot_app.h
+        - path: ../../Function/boot_flow.c
+        - path: ../../Function/boot_flow.h
+        - path: ../../Function/boot_param.c
+        - path: ../../Function/boot_param.h
+        - path: ../../Function/boot_upgrade.c
+        - path: ../../Function/boot_upgrade.h
+      folders: []
 dependenceList: []
 outDir: build
 miscInfo:
@@ -102,6 +120,8 @@ targets:
         - ../../Driver/Start/CMSIS/GD/GD32F4xx/Include
         - ../../Driver/Start/CMSIS/GD/GD32F4xx/Source
         - ../../sysFunction
+        - ../../Protocol
+        - ../../Function
         - ../../Driver/Fatfs
         - ../../Driver/System
         - .cmsis/include

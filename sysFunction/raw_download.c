@@ -1,12 +1,18 @@
 #include "raw_download.h"
 
-#include "crc_utils.h"
+#include "boot_crc.h"
+#include "myDMA.h"
 #include "ROM.h"
+#include "gd32f4xx_usart.h"
+
+#include <string.h>
 
 #define RAW_FIRST_BYTE_TIMEOUT_MS  180000U
 #define RAW_END_SILENCE_MS           3000U
 
-/* Current write position in the USART1 DMA circular buffer. */
+uint32_t GetTick(void);
+void USART1_ClearRxBuf(void);
+
 static uint32_t raw_dma_pos(void)
 {
     uint32_t pos = get_usart1_rx_len();
@@ -16,7 +22,6 @@ static uint32_t raw_dma_pos(void)
 
 boot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_image_info_t *info)
 {
-    /* GD32 flash write is word based, so bytes are packed into 4-byte words. */
     uint8_t word[4];
     uint32_t word_len = 0U;
     uint32_t size = 0U;
@@ -35,7 +40,7 @@ boot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_
     memset(word, 0xFF, sizeof(word));
     strncpy(info->name, "raw.bin", sizeof(info->name) - 1U);
 
-    /* Raw mode does not parse packets; it only drains the UART DMA buffer. */
+    //raw模式不解析协议，只从USART DMA里把bin捞出来
     usart_interrupt_disable(USART1, USART_INT_IDLE);
     USART1_ClearRxBuf();
     reset_usart1_rx_dma();
@@ -59,7 +64,7 @@ boot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_
                 return BOOT_STATUS_RANGE;
             }
 
-            crc = crc32_step(crc, &byte, 1U);
+            crc = boot_crc32_step(crc, &byte, 1U);
             word[word_len++] = byte;
             size++;
 
@@ -76,7 +81,6 @@ boot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_
             last_tick = GetTick();
         }
 
-        /* No new byte for a while means the sender has finished the bin. */
         info->size = size;
 
         if (!started) {
@@ -92,7 +96,7 @@ boot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_
         return BOOT_STATUS_TIMEOUT;
     }
 
-    /* Pad the final partial word without counting padding as image data. */
+    //Flash按word写，最后不足4字节用0xFF补齐但不算进固件长度
     if (word_len != 0U) {
         while (word_len < sizeof(word)) {
             word[word_len++] = 0xFFU;

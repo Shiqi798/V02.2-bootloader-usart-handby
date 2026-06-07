@@ -1,6 +1,6 @@
 .\objects\mydma.o: ..\Driver\System\myDMA.c
 .\objects\mydma.o: ..\Driver\System\myDMA.h
-.\objects\mydma.o: ..\Driver\HeaderFiles\HeaderFiles.h
+.\objects\mydma.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_dma.h
 .\objects\mydma.o: ..\Driver\Start\CMSIS\GD\GD32F4xx\Include\gd32f4xx.h
 .\objects\mydma.o: ..\Driver\Start\CMSIS\core_cm4.h
 .\objects\mydma.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h
@@ -40,4 +40,4 @@
 .\objects\mydma.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_exmc.h
 .\objects\mydma.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_ipa.h
 .\objects\mydma.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_tli.h
-.\objects\mydma.o: ..\User\systick.h
+.\objects\mydma.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\string.h

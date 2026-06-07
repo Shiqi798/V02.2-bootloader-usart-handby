@@ -12717,3 +12717,2907 @@ void delay_decrement(void);
 #line 9 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
 
 
+#line 1 "..\\Driver\\HardWare\\ROM\\ROM.h"
+
+
+
+#line 5 "..\\Driver\\HardWare\\ROM\\ROM.h"
+#line 6 "..\\Driver\\HardWare\\ROM\\ROM.h"
+
+#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+#line 25 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
+
+
+
+#line 8 "..\\Driver\\HardWare\\ROM\\ROM.h"
+#line 9 "..\\Driver\\HardWare\\ROM\\ROM.h"
+
+
+
+
+
+
+void ROM_page_erase(uint32_t addr);
+void ROM_sector_erase(uint32_t addr);
+void ROM_halfword_write(uint32_t addr , uint16_t data);
+void ROM_word_write(uint32_t addr , uint32_t data);
+void ROM_str_write(uint32_t addr , uint16_t* data , uint16_t len);
+_Bool ROM_erase_range(uint32_t start_addr, uint32_t size);
+_Bool ROM_buffer_write(uint32_t addr, const uint8_t *data, uint32_t len);
+uint16_t ROM_halfword_read(uint32_t addr);
+uint8_t ROM_char_read(uint32_t addr);
+uint32_t ROM_word_read(uint32_t addr);
+
+
+
+ 
+#line 12 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
+ 
+ 
+ 
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+#line 35 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
+
+
+
+
+
+
+#line 49 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
+
+ 
+#line 59 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+ 
+#line 81 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
+
+
+
+
+
+#line 133 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
+
+extern __declspec(__nothrow) __attribute__((const)) unsigned char **__rt_ctype_table(void);
+
+
+
+
+
+
+
+    extern int (isalnum)(int  );
+
+     
+
+
+
+
+
+    extern int (isalpha)(int  );
+
+     
+
+
+
+
+
+    extern int (iscntrl)(int  );
+
+     
+     
+
+ 
+
+
+
+
+    extern int (isdigit)(int  );
+
+     
+
+    extern int (isblank)(int  );
+     
+     
+     
+
+
+
+
+
+    extern int (isgraph)(int  );
+
+     
+
+
+
+
+
+    extern int (islower)(int  );
+
+     
+
+
+
+
+
+    extern int (isprint)(int  );
+
+     
+     
+
+
+
+
+
+    extern int (ispunct)(int  );
+
+     
+
+
+
+
+
+    extern int (isspace)(int  );
+
+     
+
+
+
+
+
+    extern int (isupper)(int  );
+
+     
+
+ 
+ 
+
+static inline int __isxdigit_helper(int __t) { return (__t ^ (__t << 2)); }
+
+
+
+
+    extern int (isxdigit)(int  );
+
+     
+
+
+
+extern int tolower(int  );
+     
+     
+
+extern int toupper(int  );
+     
+     
+
+
+
+
+
+
+
+#line 272 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
+
+
+
+ 
+
+#line 13 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
+ 
+
+
+
+
+
+
+ 
+
+ 
+ 
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+#line 34 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
+
+
+
+
+  typedef signed int ptrdiff_t;
+
+
+
+  
+
+
+
+    typedef unsigned int size_t;    
+#line 57 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
+
+
+
+   
+
+
+
+      typedef unsigned short wchar_t;  
+#line 82 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
+
+
+
+    
+
+
+
+
+   
+
+
+
+
+  typedef long double max_align_t;
+
+
+
+
+
+
+
+
+
+#line 114 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
+
+
+
+ 
+
+#line 14 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
+ 
+ 
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+ 
+
+
+
+
+  
+ 
+
+
+
+
+
+
+
+
+#line 47 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
+
+
+  
+
+
+
+    typedef unsigned int size_t;    
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+ 
+
+
+
+    typedef struct __va_list __va_list;
+
+
+
+
+
+
+   
+
+
+
+
+ 
+
+
+
+
+typedef struct __fpos_t_struct {
+    unsigned __int64 __pos;
+    
+
+
+
+ 
+    struct {
+        unsigned int __state1, __state2;
+    } __mbstate;
+} fpos_t;
+   
+
+
+ 
+
+
+   
+
+ 
+
+typedef struct __FILE FILE;
+   
+
+
+
+
+
+
+ 
+
+#line 136 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
+
+
+extern FILE __stdin, __stdout, __stderr;
+extern FILE *__aeabi_stdin, *__aeabi_stdout, *__aeabi_stderr;
+
+#line 166 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
+    
+
+    
+
+    
+
+
+
+
+
+     
+
+
+
+   
+
+
+ 
+
+
+   
+
+
+ 
+
+   
+
+
+
+ 
+
+   
+
+
+ 
+
+
+
+
+   
+
+
+ 
+
+
+
+
+
+    
+
+
+ 
+
+
+
+
+
+
+extern __declspec(__nothrow) int remove(const char *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int rename(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) FILE *tmpfile(void);
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) char *tmpnam(char *  );
+   
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int fclose(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int fflush(FILE *  );
+   
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) FILE *fopen(const char * __restrict  ,
+                           const char * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) FILE *freopen(const char * __restrict  ,
+                    const char * __restrict  ,
+                    FILE * __restrict  ) __attribute__((__nonnull__(2,3)));
+   
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) void setbuf(FILE * __restrict  ,
+                    char * __restrict  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) int setvbuf(FILE * __restrict  ,
+                   char * __restrict  ,
+                   int  , size_t  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+#pragma __printf_args
+extern __declspec(__nothrow) int fprintf(FILE * __restrict  ,
+                    const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+#pragma __printf_args
+extern __declspec(__nothrow) int _fprintf(FILE * __restrict  ,
+                     const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+#pragma __printf_args
+extern __declspec(__nothrow) int printf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+ 
+#pragma __printf_args
+extern __declspec(__nothrow) int _printf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+#pragma __printf_args
+extern __declspec(__nothrow) int sprintf(char * __restrict  , const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+#pragma __printf_args
+extern __declspec(__nothrow) int _sprintf(char * __restrict  , const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+
+#pragma __printf_args
+extern __declspec(__nothrow) int __ARM_snprintf(char * __restrict  , size_t  ,
+                     const char * __restrict  , ...) __attribute__((__nonnull__(3)));
+
+
+#pragma __printf_args
+extern __declspec(__nothrow) int snprintf(char * __restrict  , size_t  ,
+                     const char * __restrict  , ...) __attribute__((__nonnull__(3)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+#pragma __printf_args
+extern __declspec(__nothrow) int _snprintf(char * __restrict  , size_t  ,
+                      const char * __restrict  , ...) __attribute__((__nonnull__(3)));
+   
+
+
+
+ 
+#pragma __scanf_args
+extern __declspec(__nothrow) int fscanf(FILE * __restrict  ,
+                    const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+#pragma __scanf_args
+extern __declspec(__nothrow) int _fscanf(FILE * __restrict  ,
+                     const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+#pragma __scanf_args
+extern __declspec(__nothrow) int scanf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+ 
+#pragma __scanf_args
+extern __declspec(__nothrow) int _scanf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+#pragma __scanf_args
+extern __declspec(__nothrow) int sscanf(const char * __restrict  ,
+                    const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+ 
+#pragma __scanf_args
+extern __declspec(__nothrow) int _sscanf(const char * __restrict  ,
+                     const char * __restrict  , ...) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+
+ 
+extern __declspec(__nothrow) int vfscanf(FILE * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) int vscanf(const char * __restrict  , __va_list) __attribute__((__nonnull__(1)));
+extern __declspec(__nothrow) int vsscanf(const char * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
+
+extern __declspec(__nothrow) int _vfscanf(FILE * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) int _vscanf(const char * __restrict  , __va_list) __attribute__((__nonnull__(1)));
+extern __declspec(__nothrow) int _vsscanf(const char * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) int __ARM_vsscanf(const char * __restrict  , const char * __restrict  , __va_list) __attribute__((__nonnull__(1,2)));
+
+extern __declspec(__nothrow) int vprintf(const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int _vprintf(const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+extern __declspec(__nothrow) int vfprintf(FILE * __restrict  ,
+                    const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int vsprintf(char * __restrict  ,
+                     const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int __ARM_vsnprintf(char * __restrict  , size_t  ,
+                     const char * __restrict  , __va_list  ) __attribute__((__nonnull__(3)));
+
+extern __declspec(__nothrow) int vsnprintf(char * __restrict  , size_t  ,
+                     const char * __restrict  , __va_list  ) __attribute__((__nonnull__(3)));
+   
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int _vsprintf(char * __restrict  ,
+                      const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+extern __declspec(__nothrow) int _vfprintf(FILE * __restrict  ,
+                     const char * __restrict  , __va_list  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+extern __declspec(__nothrow) int _vsnprintf(char * __restrict  , size_t  ,
+                      const char * __restrict  , __va_list  ) __attribute__((__nonnull__(3)));
+   
+
+
+
+ 
+
+#pragma __printf_args
+extern __declspec(__nothrow) int asprintf(char **  , const char * __restrict  , ...) __attribute__((__nonnull__(2)));
+extern __declspec(__nothrow) int vasprintf(char **  , const char * __restrict  , __va_list  ) __attribute__((__nonnull__(2)));
+
+#pragma __printf_args
+extern __declspec(__nothrow) int __ARM_asprintf(char **  , const char * __restrict  , ...) __attribute__((__nonnull__(2)));
+extern __declspec(__nothrow) int __ARM_vasprintf(char **  , const char * __restrict  , __va_list  ) __attribute__((__nonnull__(2)));
+   
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int fgetc(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) char *fgets(char * __restrict  , int  ,
+                    FILE * __restrict  ) __attribute__((__nonnull__(1,3)));
+   
+
+
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int fputc(int  , FILE *  ) __attribute__((__nonnull__(2)));
+   
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int fputs(const char * __restrict  , FILE * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) int getc(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+ 
+
+
+
+
+    extern __declspec(__nothrow) int (getchar)(void);
+
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) char *gets(char *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int putc(int  , FILE *  ) __attribute__((__nonnull__(2)));
+   
+
+
+
+
+
+ 
+
+
+
+
+    extern __declspec(__nothrow) int (putchar)(int  );
+
+   
+
+
+
+ 
+extern __declspec(__nothrow) int puts(const char *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int ungetc(int  , FILE *  ) __attribute__((__nonnull__(2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t fread(void * __restrict  ,
+                    size_t  , size_t  , FILE * __restrict  ) __attribute__((__nonnull__(1,4)));
+   
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t __fread_bytes_avail(void * __restrict  ,
+                    size_t  , FILE * __restrict  ) __attribute__((__nonnull__(1,3)));
+   
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t fwrite(const void * __restrict  ,
+                    size_t  , size_t  , FILE * __restrict  ) __attribute__((__nonnull__(1,4)));
+   
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int fgetpos(FILE * __restrict  , fpos_t * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int fseek(FILE *  , long int  , int  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int fsetpos(FILE * __restrict  , const fpos_t * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) long int ftell(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) void rewind(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) void clearerr(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int feof(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+ 
+extern __declspec(__nothrow) int ferror(FILE *  ) __attribute__((__nonnull__(1)));
+   
+
+
+ 
+extern __declspec(__nothrow) void perror(const char *  );
+   
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int _fisatty(FILE *   ) __attribute__((__nonnull__(1)));
+    
+ 
+
+extern __declspec(__nothrow) void __use_no_semihosting_swi(void);
+extern __declspec(__nothrow) void __use_no_semihosting(void);
+    
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+#line 1021 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
+
+
+
+ 
+
+#line 15 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 16 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 17 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+ 
+ 
+ 
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+#line 38 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+
+
+  
+
+
+
+    typedef unsigned int size_t;    
+#line 54 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+
+
+
+
+extern __declspec(__nothrow) void *memcpy(void * __restrict  ,
+                    const void * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) void *memmove(void *  ,
+                    const void *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) char *strcpy(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) char *strncpy(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) char *strcat(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) char *strncat(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int memcmp(const void *  , const void *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strcmp(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) int strncmp(const char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strcasecmp(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strncasecmp(const char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strcoll(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strxfrm(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+#line 193 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) void *memchr(const void *  , int  , size_t  ) __attribute__((__nonnull__(1)));
+
+   
+
+
+
+
+
+ 
+
+#line 209 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strchr(const char *  , int  ) __attribute__((__nonnull__(1)));
+
+   
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strcspn(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+
+#line 232 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strpbrk(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+
+   
+
+
+
+
+ 
+
+#line 247 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strrchr(const char *  , int  ) __attribute__((__nonnull__(1)));
+
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strspn(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+
+#line 270 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strstr(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) char *strtok(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(2)));
+extern __declspec(__nothrow) char *_strtok_r(char *  , const char *  , char **  ) __attribute__((__nonnull__(2,3)));
+
+extern __declspec(__nothrow) char *strtok_r(char *  , const char *  , char **  ) __attribute__((__nonnull__(2,3)));
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) void *memset(void *  , int  , size_t  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+extern __declspec(__nothrow) char *strerror(int  );
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) size_t strlen(const char *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strlcpy(char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strlcat(char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) void _membitcpybl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpybb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpyhl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpyhb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpywl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpywb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovebl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovebb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovehl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovehb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovewl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+#line 502 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+
+
+
+ 
+
+#line 18 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+
+
+
+
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+#line 61 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+
+#line 75 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+
+
+
+
+
+
+
+   
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+#line 112 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+extern __attribute__((__pcs__("aapcs"))) unsigned __ARM_dcmp4(double  , double  );
+extern __attribute__((__pcs__("aapcs"))) unsigned __ARM_fcmp4(float  , float  );
+    
+
+
+
+
+ 
+
+extern __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_fpclassifyf(float  );
+extern __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_fpclassify(double  );
+     
+     
+
+static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isfinitef(float __x)
+{
+    return (((*(unsigned *)&(__x)) >> 23) & 0xff) != 0xff;
+}
+static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isfinite(double __x)
+{
+    return (((*(1 + (unsigned *)&(__x))) >> 20) & 0x7ff) != 0x7ff;
+}
+     
+     
+
+static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isinff(float __x)
+{
+    return ((*(unsigned *)&(__x)) << 1) == 0xff000000;
+}
+static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isinf(double __x)
+{
+    return (((*(1 + (unsigned *)&(__x))) << 1) == 0xffe00000) && ((*(unsigned *)&(__x)) == 0);
+}
+     
+     
+
+static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_islessgreaterf(float __x, float __y)
+{
+    unsigned __f = __ARM_fcmp4(__x, __y) >> 28;
+    return (__f == 8) || (__f == 2);  
+}
+static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_islessgreater(double __x, double __y)
+{
+    unsigned __f = __ARM_dcmp4(__x, __y) >> 28;
+    return (__f == 8) || (__f == 2);  
+}
+    
+
+
+ 
+
+static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isnanf(float __x)
+{
+    return (0x7f800000 - ((*(unsigned *)&(__x)) & 0x7fffffff)) >> 31;
+}
+static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isnan(double __x)
+{
+    unsigned __xf = (*(1 + (unsigned *)&(__x))) | (((*(unsigned *)&(__x)) == 0) ? 0 : 1);
+    return (0x7ff00000 - (__xf & 0x7fffffff)) >> 31;
+}
+     
+     
+
+static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isnormalf(float __x)
+{
+    unsigned __xe = ((*(unsigned *)&(__x)) >> 23) & 0xff;
+    return (__xe != 0xff) && (__xe != 0);
+}
+static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isnormal(double __x)
+{
+    unsigned __xe = ((*(1 + (unsigned *)&(__x))) >> 20) & 0x7ff;
+    return (__xe != 0x7ff) && (__xe != 0);
+}
+     
+     
+
+static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_signbitf(float __x)
+{
+    return (*(unsigned *)&(__x)) >> 31;
+}
+static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_signbit(double __x)
+{
+    return (*(1 + (unsigned *)&(__x))) >> 31;
+}
+     
+     
+
+
+
+
+
+
+
+
+#line 230 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+
+
+
+
+
+
+
+   
+  typedef float float_t;
+  typedef double double_t;
+#line 251 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+
+
+
+extern const int math_errhandling;
+#line 261 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+
+extern __declspec(__nothrow) double acos(double  );
+    
+    
+    
+extern __declspec(__nothrow) double asin(double  );
+    
+    
+    
+    
+
+extern __declspec(__nothrow) __attribute__((const)) double atan(double  );
+    
+    
+
+extern __declspec(__nothrow) double atan2(double  , double  );
+    
+    
+    
+    
+
+extern __declspec(__nothrow) double cos(double  );
+    
+    
+    
+    
+extern __declspec(__nothrow) double sin(double  );
+    
+    
+    
+    
+
+extern void __use_accurate_range_reduction(void);
+    
+    
+
+extern __declspec(__nothrow) double tan(double  );
+    
+    
+    
+    
+
+extern __declspec(__nothrow) double cosh(double  );
+    
+    
+    
+    
+extern __declspec(__nothrow) double sinh(double  );
+    
+    
+    
+    
+    
+
+extern __declspec(__nothrow) __attribute__((const)) double tanh(double  );
+    
+    
+
+extern __declspec(__nothrow) double exp(double  );
+    
+    
+    
+    
+    
+
+extern __declspec(__nothrow) double frexp(double  , int *  ) __attribute__((__nonnull__(2)));
+    
+    
+    
+    
+    
+    
+
+extern __declspec(__nothrow) double ldexp(double  , int  );
+    
+    
+    
+    
+extern __declspec(__nothrow) double log(double  );
+    
+    
+    
+    
+    
+extern __declspec(__nothrow) double log10(double  );
+    
+    
+    
+extern __declspec(__nothrow) double modf(double  , double *  ) __attribute__((__nonnull__(2)));
+    
+    
+    
+    
+
+extern __declspec(__nothrow) double pow(double  , double  );
+    
+    
+    
+    
+    
+    
+extern __declspec(__nothrow) double sqrt(double  );
+    
+    
+    
+
+
+
+
+    inline double _sqrt(double __x) { return sqrt(__x); }
+
+
+    inline float _sqrtf(float __x) { return __sqrtf(__x); }
+
+
+
+    
+
+
+
+ 
+
+extern __declspec(__nothrow) __attribute__((const)) double ceil(double  );
+    
+    
+extern __declspec(__nothrow) __attribute__((const)) double fabs(double  );
+    
+    
+
+extern __declspec(__nothrow) __attribute__((const)) double floor(double  );
+    
+    
+
+extern __declspec(__nothrow) double fmod(double  , double  );
+    
+    
+    
+    
+    
+
+    
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+extern __declspec(__nothrow) double acosh(double  );
+    
+
+ 
+extern __declspec(__nothrow) double asinh(double  );
+    
+
+ 
+extern __declspec(__nothrow) double atanh(double  );
+    
+
+ 
+extern __declspec(__nothrow) double cbrt(double  );
+    
+
+ 
+inline __declspec(__nothrow) __attribute__((const)) double copysign(double __x, double __y)
+    
+
+ 
+{
+    (*(1 + (unsigned *)&(__x))) = ((*(1 + (unsigned *)&(__x))) & 0x7fffffff) | ((*(1 + (unsigned *)&(__y))) & 0x80000000);
+    return __x;
+}
+inline __declspec(__nothrow) __attribute__((const)) float copysignf(float __x, float __y)
+    
+
+ 
+{
+    (*(unsigned *)&(__x)) = ((*(unsigned *)&(__x)) & 0x7fffffff) | ((*(unsigned *)&(__y)) & 0x80000000);
+    return __x;
+}
+extern __declspec(__nothrow) double erf(double  );
+    
+
+ 
+extern __declspec(__nothrow) double erfc(double  );
+    
+
+ 
+extern __declspec(__nothrow) double expm1(double  );
+    
+
+ 
+
+
+
+    
+
+ 
+
+
+
+
+
+
+#line 479 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+
+
+extern __declspec(__nothrow) double hypot(double  , double  );
+    
+
+
+
+
+ 
+extern __declspec(__nothrow) int ilogb(double  );
+    
+
+ 
+extern __declspec(__nothrow) int ilogbf(float  );
+    
+
+ 
+extern __declspec(__nothrow) int ilogbl(long double  );
+    
+
+ 
+
+
+
+
+
+
+
+    
+
+ 
+
+
+
+
+
+    
+
+
+
+ 
+
+
+
+
+
+    
+
+
+
+ 
+
+
+
+
+
+    
+
+ 
+
+
+
+
+
+    
+
+
+
+ 
+
+
+
+
+
+    
+
+
+
+ 
+
+
+
+
+
+    
+
+
+
+ 
+
+
+
+
+
+    
+
+ 
+
+
+
+
+
+    
+
+ 
+
+
+
+
+
+    
+
+
+ 
+
+extern __declspec(__nothrow) double lgamma (double  );
+    
+
+
+ 
+extern __declspec(__nothrow) double log1p(double  );
+    
+
+ 
+extern __declspec(__nothrow) double logb(double  );
+    
+
+ 
+extern __declspec(__nothrow) float logbf(float  );
+    
+
+ 
+extern __declspec(__nothrow) long double logbl(long double  );
+    
+
+ 
+extern __declspec(__nothrow) double nextafter(double  , double  );
+    
+
+
+ 
+extern __declspec(__nothrow) float nextafterf(float  , float  );
+    
+
+
+ 
+extern __declspec(__nothrow) long double nextafterl(long double  , long double  );
+    
+
+
+ 
+extern __declspec(__nothrow) double nexttoward(double  , long double  );
+    
+
+
+ 
+extern __declspec(__nothrow) float nexttowardf(float  , long double  );
+    
+
+
+ 
+extern __declspec(__nothrow) long double nexttowardl(long double  , long double  );
+    
+
+
+ 
+extern __declspec(__nothrow) double remainder(double  , double  );
+    
+
+ 
+extern __declspec(__nothrow) __attribute__((const)) double rint(double  );
+    
+
+ 
+extern __declspec(__nothrow) double scalbln(double  , long int  );
+    
+
+ 
+extern __declspec(__nothrow) float scalblnf(float  , long int  );
+    
+
+ 
+extern __declspec(__nothrow) long double scalblnl(long double  , long int  );
+    
+
+ 
+extern __declspec(__nothrow) double scalbn(double  , int  );
+    
+
+ 
+extern __declspec(__nothrow) float scalbnf(float  , int  );
+    
+
+ 
+extern __declspec(__nothrow) long double scalbnl(long double  , int  );
+    
+
+ 
+
+
+
+
+    
+
+ 
+
+
+
+ 
+extern __declspec(__nothrow) __attribute__((const)) float _fabsf(float);  
+inline __declspec(__nothrow) __attribute__((const)) float fabsf(float __f) { return _fabsf(__f); }
+extern __declspec(__nothrow) float sinf(float  );
+extern __declspec(__nothrow) float cosf(float  );
+extern __declspec(__nothrow) float tanf(float  );
+extern __declspec(__nothrow) float acosf(float  );
+extern __declspec(__nothrow) float asinf(float  );
+extern __declspec(__nothrow) float atanf(float  );
+extern __declspec(__nothrow) float atan2f(float  , float  );
+extern __declspec(__nothrow) float sinhf(float  );
+extern __declspec(__nothrow) float coshf(float  );
+extern __declspec(__nothrow) float tanhf(float  );
+extern __declspec(__nothrow) float expf(float  );
+extern __declspec(__nothrow) float logf(float  );
+extern __declspec(__nothrow) float log10f(float  );
+extern __declspec(__nothrow) float powf(float  , float  );
+extern __declspec(__nothrow) float sqrtf(float  );
+extern __declspec(__nothrow) float ldexpf(float  , int  );
+extern __declspec(__nothrow) float frexpf(float  , int *  ) __attribute__((__nonnull__(2)));
+extern __declspec(__nothrow) __attribute__((const)) float ceilf(float  );
+extern __declspec(__nothrow) __attribute__((const)) float floorf(float  );
+extern __declspec(__nothrow) float fmodf(float  , float  );
+extern __declspec(__nothrow) float modff(float  , float *  ) __attribute__((__nonnull__(2)));
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+__declspec(__nothrow) long double acosl(long double );
+__declspec(__nothrow) long double asinl(long double );
+__declspec(__nothrow) long double atanl(long double );
+__declspec(__nothrow) long double atan2l(long double , long double );
+__declspec(__nothrow) long double ceill(long double );
+__declspec(__nothrow) long double cosl(long double );
+__declspec(__nothrow) long double coshl(long double );
+__declspec(__nothrow) long double expl(long double );
+__declspec(__nothrow) long double fabsl(long double );
+__declspec(__nothrow) long double floorl(long double );
+__declspec(__nothrow) long double fmodl(long double , long double );
+__declspec(__nothrow) long double frexpl(long double , int* ) __attribute__((__nonnull__(2)));
+__declspec(__nothrow) long double ldexpl(long double , int );
+__declspec(__nothrow) long double logl(long double );
+__declspec(__nothrow) long double log10l(long double );
+__declspec(__nothrow) long double modfl(long double  , long double *  ) __attribute__((__nonnull__(2)));
+__declspec(__nothrow) long double powl(long double , long double );
+__declspec(__nothrow) long double sinl(long double );
+__declspec(__nothrow) long double sinhl(long double );
+__declspec(__nothrow) long double sqrtl(long double );
+__declspec(__nothrow) long double tanl(long double );
+__declspec(__nothrow) long double tanhl(long double );
+
+
+
+
+
+ 
+extern __declspec(__nothrow) float acoshf(float  );
+__declspec(__nothrow) long double acoshl(long double );
+extern __declspec(__nothrow) float asinhf(float  );
+__declspec(__nothrow) long double asinhl(long double );
+extern __declspec(__nothrow) float atanhf(float  );
+__declspec(__nothrow) long double atanhl(long double );
+__declspec(__nothrow) long double copysignl(long double , long double );
+extern __declspec(__nothrow) float cbrtf(float  );
+__declspec(__nothrow) long double cbrtl(long double );
+extern __declspec(__nothrow) float erff(float  );
+__declspec(__nothrow) long double erfl(long double );
+extern __declspec(__nothrow) float erfcf(float  );
+__declspec(__nothrow) long double erfcl(long double );
+extern __declspec(__nothrow) float expm1f(float  );
+__declspec(__nothrow) long double expm1l(long double );
+extern __declspec(__nothrow) float log1pf(float  );
+__declspec(__nothrow) long double log1pl(long double );
+extern __declspec(__nothrow) float hypotf(float  , float  );
+__declspec(__nothrow) long double hypotl(long double , long double );
+extern __declspec(__nothrow) float lgammaf(float  );
+__declspec(__nothrow) long double lgammal(long double );
+extern __declspec(__nothrow) float remainderf(float  , float  );
+__declspec(__nothrow) long double remainderl(long double , long double );
+extern __declspec(__nothrow) float rintf(float  );
+__declspec(__nothrow) long double rintl(long double );
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) double exp2(double  );  
+extern __declspec(__nothrow) float exp2f(float  );
+__declspec(__nothrow) long double exp2l(long double );
+extern __declspec(__nothrow) double fdim(double  , double  );
+extern __declspec(__nothrow) float fdimf(float  , float  );
+__declspec(__nothrow) long double fdiml(long double , long double );
+#line 803 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+extern __declspec(__nothrow) double fma(double  , double  , double  );
+extern __declspec(__nothrow) float fmaf(float  , float  , float  );
+
+inline __declspec(__nothrow) long double fmal(long double __x, long double __y, long double __z)     { return (long double)fma((double)__x, (double)__y, (double)__z); }
+
+
+extern __declspec(__nothrow) __attribute__((const)) double fmax(double  , double  );
+extern __declspec(__nothrow) __attribute__((const)) float fmaxf(float  , float  );
+__declspec(__nothrow) long double fmaxl(long double , long double );
+extern __declspec(__nothrow) __attribute__((const)) double fmin(double  , double  );
+extern __declspec(__nothrow) __attribute__((const)) float fminf(float  , float  );
+__declspec(__nothrow) long double fminl(long double , long double );
+extern __declspec(__nothrow) double log2(double  );  
+extern __declspec(__nothrow) float log2f(float  );
+__declspec(__nothrow) long double log2l(long double );
+extern __declspec(__nothrow) long lrint(double  );
+extern __declspec(__nothrow) long lrintf(float  );
+
+inline __declspec(__nothrow) long lrintl(long double __x)     { return lrint((double)__x); }
+
+
+extern __declspec(__nothrow) long long llrint(double  );
+extern __declspec(__nothrow) long long llrintf(float  );
+
+inline __declspec(__nothrow) long long llrintl(long double __x)     { return llrint((double)__x); }
+
+
+extern __declspec(__nothrow) long lround(double  );
+extern __declspec(__nothrow) long lroundf(float  );
+
+inline __declspec(__nothrow) long lroundl(long double __x)     { return lround((double)__x); }
+
+
+extern __declspec(__nothrow) long long llround(double  );
+extern __declspec(__nothrow) long long llroundf(float  );
+
+inline __declspec(__nothrow) long long llroundl(long double __x)     { return llround((double)__x); }
+
+
+extern __declspec(__nothrow) __attribute__((const)) double nan(const char * );
+extern __declspec(__nothrow) __attribute__((const)) float nanf(const char * );
+
+inline __declspec(__nothrow) __attribute__((const)) long double nanl(const char *__t)     { return (long double)nan(__t); }
+#line 856 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+extern __declspec(__nothrow) __attribute__((const)) double nearbyint(double  );
+extern __declspec(__nothrow) __attribute__((const)) float nearbyintf(float  );
+__declspec(__nothrow) long double nearbyintl(long double );
+extern  double remquo(double  , double  , int * );
+extern  float remquof(float  , float  , int * );
+
+inline long double remquol(long double __x, long double __y, int *__q)     { return (long double)remquo((double)__x, (double)__y, __q); }
+
+
+extern __declspec(__nothrow) __attribute__((const)) double round(double  );
+extern __declspec(__nothrow) __attribute__((const)) float roundf(float  );
+__declspec(__nothrow) long double roundl(long double );
+extern __declspec(__nothrow) double tgamma(double  );  
+extern __declspec(__nothrow) float tgammaf(float  );
+__declspec(__nothrow) long double tgammal(long double );
+extern __declspec(__nothrow) __attribute__((const)) double trunc(double  );
+extern __declspec(__nothrow) __attribute__((const)) float truncf(float  );
+__declspec(__nothrow) long double truncl(long double );
+
+
+
+
+
+
+#line 896 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+
+#line 1087 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+
+
+
+
+
+
+
+
+
+
+
+#line 1317 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
+
+
+
+
+
+ 
+#line 19 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
+ 
+ 
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+#line 27 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
+
+
+
+
+
+
+
+
+ 
+
+ 
+ 
+#line 57 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
+    typedef struct __va_list { void *__ap; } va_list;
+
+   
+
+
+
+
+
+
+ 
+
+
+   
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+   
+
+ 
+
+
+   
+
+
+
+
+ 
+
+
+
+   
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+#line 138 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
+
+
+
+#line 147 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
+
+ 
+
+#line 20 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+   
+
+#line 1 "..\\Driver\\HardWare\\OLED\\OLED.h"
+
+
+
+ 
+
+#line 1 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 36 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+
+
+#line 7 "..\\Driver\\HardWare\\OLED\\OLED.h"
+
+
+
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+void OLED_ClearPoint(unsigned char x,unsigned char y);
+void OLED_ColorTurn(unsigned char i);
+void OLED_DisplayTurn(unsigned char i);
+void I2C_Start(void);
+void I2C_Stop(void);
+void I2C_WaitAck(void);
+void Send_Byte(unsigned char dat);
+void OLED_WR_Byte(unsigned char dat,unsigned char mode);
+void OLED_DisPlay_On(void);
+void OLED_DisPlay_Off(void);
+void OLED_Refresh(void);
+void OLED_Clear(void);
+void OLED_DrawPoint(unsigned char x,unsigned char y);
+void OLED_DrawLine(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2);
+void OLED_DrawCircle(unsigned char x,unsigned char y,unsigned char r);
+void OLED_ShowChar(unsigned char x,unsigned char y,unsigned char chr,unsigned char size1);
+void OLED_ShowString(unsigned char x,unsigned char y,unsigned char *chr,unsigned char size1);
+void OLED_ShowNum(unsigned char x,unsigned char y,unsigned int num,unsigned char len,unsigned char size1);
+void OLED_ShowChinese(unsigned char x,unsigned char y,unsigned char num,unsigned char size1);
+void OLED_ScrollDisplay(unsigned char num,unsigned char space);
+void OLED_WR_BP(unsigned char x,unsigned char y);
+void OLED_ShowPicture(unsigned char x0,unsigned char y0,unsigned char x1,unsigned char y1,unsigned char BMP[]);
+
+void OLED_Init(void);
+void OLED_ShowFloatNum(int16_t X, int16_t Y, double Number, uint8_t IntLength, uint8_t FraLength, uint8_t FontSize);
+void OLED_Printf(int16_t X, int16_t Y, uint8_t FontSize, char *format, ...);
+
+
+
+ 
+
+#line 23 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "..\\Driver\\HardWare\\USART\\USART.h"
+
+
+
+ 
+
+#line 7 "..\\Driver\\HardWare\\USART\\USART.h"
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern volatile uint8_t data_recv;                 
+extern uint8_t usart1_rx_buf[128]; 
+extern volatile uint16_t usart1_rx_len;            
+extern volatile uint8_t usart1_rx_flag;             
+
+ 
+void rs485_printf(const char *fmt, ...);
+
+
+ 
+void USART1_Init(void);
+
+
+
+ 
+void USART1_ClearRxBuf(void);
+
+
+
+
+
+ 
+void USART1_SendData(uint16_t *buf, uint16_t len);
+
+
+
+
+ 
+#line 24 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "..\\Driver\\HardWare\\SPI_FLASH\\SPI_FLASH.h"
+
+
+
+#line 5 "..\\Driver\\HardWare\\SPI_FLASH\\SPI_FLASH.h"
+ 
+
+ 
+ 
+void spi_flash_init(void);
+ 
+void spi_flash_sector_erase(uint32_t sector_addr);
+ 
+void spi_flash_bulk_erase(void);
+ 
+void spi_flash_page_write(uint8_t *pbuffer, uint32_t write_addr, uint16_t num_byte_to_write);
+ 
+void spi_flash_buffer_write(uint8_t *pbuffer, uint32_t write_addr, uint32_t num_byte_to_write);
+ 
+void spi_flash_buffer_read(uint8_t *pbuffer, uint32_t read_addr, uint16_t num_byte_to_read);
+ 
+uint32_t spi_flash_read_id(void);
+ 
+void spi_flash_start_read_sequence(uint32_t read_addr);
+ 
+uint8_t spi_flash_read_byte(void);
+ 
+uint8_t spi_flash_send_byte(uint8_t byte);
+ 
+uint16_t spi_flash_send_halfword(uint16_t half_word);
+ 
+void spi_flash_write_enable(void);
+ 
+void spi_flash_wait_for_write_end(void);
+void spi_flash_buffer_erase(uint32_t sector_addr, uint32_t num_byte_to_erase);
+
+
+
+#line 25 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+
+
+#line 1 "..\\sysFunction\\bootloader.h"
+
+
+
+#line 5 "..\\sysFunction\\bootloader.h"
+#line 6 "..\\sysFunction\\bootloader.h"
+
+#line 16 "..\\sysFunction\\bootloader.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef struct {
+    uint32_t magic;
+    uint16_t device_id;
+    uint8_t baud_code;
+    uint8_t boot_flag;
+    uint32_t checksum;
+} boot_param_t;
+
+typedef enum {
+    BOOT_STATUS_OK = 0U,
+    BOOT_STATUS_TIMEOUT,
+    BOOT_STATUS_ERROR,
+    BOOT_STATUS_CRC,
+    BOOT_STATUS_FLASH,
+    BOOT_STATUS_RANGE
+} boot_status_t;
+
+typedef struct {
+    char name[32];
+    uint32_t size;
+    uint32_t crc32;
+} boot_image_info_t;
+
+uint32_t GetTick(void);
+
+void bootloader_init(void);
+_Bool bootloader_update_requested(void);
+_Bool bootloader_boot_default(void);
+void bootloader_console(void);
+
+#line 28 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "..\\Driver\\System\\myDMA.h"
+
+
+
+#line 5 "..\\Driver\\System\\myDMA.h"
+#line 6 "..\\Driver\\System\\myDMA.h"
+
+
+
+extern uint8_t usart1_rx_buffer[1152U];
+extern uint8_t usart1_tx_buffer[256];
+extern uint16_t adc_value[2];
+
+
+void mydma_init_buffers(void);
+
+void dma_usart_tx_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t par, uint32_t mar);
+void dma_usart1_rx_config(void);
+void dma_enable(uint32_t dma_periph, dma_channel_enum channelx, uint16_t ndtr);
+
+void DMA_ADC_Init(void);
+void DMA_ADJ_Init(void);
+void USART1_DMA_All_Init(void);
+
+uint16_t get_usart1_rx_len(void);
+void reset_usart1_rx_dma(void);
+
+#line 29 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+ 
+#line 1 "..\\sysFunction\\Function.h"
+
+
+
+#line 5 "..\\sysFunction\\Function.h"
+
+extern uint8_t sampling_flag;
+extern uint8_t overlimit_flag;
+extern uint8_t hide_flag;
+
+void sysFunction_Init(void);
+void sysFunction_loop(void);
+
+
+#line 31 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "..\\sysFunction\\crc_utils.h"
+#line 32 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+
+
+
+
+
+
+#line 5 "..\\sysFunction\\crc_utils.h"
+
+uint32_t crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
+uint32_t crc32_buffer(const uint8_t *data, uint32_t len);
+uint32_t crc32_flash(uint32_t addr, uint32_t len);
+uint16_t crc16_ccitt(const uint8_t *data, uint32_t len);
+uint16_t crc16_modbus(const uint8_t *data, uint32_t len);
+
+#line 2 "..\\sysFunction\\crc_utils.c"
+
+uint32_t crc32_step(uint32_t crc, const uint8_t *data, uint32_t len)
+{
+    for (uint32_t i = 0U; i < len; i++) {
+        crc ^= data[i];
+        for (uint32_t j = 0U; j < 8U; j++) {
+            crc = (crc & 1U) ? ((crc >> 1U) ^ 0xEDB88320U) : (crc >> 1U);
+        }
+    }
+
+    return crc;
+}
+
+uint32_t crc32_buffer(const uint8_t *data, uint32_t len)
+{
+    return crc32_step(0xFFFFFFFFU, data, len) ^ 0xFFFFFFFFU;
+}
+
+uint32_t crc32_flash(uint32_t addr, uint32_t len)
+{
+    return crc32_buffer((const uint8_t *)addr, len);
+}
+
+uint16_t crc16_ccitt(const uint8_t *data, uint32_t len)
+{
+    uint16_t crc = 0U;
+
+    for (uint32_t i = 0U; i < len; i++) {
+        crc ^= (uint16_t)data[i] << 8;
+        for (uint32_t j = 0U; j < 8U; j++) {
+            crc = (crc & 0x8000U) ? (uint16_t)((crc << 1U) ^ 0x1021U) : (uint16_t)(crc << 1U);
+        }
+    }
+
+    return crc;
+}
+
+uint16_t crc16_modbus(const uint8_t *data, uint32_t len)
+{
+    uint16_t crc = 0xFFFFU;
+
+    for (uint32_t i = 0U; i < len; i++) {
+        crc ^= data[i];
+        for (uint32_t j = 0U; j < 8U; j++) {
+            crc = (crc & 1U) ? (uint16_t)((crc >> 1U) ^ 0xA001U) : (uint16_t)(crc >> 1U);
+        }
+    }
+
+    return crc;
+}

@@ -1,43 +1,5 @@
 .\objects\bootloader.o: ..\sysFunction\bootloader.c
 .\objects\bootloader.o: ..\sysFunction\bootloader.h
-.\objects\bootloader.o: ..\Driver\HeaderFiles\HeaderFiles.h
-.\objects\bootloader.o: ..\Driver\Start\CMSIS\GD\GD32F4xx\Include\gd32f4xx.h
-.\objects\bootloader.o: ..\Driver\Start\CMSIS\core_cm4.h
+.\objects\bootloader.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\bootloader.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h
-.\objects\bootloader.o: ..\Driver\Start\CMSIS\core_cmInstr.h
-.\objects\bootloader.o: ..\Driver\Start\CMSIS\core_cmFunc.h
-.\objects\bootloader.o: ..\Driver\Start\CMSIS\core_cm4_simd.h
-.\objects\bootloader.o: ..\Driver\Start\CMSIS\GD\GD32F4xx\Include\system_gd32f4xx.h
-.\objects\bootloader.o: ..\User\gd32f4xx_libopt.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_rcu.h
-.\objects\bootloader.o: ..\Driver\Start\CMSIS\GD\GD32F4xx\Include\gd32f4xx.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_adc.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_can.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_crc.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_ctc.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_dac.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_dbg.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_dci.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_dma.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_exti.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_fmc.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_fwdgt.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_gpio.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_syscfg.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_i2c.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_iref.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_pmu.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_rtc.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_sdio.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_spi.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_timer.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_trng.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_usart.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_wwdgt.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_misc.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_enet.h
-.\objects\bootloader.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdlib.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_exmc.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_ipa.h
-.\objects\bootloader.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_tli.h
-.\objects\bootloader.o: ..\User\systick.h
+.\objects\bootloader.o: ..\Function\boot_flow.h

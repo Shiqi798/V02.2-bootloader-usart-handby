@@ -8,6 +8,7 @@ typedef struct {
     uint32_t ctl;
 } rom_sector_t;
 
+#if !defined(GD32F425) && !defined(GD32F427) && !defined(GD32F470)
 static const rom_sector_t g_rom_sector[] = {
     {0x08000000U, 0x08004000U, CTL_SECTOR_NUMBER_0},
     {0x08004000U, 0x08008000U, CTL_SECTOR_NUMBER_1},
@@ -31,6 +32,7 @@ static uint32_t rom_sector_ctl_from_addr(uint32_t addr)
 
     return 0xFFFFFFFFU;
 }
+#endif
 
 static void rom_clear_status_flags(void)
 {

@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,GD32F470</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Driver\HardWare\LED;..\Driver\HardWare\OLED;..\Driver\HardWare\RTC;..\Driver\HardWare\SPI_FLASH;..\Driver\HardWare\USART;..\Driver\HardWare\ROM;..\Driver\HeaderFiles;..\Driver\Library;..\Driver\Start\CMSIS;..\Driver\Start\Startup;..\User;..\Driver\Library\GD32F4xx_standard_peripheral\Include;..\Driver\Library\GD32F4xx_standard_peripheral\Source;..\Driver\Start\CMSIS\GD\GD32F4xx\Include;..\Driver\Start\CMSIS\GD\GD32F4xx\Source;..\sysFunction;..\Driver\System;..\Driver;..\Driver\HardWare;..\Driver</IncludePath>
+              <IncludePath>..\Driver\HardWare\LED;..\Driver\HardWare\OLED;..\Driver\HardWare\RTC;..\Driver\HardWare\SPI_FLASH;..\Driver\HardWare\USART;..\Driver\HardWare\ROM;..\Driver\HeaderFiles;..\Driver\Library;..\Driver\Start\CMSIS;..\Driver\Start\Startup;..\User;..\Driver\Library\GD32F4xx_standard_peripheral\Include;..\Driver\Library\GD32F4xx_standard_peripheral\Source;..\Driver\Start\CMSIS\GD\GD32F4xx\Include;..\Driver\Start\CMSIS\GD\GD32F4xx\Source;..\sysFunction;..\Protocol;..\Function;..\Driver\System;..\Driver;..\Driver\HardWare;..\Driver</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -600,6 +600,76 @@
               <FileName>raw_download.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\sysFunction\raw_download.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Protocol</GroupName>
+          <Files>
+            <File>
+              <FileName>boot_crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Protocol\boot_crc.c</FilePath>
+            </File>
+            <File>
+              <FileName>boot_crc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Protocol\boot_crc.h</FilePath>
+            </File>
+            <File>
+              <FileName>boot_protocol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Protocol\boot_protocol.c</FilePath>
+            </File>
+            <File>
+              <FileName>boot_protocol.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Protocol\boot_protocol.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>FunctionLayer</GroupName>
+          <Files>
+            <File>
+              <FileName>boot_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Function\boot_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>boot_app.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Function\boot_app.h</FilePath>
+            </File>
+            <File>
+              <FileName>boot_flow.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Function\boot_flow.c</FilePath>
+            </File>
+            <File>
+              <FileName>boot_flow.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Function\boot_flow.h</FilePath>
+            </File>
+            <File>
+              <FileName>boot_param.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Function\boot_param.c</FilePath>
+            </File>
+            <File>
+              <FileName>boot_param.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Function\boot_param.h</FilePath>
+            </File>
+            <File>
+              <FileName>boot_upgrade.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Function\boot_upgrade.c</FilePath>
+            </File>
+            <File>
+              <FileName>boot_upgrade.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Function\boot_upgrade.h</FilePath>
             </File>
           </Files>
         </Group>

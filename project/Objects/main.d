@@ -40,3 +40,19 @@
 .\objects\main.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_ipa.h
 .\objects\main.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_tli.h
 .\objects\main.o: ..\User\systick.h
+.\objects\main.o: ..\Driver\HardWare\ROM\ROM.h
+.\objects\main.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\main.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\ctype.h
+.\objects\main.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\main.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\main.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\string.h
+.\objects\main.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\math.h
+.\objects\main.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\main.o: ..\Driver\HardWare\OLED\OLED.h
+.\objects\main.o: ..\Driver\HeaderFiles\HeaderFiles.h
+.\objects\main.o: ..\Driver\HardWare\USART\USART.h
+.\objects\main.o: ..\Driver\HardWare\SPI_FLASH\SPI_FLASH.h
+.\objects\main.o: ..\sysFunction\bootloader.h
+.\objects\main.o: ..\Driver\System\myDMA.h
+.\objects\main.o: ..\sysFunction\Function.h
+.\objects\main.o: ..\sysFunction\crc_utils.h

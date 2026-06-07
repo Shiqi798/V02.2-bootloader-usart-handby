@@ -3,10 +3,42 @@
 
 
 
-#line 1 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+
 
 
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
 
 #line 1 "..\\Driver\\Start\\CMSIS\\GD\\GD32F4xx\\Include\\gd32f4xx.h"
 
@@ -5435,328 +5467,6 @@ void dci_interrupt_flag_clear(uint32_t int_flag);
 
 
  
-
-
-
-
-#line 41 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
-
- 
-
-
-
- 
-
-
-
-
-
-#line 59 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
-#line 66 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
-#line 73 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
-#line 80 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
-#line 87 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
-#line 94 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
-#line 101 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
-#line 108 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
- 
- 
-
-
-
-
-
-
- 
-
-
-
-
-
-
- 
-#line 144 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
- 
-
-
- 
-
-
- 
-
-
- 
-
-
- 
-
-
-
-
-
- 
- 
-typedef enum 
-{
-    DMA_CH0 = 0,                                     
-    DMA_CH1,                                         
-    DMA_CH2,                                         
-    DMA_CH3,                                         
-    DMA_CH4,                                         
-    DMA_CH5,                                         
-    DMA_CH6,                                         
-    DMA_CH7                                          
-} dma_channel_enum;
-
- 
-typedef enum 
-{
-    DMA_SUBPERI0 = 0,                                
-    DMA_SUBPERI1,                                    
-    DMA_SUBPERI2,                                    
-    DMA_SUBPERI3,                                    
-    DMA_SUBPERI4,                                    
-    DMA_SUBPERI5,                                    
-    DMA_SUBPERI6,                                    
-    DMA_SUBPERI7                                     
-} dma_subperipheral_enum;
-
- 
-typedef struct
-{
-    uint32_t periph_addr;                            
-    uint32_t periph_width;                           
-    uint32_t periph_inc;                               
-
-    uint32_t memory0_addr;                           
-    uint32_t memory_width;                           
-    uint32_t memory_inc;                             
-
-    uint32_t memory_burst_width;                     
-    uint32_t periph_burst_width;                     
-    uint32_t critical_value;                         
-
-    uint32_t circular_mode;                          
-    uint32_t direction;                              
-    uint32_t number;                                 
-    uint32_t priority;                               
-}dma_multi_data_parameter_struct;
-
- 
-typedef struct
-{
-    uint32_t periph_addr;                            
-    uint32_t periph_inc;                               
-
-    uint32_t memory0_addr;                           
-    uint32_t memory_inc;                             
-
-    uint32_t periph_memory_width;                    
-
-    uint32_t circular_mode;                          
-    uint32_t direction;                              
-    uint32_t number;                                 
-    uint32_t priority;                               
-} dma_single_data_parameter_struct;
-
-
-
- 
-#line 237 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
- 
-#line 248 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
- 
-
-
-
-
-
-
- 
-
-
-
-
-
-
- 
-
-
-
-
-
-
- 
-
-
-
-
-
- 
-
-
-
-
-
- 
-
-
-
-
-
- 
-
-
-
-
-
-
- 
-
-
-
- 
-
-
-
- 
-
-
-
- 
-
-
-
-
- 
-
-
-
- 
-#line 323 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
- 
-#line 331 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
-
- 
- 
-
-
-
-
-
-
- 
-
-
-
-
-
-
- 
- 
-
-
-
-
-
-
- 
- 
- 
-void dma_deinit(uint32_t dma_periph, dma_channel_enum channelx);
- 
-void dma_single_data_para_struct_init(dma_single_data_parameter_struct* init_struct);
- 
-void dma_multi_data_para_struct_init(dma_multi_data_parameter_struct* init_struct);
- 
-void dma_single_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx, dma_single_data_parameter_struct* init_struct);
- 
-void dma_multi_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx, dma_multi_data_parameter_struct* init_struct);
-
- 
- 
-void dma_periph_address_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t address);
- 
-void dma_memory_address_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t memory_flag, uint32_t address);
-
- 
-void dma_transfer_number_config(uint32_t dma_periph,dma_channel_enum channelx, uint32_t number);
- 
-uint32_t dma_transfer_number_get(uint32_t dma_periph, dma_channel_enum channelx);
-
- 
-void dma_priority_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t priority);
-
- 
-void dma_memory_burst_beats_config (uint32_t dma_periph, dma_channel_enum channelx, uint32_t mbeat);
- 
-void dma_periph_burst_beats_config (uint32_t dma_periph, dma_channel_enum channelx, uint32_t pbeat);
- 
-void dma_memory_width_config (uint32_t dma_periph, dma_channel_enum channelx, uint32_t msize);
- 
-void dma_periph_width_config (uint32_t dma_periph, dma_channel_enum channelx, uint32_t psize);
-
- 
-void dma_memory_address_generation_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t generation_algorithm);
- 
-void dma_peripheral_address_generation_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t generation_algorithm);
-
- 
-void dma_circulation_enable(uint32_t dma_periph, dma_channel_enum channelx);
- 
-void dma_circulation_disable(uint32_t dma_periph, dma_channel_enum channelx);
- 
-void dma_channel_enable(uint32_t dma_periph, dma_channel_enum channelx);
- 
-void dma_channel_disable(uint32_t dma_periph, dma_channel_enum channelx);
-
- 
-void dma_transfer_direction_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t direction);
-
- 
-void dma_switch_buffer_mode_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t memory1_addr, uint32_t memory_select);
- 
-uint32_t dma_using_memory_get(uint32_t dma_periph, dma_channel_enum channelx);
-
- 
-void dma_channel_subperipheral_select(uint32_t dma_periph, dma_channel_enum channelx, dma_subperipheral_enum sub_periph);
- 
-void dma_flow_controller_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t controller);
- 
-void dma_switch_buffer_mode_enable(uint32_t dma_periph, dma_channel_enum channelx, ControlStatus newvalue);
- 
-uint32_t dma_fifo_status_get(uint32_t dma_periph, dma_channel_enum channelx);
-
- 
- 
-FlagStatus dma_flag_get(uint32_t dma_periph, dma_channel_enum channelx, uint32_t flag);
- 
-void dma_flag_clear(uint32_t dma_periph, dma_channel_enum channelx, uint32_t flag);
- 
-void dma_interrupt_enable(uint32_t dma_periph, dma_channel_enum channelx, uint32_t source);
- 
-void dma_interrupt_disable(uint32_t dma_periph, dma_channel_enum channelx, uint32_t source);
- 
-FlagStatus dma_interrupt_flag_get(uint32_t dma_periph, dma_channel_enum channelx, uint32_t interrupt);
- 
-void dma_interrupt_flag_clear(uint32_t dma_periph, dma_channel_enum channelx, uint32_t interrupt);
-
-
-
-
 
 #line 48 "..\\User\\gd32f4xx_libopt.h"
 #line 1 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_exti.h"
@@ -12664,10 +12374,366 @@ FlagStatus tli_flag_get(uint32_t flag);
 #line 364 "..\\Driver\\Start\\CMSIS\\GD\\GD32F4xx\\Include\\gd32f4xx.h"
 
 
-#line 6 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 7 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 8 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "..\\User\\systick.h"
+#line 41 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+#line 59 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+#line 66 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+#line 73 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+#line 80 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+#line 87 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+#line 94 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+#line 101 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+#line 108 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+#line 144 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+
+
+
+ 
+ 
+typedef enum 
+{
+    DMA_CH0 = 0,                                     
+    DMA_CH1,                                         
+    DMA_CH2,                                         
+    DMA_CH3,                                         
+    DMA_CH4,                                         
+    DMA_CH5,                                         
+    DMA_CH6,                                         
+    DMA_CH7                                          
+} dma_channel_enum;
+
+ 
+typedef enum 
+{
+    DMA_SUBPERI0 = 0,                                
+    DMA_SUBPERI1,                                    
+    DMA_SUBPERI2,                                    
+    DMA_SUBPERI3,                                    
+    DMA_SUBPERI4,                                    
+    DMA_SUBPERI5,                                    
+    DMA_SUBPERI6,                                    
+    DMA_SUBPERI7                                     
+} dma_subperipheral_enum;
+
+ 
+typedef struct
+{
+    uint32_t periph_addr;                            
+    uint32_t periph_width;                           
+    uint32_t periph_inc;                               
+
+    uint32_t memory0_addr;                           
+    uint32_t memory_width;                           
+    uint32_t memory_inc;                             
+
+    uint32_t memory_burst_width;                     
+    uint32_t periph_burst_width;                     
+    uint32_t critical_value;                         
+
+    uint32_t circular_mode;                          
+    uint32_t direction;                              
+    uint32_t number;                                 
+    uint32_t priority;                               
+}dma_multi_data_parameter_struct;
+
+ 
+typedef struct
+{
+    uint32_t periph_addr;                            
+    uint32_t periph_inc;                               
+
+    uint32_t memory0_addr;                           
+    uint32_t memory_inc;                             
+
+    uint32_t periph_memory_width;                    
+
+    uint32_t circular_mode;                          
+    uint32_t direction;                              
+    uint32_t number;                                 
+    uint32_t priority;                               
+} dma_single_data_parameter_struct;
+
+
+
+ 
+#line 237 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+ 
+#line 248 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+ 
+#line 323 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+ 
+#line 331 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_dma.h"
+
+ 
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+ 
+ 
+void dma_deinit(uint32_t dma_periph, dma_channel_enum channelx);
+ 
+void dma_single_data_para_struct_init(dma_single_data_parameter_struct* init_struct);
+ 
+void dma_multi_data_para_struct_init(dma_multi_data_parameter_struct* init_struct);
+ 
+void dma_single_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx, dma_single_data_parameter_struct* init_struct);
+ 
+void dma_multi_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx, dma_multi_data_parameter_struct* init_struct);
+
+ 
+ 
+void dma_periph_address_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t address);
+ 
+void dma_memory_address_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t memory_flag, uint32_t address);
+
+ 
+void dma_transfer_number_config(uint32_t dma_periph,dma_channel_enum channelx, uint32_t number);
+ 
+uint32_t dma_transfer_number_get(uint32_t dma_periph, dma_channel_enum channelx);
+
+ 
+void dma_priority_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t priority);
+
+ 
+void dma_memory_burst_beats_config (uint32_t dma_periph, dma_channel_enum channelx, uint32_t mbeat);
+ 
+void dma_periph_burst_beats_config (uint32_t dma_periph, dma_channel_enum channelx, uint32_t pbeat);
+ 
+void dma_memory_width_config (uint32_t dma_periph, dma_channel_enum channelx, uint32_t msize);
+ 
+void dma_periph_width_config (uint32_t dma_periph, dma_channel_enum channelx, uint32_t psize);
+
+ 
+void dma_memory_address_generation_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t generation_algorithm);
+ 
+void dma_peripheral_address_generation_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t generation_algorithm);
+
+ 
+void dma_circulation_enable(uint32_t dma_periph, dma_channel_enum channelx);
+ 
+void dma_circulation_disable(uint32_t dma_periph, dma_channel_enum channelx);
+ 
+void dma_channel_enable(uint32_t dma_periph, dma_channel_enum channelx);
+ 
+void dma_channel_disable(uint32_t dma_periph, dma_channel_enum channelx);
+
+ 
+void dma_transfer_direction_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t direction);
+
+ 
+void dma_switch_buffer_mode_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t memory1_addr, uint32_t memory_select);
+ 
+uint32_t dma_using_memory_get(uint32_t dma_periph, dma_channel_enum channelx);
+
+ 
+void dma_channel_subperipheral_select(uint32_t dma_periph, dma_channel_enum channelx, dma_subperipheral_enum sub_periph);
+ 
+void dma_flow_controller_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t controller);
+ 
+void dma_switch_buffer_mode_enable(uint32_t dma_periph, dma_channel_enum channelx, ControlStatus newvalue);
+ 
+uint32_t dma_fifo_status_get(uint32_t dma_periph, dma_channel_enum channelx);
+
+ 
+ 
+FlagStatus dma_flag_get(uint32_t dma_periph, dma_channel_enum channelx, uint32_t flag);
+ 
+void dma_flag_clear(uint32_t dma_periph, dma_channel_enum channelx, uint32_t flag);
+ 
+void dma_interrupt_enable(uint32_t dma_periph, dma_channel_enum channelx, uint32_t source);
+ 
+void dma_interrupt_disable(uint32_t dma_periph, dma_channel_enum channelx, uint32_t source);
+ 
+FlagStatus dma_interrupt_flag_get(uint32_t dma_periph, dma_channel_enum channelx, uint32_t interrupt);
+ 
+void dma_interrupt_flag_clear(uint32_t dma_periph, dma_channel_enum channelx, uint32_t interrupt);
+
+
+
+
+
+#line 5 "..\\Driver\\System\\myDMA.h"
+#line 6 "..\\Driver\\System\\myDMA.h"
+
+
+
+extern uint8_t usart1_rx_buffer[1152U];
+extern uint8_t usart1_tx_buffer[256];
+extern uint16_t adc_value[2];
+
+
+void mydma_init_buffers(void);
+
+void dma_usart_tx_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t par, uint32_t mar);
+void dma_usart1_rx_config(void);
+void dma_enable(uint32_t dma_periph, dma_channel_enum channelx, uint16_t ndtr);
+
+void DMA_ADC_Init(void);
+void DMA_ADJ_Init(void);
+void USART1_DMA_All_Init(void);
+
+uint16_t get_usart1_rx_len(void);
+void reset_usart1_rx_dma(void);
+
+#line 2 "..\\Driver\\System\\myDMA.c"
+
+#line 4 "..\\Driver\\System\\myDMA.c"
+#line 5 "..\\Driver\\System\\myDMA.c"
+#line 6 "..\\Driver\\System\\myDMA.c"
+#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+ 
+ 
+ 
+ 
+
+
+
+
+ 
+
+
+
 
 
 
@@ -12686,6 +12752,369 @@ FlagStatus tli_flag_get(uint32_t flag);
 
 
 
+#line 38 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+
+
+  
+
+
+
+    typedef unsigned int size_t;    
+#line 54 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+
+
+
+
+extern __declspec(__nothrow) void *memcpy(void * __restrict  ,
+                    const void * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) void *memmove(void *  ,
+                    const void *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) char *strcpy(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) char *strncpy(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) char *strcat(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) char *strncat(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) int memcmp(const void *  , const void *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strcmp(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+extern __declspec(__nothrow) int strncmp(const char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strcasecmp(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strncasecmp(const char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+ 
+extern __declspec(__nothrow) int strcoll(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strxfrm(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+#line 193 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) void *memchr(const void *  , int  , size_t  ) __attribute__((__nonnull__(1)));
+
+   
+
+
+
+
+
+ 
+
+#line 209 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strchr(const char *  , int  ) __attribute__((__nonnull__(1)));
+
+   
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strcspn(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+ 
+
+#line 232 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strpbrk(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+
+   
+
+
+
+
+ 
+
+#line 247 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strrchr(const char *  , int  ) __attribute__((__nonnull__(1)));
+
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strspn(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+ 
+
+#line 270 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+extern __declspec(__nothrow) char *strstr(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+
+   
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) char *strtok(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(2)));
+extern __declspec(__nothrow) char *_strtok_r(char *  , const char *  , char **  ) __attribute__((__nonnull__(2,3)));
+
+extern __declspec(__nothrow) char *strtok_r(char *  , const char *  , char **  ) __attribute__((__nonnull__(2,3)));
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) void *memset(void *  , int  , size_t  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+extern __declspec(__nothrow) char *strerror(int  );
+   
+
+
+
+
+
+ 
+extern __declspec(__nothrow) size_t strlen(const char *  ) __attribute__((__nonnull__(1)));
+   
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strlcpy(char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) size_t strlcat(char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+extern __declspec(__nothrow) void _membitcpybl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpybb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpyhl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpyhb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpywl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitcpywb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovebl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovebb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovehl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovehb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovewl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -12705,15 +13134,165 @@ FlagStatus tli_flag_get(uint32_t flag);
 
 
 
-#line 39 "..\\User\\systick.h"
+
+
+
+#line 502 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
+
+
 
  
-void systick_config(void);
- 
-void delay_1ms(uint32_t count);
- 
-void delay_decrement(void);
 
-#line 9 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 7 "..\\Driver\\System\\myDMA.c"
 
+
+
+uint8_t usart1_rx_buffer[1152U];
+uint8_t usart1_tx_buffer[256];
+ 
+uint16_t adc_value[2];
+
+
+void mydma_init_buffers(void)
+{
+    memset(usart1_rx_buffer, 0, 1152U);
+    memset(usart1_tx_buffer, 0, 256);
+    memset(adc_value, 0, sizeof(adc_value));
+} 
+
+
+
+ 
+void dma_usart_tx_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t par, uint32_t mar)
+{
+    dma_single_data_parameter_struct dma_init_struct;
+
+    
+    rcu_periph_clock_enable(RCU_DMA0);
+    rcu_periph_clock_enable(RCU_DMA1);
+
+    dma_deinit(dma_periph, channelx);
+
+    dma_init_struct.periph_addr = par;
+    dma_init_struct.periph_inc = ((uint32_t)0x00000001U);
+    dma_init_struct.memory0_addr = mar;
+    dma_init_struct.memory_inc = ((uint32_t)0x00000000U);
+    dma_init_struct.periph_memory_width = (((0xFFFFFFFFUL << (11)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(12)))) & ((uint32_t)(0) << 11));
+    dma_init_struct.circular_mode = ((uint32_t)0x00000001U);  
+    dma_init_struct.direction = (((0xFFFFFFFFUL << (6)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(7)))) & ((uint32_t)(1) << 6));           
+    dma_init_struct.number = 0; 
+    
+    
+    
+    dma_init_struct.priority = (((0xFFFFFFFFUL << (16)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(17)))) & ((uint32_t)(1) << 16));
+    dma_single_data_mode_init(dma_periph, channelx, &dma_init_struct);
+    
+    
+    dma_channel_subperipheral_select(dma_periph, channelx, DMA_SUBPERI4);
+}
+
+
+ 
+void dma_usart1_rx_config(void)
+{
+    dma_single_data_parameter_struct dma_init_struct;
+
+    rcu_periph_clock_enable(RCU_DMA0);
+    dma_deinit(((((uint32_t)0x40020000U) + 0x00006000U)), DMA_CH5);
+
+    dma_init_struct.periph_addr = (uint32_t)&(*(volatile uint32_t *)(uint32_t)(((((uint32_t)0x40000000U) + 0x00004400U)) + 0x04U));
+    dma_init_struct.periph_inc = ((uint32_t)0x00000001U);
+    dma_init_struct.memory0_addr = (uint32_t)usart1_rx_buffer;
+    dma_init_struct.memory_inc = ((uint32_t)0x00000000U);
+    dma_init_struct.periph_memory_width = (((0xFFFFFFFFUL << (11)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(12)))) & ((uint32_t)(0) << 11));
+    dma_init_struct.circular_mode = ((uint32_t)0x00000000U); 
+    dma_init_struct.direction = (((0xFFFFFFFFUL << (6)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(7)))) & ((uint32_t)(0) << 6));
+    
+    
+    dma_init_struct.number = 1152U;
+    
+    dma_init_struct.priority = (((0xFFFFFFFFUL << (16)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(17)))) & ((uint32_t)(1) << 16));
+
+    dma_single_data_mode_init(((((uint32_t)0x40020000U) + 0x00006000U)), DMA_CH5, &dma_init_struct);
+    dma_channel_subperipheral_select(((((uint32_t)0x40020000U) + 0x00006000U)), DMA_CH5, DMA_SUBPERI4);
+    dma_channel_enable(((((uint32_t)0x40020000U) + 0x00006000U)), DMA_CH5); 
+}
+
+ 
+void dma_enable(uint32_t dma_periph, dma_channel_enum channelx, uint16_t ndtr)
+{
+    dma_channel_disable(dma_periph, channelx);
+    
+    
+    dma_flag_clear(dma_periph, channelx, ((uint32_t)((uint32_t)0x01U<<(5))));
+    
+    dma_transfer_number_config(dma_periph, channelx, ndtr);
+    dma_channel_enable(dma_periph, channelx);
+}
+
+
+
+
+ 
+
+uint16_t get_usart1_rx_len(void)
+{
+    return 1152U - dma_transfer_number_get(((((uint32_t)0x40020000U) + 0x00006000U)), DMA_CH5);
+}
+
+ 
+void reset_usart1_rx_dma(void)
+{
+    dma_channel_disable(((((uint32_t)0x40020000U) + 0x00006000U)), DMA_CH5);
+    
+    dma_flag_clear(((((uint32_t)0x40020000U) + 0x00006000U)), DMA_CH5, ((uint32_t)((uint32_t)0x01U<<(5))));
+    dma_transfer_number_config(((((uint32_t)0x40020000U) + 0x00006000U)), DMA_CH5, 1152U);
+    dma_channel_enable(((((uint32_t)0x40020000U) + 0x00006000U)), DMA_CH5);
+}
+
+
+
+
+ 
+void DMA_ADC_Init(void)
+{
+    dma_single_data_parameter_struct dma_init_struct;
+    rcu_periph_clock_enable(RCU_DMA1);
+    dma_deinit(((((uint32_t)0x40020000U) + 0x00006000U) + 0x00000400U), DMA_CH0);
+    
+    dma_init_struct.periph_addr = (uint32_t)(&(*(volatile uint32_t *)(uint32_t)(((((uint32_t)0x40010000U) + 0x00002000U)) + 0x4CU)));
+    dma_init_struct.periph_inc = ((uint32_t)0x00000001U);
+    dma_init_struct.memory0_addr = (uint32_t)adc_value;
+    dma_init_struct.memory_inc = ((uint32_t)0x00000000U);
+    
+    dma_init_struct.periph_memory_width = (((0xFFFFFFFFUL << (11)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(12)))) & ((uint32_t)(1) << 11)); 
+    dma_init_struct.circular_mode = ((uint32_t)0x00000000U);
+    dma_init_struct.direction = (((0xFFFFFFFFUL << (6)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(7)))) & ((uint32_t)(0) << 6));
+    
+    
+    dma_init_struct.number = 2;
+    dma_init_struct.priority = (((0xFFFFFFFFUL << (16)) & (0xFFFFFFFFUL >> (31U - (uint32_t)(17)))) & ((uint32_t)(2) << 16));
+    dma_single_data_mode_init(((((uint32_t)0x40020000U) + 0x00006000U) + 0x00000400U), DMA_CH0, &dma_init_struct);
+    
+    dma_channel_subperipheral_select(((((uint32_t)0x40020000U) + 0x00006000U) + 0x00000400U), DMA_CH0, DMA_SUBPERI0);
+    dma_channel_enable(((((uint32_t)0x40020000U) + 0x00006000U) + 0x00000400U), DMA_CH0);
+}
+
+void DMA_ADJ_Init(void)
+{
+    DMA_ADC_Init();
+}
+
+
+
+
+void USART1_DMA_All_Init(void)
+{
+    
+    dma_usart_tx_config(((((uint32_t)0x40020000U) + 0x00006000U)), DMA_CH6, (uint32_t)&(*(volatile uint32_t *)(uint32_t)(((((uint32_t)0x40000000U) + 0x00004400U)) + 0x04U)), (uint32_t)usart1_tx_buffer);
+    
+    dma_usart1_rx_config();
+
+    DMA_ADC_Init();
+}
 
