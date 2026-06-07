@@ -3,6 +3,7 @@
 #include "boot_crc.h"
 #include "myDMA.h"
 #include "ROM.h"
+#include "USART.h"
 #include "gd32f4xx_usart.h"
 
 #include <string.h>
@@ -11,7 +12,6 @@
 #define RAW_END_SILENCE_MS           3000U
 
 uint32_t GetTick(void);
-void USART1_ClearRxBuf(void);
 
 static uint32_t raw_dma_pos(void)
 {

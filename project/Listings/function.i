@@ -15368,6 +15368,7 @@ void OLED_Printf(int16_t X, int16_t Y, uint8_t FontSize, char *format, ...);
  
 
 #line 7 "..\\Driver\\HardWare\\USART\\USART.h"
+#line 8 "..\\Driver\\HardWare\\USART\\USART.h"
 
  
 
@@ -15390,22 +15391,11 @@ extern volatile uint16_t usart1_rx_len;
 extern volatile uint8_t usart1_rx_flag;             
 
  
-void rs485_printf(const char *fmt, ...);
-
-
- 
+int rs485_printf(const char *fmt, ...);
 void USART1_Init(void);
 
-
-
- 
 void USART1_ClearRxBuf(void);
 
-
-
-
-
- 
 void USART1_SendData(uint16_t *buf, uint16_t len);
 
 

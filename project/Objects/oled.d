@@ -51,8 +51,8 @@
 .\objects\oled.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdarg.h
 .\objects\oled.o: ..\Driver\HardWare\OLED\OLED.h
 .\objects\oled.o: ..\Driver\HardWare\USART\USART.h
-.\objects\oled.o: ..\Driver\HeaderFiles\HeaderFiles.h
 .\objects\oled.o: ..\Driver\HardWare\SPI_FLASH\SPI_FLASH.h
+.\objects\oled.o: ..\Driver\HeaderFiles\HeaderFiles.h
 .\objects\oled.o: ..\sysFunction\bootloader.h
 .\objects\oled.o: ..\Driver\System\myDMA.h
 .\objects\oled.o: ..\sysFunction\Function.h

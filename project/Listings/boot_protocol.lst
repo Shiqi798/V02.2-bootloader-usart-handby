@@ -19644,6 +19644,50 @@ Nvoid reset_usart1_rx_dma(void);
 N
 N#endif
 L 5 "..\Protocol\boot_protocol.c" 2
+N#include "USART.h"
+L 1 "..\Driver\HardWare\USART\USART.h" 1
+N#ifndef __USART1_H
+N#define __USART1_H
+N
+N/************************* 头文件 *************************/
+N
+N#include "gd32f4xx_gpio.h"
+N#include <stdint.h>
+N
+N/************************* 宏定义 *************************/
+N
+N#define USART1_RX_BUF_LEN 128  // 接收缓冲区长度（适配赛题最长指令）
+N//#define USART1_CMD_END    '\n' // 指令结束符（赛题串口指令以回车/换行结尾）
+N#define RS485_DIR_PIN    GPIO_PIN_8
+N#define RS485_DIR_PORT   GPIOE
+N// 发送模式（PE8 高电平）
+N#define RS485_TX_MODE()  gpio_bit_set(RS485_DIR_PORT, RS485_DIR_PIN)
+N// 接收模式（PE8 低电平，默认）
+N#define RS485_RX_MODE()  gpio_bit_reset(RS485_DIR_PORT, RS485_DIR_PIN)
+N
+N
+N#define printf  rs485_printf
+N
+N/************************ 全局变量 ************************/
+Nextern volatile uint8_t data_recv;                 // 单字节接收临时变量
+Nextern uint8_t usart1_rx_buf[USART1_RX_BUF_LEN]; // 串口接收缓冲区（核心）
+Xextern uint8_t usart1_rx_buf[128]; 
+Nextern volatile uint16_t usart1_rx_len;            // 缓冲区已存储的字节数
+Nextern volatile uint8_t usart1_rx_flag;             // 接收完成标志（IDLE 置1）
+N
+N/************************* 函数声明 *************************/
+Nint rs485_printf(const char *fmt, ...);
+Nvoid USART1_Init(void);
+N
+Nvoid USART1_ClearRxBuf(void);
+N
+Nvoid USART1_SendData(uint16_t *buf, uint16_t len);
+N
+N
+N#endif
+N
+N/**************************** 文件结束 *****************************/
+L 6 "..\Protocol\boot_protocol.c" 2
 N#include "gd32f4xx_usart.h"
 N#include <string.h>
 L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\string.h" 1
@@ -20195,14 +20239,9 @@ N#endif
 N
 N/* end of string.h */
 N
-L 7 "..\Protocol\boot_protocol.c" 2
-N
-Nextern volatile uint8_t usart1_rx_flag;
-Nextern volatile uint16_t usart1_rx_len;
+L 8 "..\Protocol\boot_protocol.c" 2
 N
 Nuint32_t GetTick(void);
-Nvoid USART1_ClearRxBuf(void);
-Nvoid rs485_printf(const char *fmt, ...);
 N
 N#define BOOT_PROTO_ASCII_MAX 128U
 N#define BOOT_PROTO_RAW_MAX   64U

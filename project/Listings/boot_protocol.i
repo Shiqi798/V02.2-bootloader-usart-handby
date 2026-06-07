@@ -12803,7 +12803,49 @@ uint16_t get_usart1_rx_len(void);
 void reset_usart1_rx_dma(void);
 
 #line 5 "..\\Protocol\\boot_protocol.c"
+#line 1 "..\\Driver\\HardWare\\USART\\USART.h"
+
+
+
+ 
+
+#line 7 "..\\Driver\\HardWare\\USART\\USART.h"
+#line 8 "..\\Driver\\HardWare\\USART\\USART.h"
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern volatile uint8_t data_recv;                 
+extern uint8_t usart1_rx_buf[128]; 
+extern volatile uint16_t usart1_rx_len;            
+extern volatile uint8_t usart1_rx_flag;             
+
+ 
+int rs485_printf(const char *fmt, ...);
+void USART1_Init(void);
+
+void USART1_ClearRxBuf(void);
+
+void USART1_SendData(uint16_t *buf, uint16_t len);
+
+
+
+
+ 
 #line 6 "..\\Protocol\\boot_protocol.c"
+#line 7 "..\\Protocol\\boot_protocol.c"
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
  
  
@@ -13226,14 +13268,9 @@ extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  ,
 
  
 
-#line 7 "..\\Protocol\\boot_protocol.c"
-
-extern volatile uint8_t usart1_rx_flag;
-extern volatile uint16_t usart1_rx_len;
+#line 8 "..\\Protocol\\boot_protocol.c"
 
 uint32_t GetTick(void);
-void USART1_ClearRxBuf(void);
-void rs485_printf(const char *fmt, ...);
 
 
 

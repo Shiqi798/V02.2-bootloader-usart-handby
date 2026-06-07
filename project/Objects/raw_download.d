@@ -45,4 +45,5 @@
 .\objects\raw_download.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_ipa.h
 .\objects\raw_download.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_tli.h
 .\objects\raw_download.o: ..\Driver\HardWare\ROM\ROM.h
+.\objects\raw_download.o: ..\Driver\HardWare\USART\USART.h
 .\objects\raw_download.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\string.h

@@ -4,11 +4,11 @@
 #include "boot_param.h"
 #include "boot_protocol.h"
 #include "boot_upgrade.h"
+#include "USART.h"
 
 void OLED_Clear(void);
 void OLED_Refresh(void);
 void OLED_Printf(int16_t X, int16_t Y, uint8_t FontSize, char *format, ...);
-void rs485_printf(const char *fmt, ...);
 
 #define BOOT_TEAM_ID_TEXT "2026639584"
 #define BOOT_MODE_TEXT "Bootloader"

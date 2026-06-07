@@ -691,3 +691,29 @@
 
                   g_suppress_next_bad_frame
 000000  00                DCB      0x00
+
+;*** Start embedded assembler ***
+
+#line 1 "..\\Function\\boot_flow.c"
+	AREA ||.rev16_text||, CODE
+	THUMB
+	EXPORT |__asm___11_boot_flow_c_573e1d38____REV16|
+#line 114 "..\\Driver\\Start\\CMSIS\\core_cmInstr.h"
+|__asm___11_boot_flow_c_573e1d38____REV16| PROC
+#line 115
+
+ rev16 r0, r0
+ bx lr
+	ENDP
+	AREA ||.revsh_text||, CODE
+	THUMB
+	EXPORT |__asm___11_boot_flow_c_573e1d38____REVSH|
+#line 128
+|__asm___11_boot_flow_c_573e1d38____REVSH| PROC
+#line 129
+
+ revsh r0, r0
+ bx lr
+	ENDP
+
+;*** End   embedded assembler ***

@@ -2,15 +2,11 @@
 
 #include "boot_crc.h"
 #include "myDMA.h"
+#include "USART.h"
 #include "gd32f4xx_usart.h"
 #include <string.h>
 
-extern volatile uint8_t usart1_rx_flag;
-extern volatile uint16_t usart1_rx_len;
-
 uint32_t GetTick(void);
-void USART1_ClearRxBuf(void);
-void rs485_printf(const char *fmt, ...);
 
 #define BOOT_PROTO_ASCII_MAX 128U
 #define BOOT_PROTO_RAW_MAX   64U

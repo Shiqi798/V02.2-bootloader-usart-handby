@@ -1,5 +1,13 @@
 #include "USART.h"
 
+#include "myDMA.h"
+#include "gd32f4xx_dma.h"
+#include "gd32f4xx_misc.h"
+#include "gd32f4xx_rcu.h"
+#include "gd32f4xx_usart.h"
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
 
 volatile uint8_t data_recv = 0;                 // 暂时留着清状态用
 //usart1_rx_buffer--mydma.c
@@ -14,7 +22,7 @@ static void USART1_ClearTxState(void)
 }
 
 // 重定向 C 库 printf 到 USART（配合 DMA 改版）
-void rs485_printf(const char *fmt, ...)
+int rs485_printf(const char *fmt, ...)
 {
     char buf[256];
     va_list ap;
@@ -26,7 +34,7 @@ void rs485_printf(const char *fmt, ...)
     va_end(ap);
 
     if (n < 0) {
-        return;
+        return n;
     }
 
     uint16_t len = (uint16_t)strlen(buf);
@@ -35,7 +43,7 @@ void rs485_printf(const char *fmt, ...)
     }
     if (len == 0) {
         RS485_RX_MODE();
-        return;  // 字符串为空，直接返回
+        return 0;  // 字符串为空，直接返回
     }
     
     // 先拷到 DMA 专用的 TX buffer，免得局部变量 buf 出作用域后被覆写
@@ -53,6 +61,7 @@ void rs485_printf(const char *fmt, ...)
     
 
     RS485_RX_MODE();
+    return (int)len;
 }
 
 // 清空 USART1 接收缓冲区

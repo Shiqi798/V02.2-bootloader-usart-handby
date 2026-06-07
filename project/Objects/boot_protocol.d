@@ -43,4 +43,5 @@
 .\objects\boot_protocol.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_exmc.h
 .\objects\boot_protocol.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_ipa.h
 .\objects\boot_protocol.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_tli.h
+.\objects\boot_protocol.o: ..\Driver\HardWare\USART\USART.h
 .\objects\boot_protocol.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\string.h

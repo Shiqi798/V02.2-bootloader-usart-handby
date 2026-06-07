@@ -5,10 +5,43 @@
 
  
 
-#line 1 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
+
+
+
 
 
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
 
 #line 1 "..\\Driver\\Start\\CMSIS\\GD\\GD32F4xx\\Include\\gd32f4xx.h"
 
@@ -6314,145 +6347,6 @@ FlagStatus fwdgt_flag_get(uint16_t flag);
 
  
 
-
-
-
-#line 39 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 50 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 64 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
- 
-#line 83 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 101 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 119 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 137 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 155 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 173 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 207 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 226 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 236 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 246 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 264 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-#line 282 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-typedef FlagStatus bit_status;
-
- 
-
-
-
-
-
-
- 
-
-
-
-
-
- 
-#line 317 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
-
-
-
- 
-
-
-
- 
-
-
-
- 
-
-
-
- 
-
-
-
-
-
-
- 
-
-
-
-
-
- 
-
-
- 
- 
-#line 369 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
-
- 
- 
-void gpio_deinit(uint32_t gpio_periph);
- 
-void gpio_mode_set(uint32_t gpio_periph, uint32_t mode, uint32_t pull_up_down, uint32_t pin);
- 
-void gpio_output_options_set(uint32_t gpio_periph, uint8_t otype, uint32_t speed, uint32_t pin);
-
- 
-void gpio_bit_set(uint32_t gpio_periph, uint32_t pin);
- 
-void gpio_bit_reset(uint32_t gpio_periph, uint32_t pin);
- 
-void gpio_bit_write(uint32_t gpio_periph, uint32_t pin, bit_status bit_value);
- 
-void gpio_port_write(uint32_t gpio_periph, uint16_t data);
-
- 
-FlagStatus gpio_input_bit_get(uint32_t gpio_periph, uint32_t pin);
- 
-uint16_t gpio_input_port_get(uint32_t gpio_periph);
- 
-FlagStatus gpio_output_bit_get(uint32_t gpio_periph, uint32_t pin);
- 
-uint16_t gpio_output_port_get(uint32_t gpio_periph);
-
- 
-void gpio_af_set(uint32_t gpio_periph, uint32_t alt_func_num, uint32_t pin);
- 
-void gpio_pin_lock(uint32_t gpio_periph, uint32_t pin);
-
- 
-void gpio_bit_toggle(uint32_t gpio_periph, uint32_t pin);
- 
-void gpio_port_toggle(uint32_t gpio_periph);
-
 #line 52 "..\\User\\gd32f4xx_libopt.h"
 #line 1 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_syscfg.h"
 
@@ -12666,67 +12560,54 @@ FlagStatus tli_flag_get(uint32_t flag);
 #line 364 "..\\Driver\\Start\\CMSIS\\GD\\GD32F4xx\\Include\\gd32f4xx.h"
 
 
-#line 6 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 7 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 8 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "..\\User\\systick.h"
-
-
-
-
+#line 39 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
 
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#line 50 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
 
  
-
-
-
-
-#line 39 "..\\User\\systick.h"
+#line 64 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
 
  
-void systick_config(void);
  
-void delay_1ms(uint32_t count);
+#line 83 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
+
  
-void delay_decrement(void);
+#line 101 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
 
-#line 9 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+ 
+#line 119 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
 
+ 
+#line 137 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
 
-#line 1 "..\\Driver\\HardWare\\ROM\\ROM.h"
+ 
+#line 155 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
 
+ 
+#line 173 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
 
+ 
+#line 207 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
 
-#line 5 "..\\Driver\\HardWare\\ROM\\ROM.h"
-#line 6 "..\\Driver\\HardWare\\ROM\\ROM.h"
+ 
+#line 226 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
 
-#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
+ 
+#line 236 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
+
+ 
+#line 246 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
+
+ 
+#line 264 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
+
+ 
+#line 282 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
+
+ 
+typedef FlagStatus bit_status;
+
  
 
 
@@ -12740,40 +12621,22 @@ void delay_decrement(void);
 
 
 
-#line 25 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
+ 
+#line 317 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
 
-
-
-#line 8 "..\\Driver\\HardWare\\ROM\\ROM.h"
-#line 9 "..\\Driver\\HardWare\\ROM\\ROM.h"
-
-
-
-
-
-
-void ROM_page_erase(uint32_t addr);
-void ROM_sector_erase(uint32_t addr);
-void ROM_halfword_write(uint32_t addr , uint16_t data);
-void ROM_word_write(uint32_t addr , uint32_t data);
-void ROM_str_write(uint32_t addr , uint16_t* data , uint16_t len);
-_Bool ROM_erase_range(uint32_t start_addr, uint32_t size);
-_Bool ROM_buffer_write(uint32_t addr, const uint8_t *data, uint32_t len);
-uint16_t ROM_halfword_read(uint32_t addr);
-uint8_t ROM_char_read(uint32_t addr);
-uint32_t ROM_word_read(uint32_t addr);
+ 
 
 
 
  
-#line 12 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
- 
- 
- 
+
+
+
  
 
 
+
+ 
 
 
 
@@ -12790,169 +12653,52 @@ uint32_t ROM_word_read(uint32_t addr);
 
 
 
-
-
-
-#line 35 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
-
-
-
-
-
-
-#line 49 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
-
- 
-#line 59 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
-
- 
  
 
 
-
-
-
-
-
-
-
  
-#line 81 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
-
-
-
-
-
-#line 133 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
-
-extern __declspec(__nothrow) __attribute__((const)) unsigned char **__rt_ctype_table(void);
-
-
-
-
-
-
-
-    extern int (isalnum)(int  );
-
-     
-
-
-
-
-
-    extern int (isalpha)(int  );
-
-     
-
-
-
-
-
-    extern int (iscntrl)(int  );
-
-     
-     
-
  
-
-
-
-
-    extern int (isdigit)(int  );
-
-     
-
-    extern int (isblank)(int  );
-     
-     
-     
-
-
-
-
-
-    extern int (isgraph)(int  );
-
-     
-
-
-
-
-
-    extern int (islower)(int  );
-
-     
-
-
-
-
-
-    extern int (isprint)(int  );
-
-     
-     
-
-
-
-
-
-    extern int (ispunct)(int  );
-
-     
-
-
-
-
-
-    extern int (isspace)(int  );
-
-     
-
-
-
-
-
-    extern int (isupper)(int  );
-
-     
+#line 369 "..\\Driver\\Library\\GD32F4xx_standard_peripheral\\Include\\gd32f4xx_gpio.h"
 
  
  
-
-static inline int __isxdigit_helper(int __t) { return (__t ^ (__t << 2)); }
-
-
-
-
-    extern int (isxdigit)(int  );
-
-     
-
-
-
-extern int tolower(int  );
-     
-     
-
-extern int toupper(int  );
-     
-     
-
-
-
-
-
-
-
-#line 272 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\ctype.h"
-
-
+void gpio_deinit(uint32_t gpio_periph);
+ 
+void gpio_mode_set(uint32_t gpio_periph, uint32_t mode, uint32_t pull_up_down, uint32_t pin);
+ 
+void gpio_output_options_set(uint32_t gpio_periph, uint8_t otype, uint32_t speed, uint32_t pin);
 
  
+void gpio_bit_set(uint32_t gpio_periph, uint32_t pin);
+ 
+void gpio_bit_reset(uint32_t gpio_periph, uint32_t pin);
+ 
+void gpio_bit_write(uint32_t gpio_periph, uint32_t pin, bit_status bit_value);
+ 
+void gpio_port_write(uint32_t gpio_periph, uint16_t data);
 
-#line 13 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
+ 
+FlagStatus gpio_input_bit_get(uint32_t gpio_periph, uint32_t pin);
+ 
+uint16_t gpio_input_port_get(uint32_t gpio_periph);
+ 
+FlagStatus gpio_output_bit_get(uint32_t gpio_periph, uint32_t pin);
+ 
+uint16_t gpio_output_port_get(uint32_t gpio_periph);
+
+ 
+void gpio_af_set(uint32_t gpio_periph, uint32_t alt_func_num, uint32_t pin);
+ 
+void gpio_pin_lock(uint32_t gpio_periph, uint32_t pin);
+
+ 
+void gpio_bit_toggle(uint32_t gpio_periph, uint32_t pin);
+ 
+void gpio_port_toggle(uint32_t gpio_periph);
+
+#line 7 "..\\Driver\\HardWare\\USART\\USART.h"
+#line 8 "..\\Driver\\HardWare\\USART\\USART.h"
+
  
 
 
@@ -12960,8 +12706,66 @@ extern int toupper(int  );
 
 
 
- 
 
+
+
+
+
+
+
+ 
+extern volatile uint8_t data_recv;                 
+extern uint8_t usart1_rx_buf[128]; 
+extern volatile uint16_t usart1_rx_len;            
+extern volatile uint8_t usart1_rx_flag;             
+
+ 
+int rs485_printf(const char *fmt, ...);
+void USART1_Init(void);
+
+void USART1_ClearRxBuf(void);
+
+void USART1_SendData(uint16_t *buf, uint16_t len);
+
+
+
+
+ 
+#line 2 "..\\Driver\\HardWare\\USART\\USART.c"
+
+#line 1 "..\\Driver\\System\\myDMA.h"
+
+
+
+#line 5 "..\\Driver\\System\\myDMA.h"
+#line 6 "..\\Driver\\System\\myDMA.h"
+
+
+
+extern uint8_t usart1_rx_buffer[1152U];
+extern uint8_t usart1_tx_buffer[256];
+extern uint16_t adc_value[2];
+
+
+void mydma_init_buffers(void);
+
+void dma_usart_tx_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t par, uint32_t mar);
+void dma_usart1_rx_config(void);
+void dma_enable(uint32_t dma_periph, dma_channel_enum channelx, uint16_t ndtr);
+
+void DMA_ADC_Init(void);
+void DMA_ADJ_Init(void);
+void USART1_DMA_All_Init(void);
+
+uint16_t get_usart1_rx_len(void);
+void reset_usart1_rx_dma(void);
+
+#line 4 "..\\Driver\\HardWare\\USART\\USART.c"
+#line 5 "..\\Driver\\HardWare\\USART\\USART.c"
+#line 6 "..\\Driver\\HardWare\\USART\\USART.c"
+#line 7 "..\\Driver\\HardWare\\USART\\USART.c"
+#line 8 "..\\Driver\\HardWare\\USART\\USART.c"
+#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
  
  
  
@@ -12976,35 +12780,83 @@ extern int toupper(int  );
 
 
 
-#line 34 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
 
 
 
 
-  typedef signed int ptrdiff_t;
+
+#line 27 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
 
 
 
-  
 
 
 
-    typedef unsigned int size_t;    
-#line 57 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
 
+
+ 
+
+ 
+ 
+#line 57 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
+    typedef struct __va_list { void *__ap; } va_list;
+
+   
+
+
+
+
+
+
+ 
 
 
    
 
 
 
-      typedef unsigned short wchar_t;  
-#line 82 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
 
 
 
-    
 
+
+
+
+ 
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+   
+
+ 
+
+
+   
+
+
+
+
+ 
 
 
 
@@ -13013,23 +12865,24 @@ extern int toupper(int  );
 
 
 
-  typedef long double max_align_t;
-
-
-
-
-
-
-
-
-
-#line 114 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
-
-
 
  
 
-#line 14 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+
+
+
+
+
+
+#line 138 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
+
+
+
+#line 147 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
+
+ 
+
+#line 9 "..\\Driver\\HardWare\\USART\\USART.c"
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdio.h"
  
  
@@ -13384,7 +13237,7 @@ extern __declspec(__nothrow) int _fprintf(FILE * __restrict  ,
 
  
 #pragma __printf_args
-extern __declspec(__nothrow) int printf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
+extern __declspec(__nothrow) int rs485_printf(const char * __restrict  , ...) __attribute__((__nonnull__(1)));
    
 
 
@@ -13929,9 +13782,7 @@ extern __declspec(__nothrow) void __use_no_semihosting(void);
 
  
 
-#line 15 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 16 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 17 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 10 "..\\Driver\\HardWare\\USART\\USART.c"
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
  
  
@@ -14354,1227 +14205,7 @@ extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  ,
 
  
 
-#line 18 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-
-
-
-
- 
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-   
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-#line 61 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-
-#line 75 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-
-
-
-
-
-
-
-   
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-#line 112 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-extern __attribute__((__pcs__("aapcs"))) unsigned __ARM_dcmp4(double  , double  );
-extern __attribute__((__pcs__("aapcs"))) unsigned __ARM_fcmp4(float  , float  );
-    
-
-
-
-
- 
-
-extern __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_fpclassifyf(float  );
-extern __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_fpclassify(double  );
-     
-     
-
-static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isfinitef(float __x)
-{
-    return (((*(unsigned *)&(__x)) >> 23) & 0xff) != 0xff;
-}
-static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isfinite(double __x)
-{
-    return (((*(1 + (unsigned *)&(__x))) >> 20) & 0x7ff) != 0x7ff;
-}
-     
-     
-
-static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isinff(float __x)
-{
-    return ((*(unsigned *)&(__x)) << 1) == 0xff000000;
-}
-static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isinf(double __x)
-{
-    return (((*(1 + (unsigned *)&(__x))) << 1) == 0xffe00000) && ((*(unsigned *)&(__x)) == 0);
-}
-     
-     
-
-static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_islessgreaterf(float __x, float __y)
-{
-    unsigned __f = __ARM_fcmp4(__x, __y) >> 28;
-    return (__f == 8) || (__f == 2);  
-}
-static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_islessgreater(double __x, double __y)
-{
-    unsigned __f = __ARM_dcmp4(__x, __y) >> 28;
-    return (__f == 8) || (__f == 2);  
-}
-    
-
-
- 
-
-static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isnanf(float __x)
-{
-    return (0x7f800000 - ((*(unsigned *)&(__x)) & 0x7fffffff)) >> 31;
-}
-static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isnan(double __x)
-{
-    unsigned __xf = (*(1 + (unsigned *)&(__x))) | (((*(unsigned *)&(__x)) == 0) ? 0 : 1);
-    return (0x7ff00000 - (__xf & 0x7fffffff)) >> 31;
-}
-     
-     
-
-static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isnormalf(float __x)
-{
-    unsigned __xe = ((*(unsigned *)&(__x)) >> 23) & 0xff;
-    return (__xe != 0xff) && (__xe != 0);
-}
-static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_isnormal(double __x)
-{
-    unsigned __xe = ((*(1 + (unsigned *)&(__x))) >> 20) & 0x7ff;
-    return (__xe != 0x7ff) && (__xe != 0);
-}
-     
-     
-
-static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_signbitf(float __x)
-{
-    return (*(unsigned *)&(__x)) >> 31;
-}
-static inline __declspec(__nothrow) __attribute__((__pcs__("aapcs"))) int __ARM_signbit(double __x)
-{
-    return (*(1 + (unsigned *)&(__x))) >> 31;
-}
-     
-     
-
-
-
-
-
-
-
-
-#line 230 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-
-
-
-
-
-
-
-   
-  typedef float float_t;
-  typedef double double_t;
-#line 251 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-
-
-
-extern const int math_errhandling;
-#line 261 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-
-extern __declspec(__nothrow) double acos(double  );
-    
-    
-    
-extern __declspec(__nothrow) double asin(double  );
-    
-    
-    
-    
-
-extern __declspec(__nothrow) __attribute__((const)) double atan(double  );
-    
-    
-
-extern __declspec(__nothrow) double atan2(double  , double  );
-    
-    
-    
-    
-
-extern __declspec(__nothrow) double cos(double  );
-    
-    
-    
-    
-extern __declspec(__nothrow) double sin(double  );
-    
-    
-    
-    
-
-extern void __use_accurate_range_reduction(void);
-    
-    
-
-extern __declspec(__nothrow) double tan(double  );
-    
-    
-    
-    
-
-extern __declspec(__nothrow) double cosh(double  );
-    
-    
-    
-    
-extern __declspec(__nothrow) double sinh(double  );
-    
-    
-    
-    
-    
-
-extern __declspec(__nothrow) __attribute__((const)) double tanh(double  );
-    
-    
-
-extern __declspec(__nothrow) double exp(double  );
-    
-    
-    
-    
-    
-
-extern __declspec(__nothrow) double frexp(double  , int *  ) __attribute__((__nonnull__(2)));
-    
-    
-    
-    
-    
-    
-
-extern __declspec(__nothrow) double ldexp(double  , int  );
-    
-    
-    
-    
-extern __declspec(__nothrow) double log(double  );
-    
-    
-    
-    
-    
-extern __declspec(__nothrow) double log10(double  );
-    
-    
-    
-extern __declspec(__nothrow) double modf(double  , double *  ) __attribute__((__nonnull__(2)));
-    
-    
-    
-    
-
-extern __declspec(__nothrow) double pow(double  , double  );
-    
-    
-    
-    
-    
-    
-extern __declspec(__nothrow) double sqrt(double  );
-    
-    
-    
-
-
-
-
-    inline double _sqrt(double __x) { return sqrt(__x); }
-
-
-    inline float _sqrtf(float __x) { return __sqrtf(__x); }
-
-
-
-    
-
-
-
- 
-
-extern __declspec(__nothrow) __attribute__((const)) double ceil(double  );
-    
-    
-extern __declspec(__nothrow) __attribute__((const)) double fabs(double  );
-    
-    
-
-extern __declspec(__nothrow) __attribute__((const)) double floor(double  );
-    
-    
-
-extern __declspec(__nothrow) double fmod(double  , double  );
-    
-    
-    
-    
-    
-
-    
-
-
-
-
-
-
-
-
-
- 
-
-
-
-extern __declspec(__nothrow) double acosh(double  );
-    
-
- 
-extern __declspec(__nothrow) double asinh(double  );
-    
-
- 
-extern __declspec(__nothrow) double atanh(double  );
-    
-
- 
-extern __declspec(__nothrow) double cbrt(double  );
-    
-
- 
-inline __declspec(__nothrow) __attribute__((const)) double copysign(double __x, double __y)
-    
-
- 
-{
-    (*(1 + (unsigned *)&(__x))) = ((*(1 + (unsigned *)&(__x))) & 0x7fffffff) | ((*(1 + (unsigned *)&(__y))) & 0x80000000);
-    return __x;
-}
-inline __declspec(__nothrow) __attribute__((const)) float copysignf(float __x, float __y)
-    
-
- 
-{
-    (*(unsigned *)&(__x)) = ((*(unsigned *)&(__x)) & 0x7fffffff) | ((*(unsigned *)&(__y)) & 0x80000000);
-    return __x;
-}
-extern __declspec(__nothrow) double erf(double  );
-    
-
- 
-extern __declspec(__nothrow) double erfc(double  );
-    
-
- 
-extern __declspec(__nothrow) double expm1(double  );
-    
-
- 
-
-
-
-    
-
- 
-
-
-
-
-
-
-#line 479 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-
-
-extern __declspec(__nothrow) double hypot(double  , double  );
-    
-
-
-
-
- 
-extern __declspec(__nothrow) int ilogb(double  );
-    
-
- 
-extern __declspec(__nothrow) int ilogbf(float  );
-    
-
- 
-extern __declspec(__nothrow) int ilogbl(long double  );
-    
-
- 
-
-
-
-
-
-
-
-    
-
- 
-
-
-
-
-
-    
-
-
-
- 
-
-
-
-
-
-    
-
-
-
- 
-
-
-
-
-
-    
-
- 
-
-
-
-
-
-    
-
-
-
- 
-
-
-
-
-
-    
-
-
-
- 
-
-
-
-
-
-    
-
-
-
- 
-
-
-
-
-
-    
-
- 
-
-
-
-
-
-    
-
- 
-
-
-
-
-
-    
-
-
- 
-
-extern __declspec(__nothrow) double lgamma (double  );
-    
-
-
- 
-extern __declspec(__nothrow) double log1p(double  );
-    
-
- 
-extern __declspec(__nothrow) double logb(double  );
-    
-
- 
-extern __declspec(__nothrow) float logbf(float  );
-    
-
- 
-extern __declspec(__nothrow) long double logbl(long double  );
-    
-
- 
-extern __declspec(__nothrow) double nextafter(double  , double  );
-    
-
-
- 
-extern __declspec(__nothrow) float nextafterf(float  , float  );
-    
-
-
- 
-extern __declspec(__nothrow) long double nextafterl(long double  , long double  );
-    
-
-
- 
-extern __declspec(__nothrow) double nexttoward(double  , long double  );
-    
-
-
- 
-extern __declspec(__nothrow) float nexttowardf(float  , long double  );
-    
-
-
- 
-extern __declspec(__nothrow) long double nexttowardl(long double  , long double  );
-    
-
-
- 
-extern __declspec(__nothrow) double remainder(double  , double  );
-    
-
- 
-extern __declspec(__nothrow) __attribute__((const)) double rint(double  );
-    
-
- 
-extern __declspec(__nothrow) double scalbln(double  , long int  );
-    
-
- 
-extern __declspec(__nothrow) float scalblnf(float  , long int  );
-    
-
- 
-extern __declspec(__nothrow) long double scalblnl(long double  , long int  );
-    
-
- 
-extern __declspec(__nothrow) double scalbn(double  , int  );
-    
-
- 
-extern __declspec(__nothrow) float scalbnf(float  , int  );
-    
-
- 
-extern __declspec(__nothrow) long double scalbnl(long double  , int  );
-    
-
- 
-
-
-
-
-    
-
- 
-
-
-
- 
-extern __declspec(__nothrow) __attribute__((const)) float _fabsf(float);  
-inline __declspec(__nothrow) __attribute__((const)) float fabsf(float __f) { return _fabsf(__f); }
-extern __declspec(__nothrow) float sinf(float  );
-extern __declspec(__nothrow) float cosf(float  );
-extern __declspec(__nothrow) float tanf(float  );
-extern __declspec(__nothrow) float acosf(float  );
-extern __declspec(__nothrow) float asinf(float  );
-extern __declspec(__nothrow) float atanf(float  );
-extern __declspec(__nothrow) float atan2f(float  , float  );
-extern __declspec(__nothrow) float sinhf(float  );
-extern __declspec(__nothrow) float coshf(float  );
-extern __declspec(__nothrow) float tanhf(float  );
-extern __declspec(__nothrow) float expf(float  );
-extern __declspec(__nothrow) float logf(float  );
-extern __declspec(__nothrow) float log10f(float  );
-extern __declspec(__nothrow) float powf(float  , float  );
-extern __declspec(__nothrow) float sqrtf(float  );
-extern __declspec(__nothrow) float ldexpf(float  , int  );
-extern __declspec(__nothrow) float frexpf(float  , int *  ) __attribute__((__nonnull__(2)));
-extern __declspec(__nothrow) __attribute__((const)) float ceilf(float  );
-extern __declspec(__nothrow) __attribute__((const)) float floorf(float  );
-extern __declspec(__nothrow) float fmodf(float  , float  );
-extern __declspec(__nothrow) float modff(float  , float *  ) __attribute__((__nonnull__(2)));
-
- 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-__declspec(__nothrow) long double acosl(long double );
-__declspec(__nothrow) long double asinl(long double );
-__declspec(__nothrow) long double atanl(long double );
-__declspec(__nothrow) long double atan2l(long double , long double );
-__declspec(__nothrow) long double ceill(long double );
-__declspec(__nothrow) long double cosl(long double );
-__declspec(__nothrow) long double coshl(long double );
-__declspec(__nothrow) long double expl(long double );
-__declspec(__nothrow) long double fabsl(long double );
-__declspec(__nothrow) long double floorl(long double );
-__declspec(__nothrow) long double fmodl(long double , long double );
-__declspec(__nothrow) long double frexpl(long double , int* ) __attribute__((__nonnull__(2)));
-__declspec(__nothrow) long double ldexpl(long double , int );
-__declspec(__nothrow) long double logl(long double );
-__declspec(__nothrow) long double log10l(long double );
-__declspec(__nothrow) long double modfl(long double  , long double *  ) __attribute__((__nonnull__(2)));
-__declspec(__nothrow) long double powl(long double , long double );
-__declspec(__nothrow) long double sinl(long double );
-__declspec(__nothrow) long double sinhl(long double );
-__declspec(__nothrow) long double sqrtl(long double );
-__declspec(__nothrow) long double tanl(long double );
-__declspec(__nothrow) long double tanhl(long double );
-
-
-
-
-
- 
-extern __declspec(__nothrow) float acoshf(float  );
-__declspec(__nothrow) long double acoshl(long double );
-extern __declspec(__nothrow) float asinhf(float  );
-__declspec(__nothrow) long double asinhl(long double );
-extern __declspec(__nothrow) float atanhf(float  );
-__declspec(__nothrow) long double atanhl(long double );
-__declspec(__nothrow) long double copysignl(long double , long double );
-extern __declspec(__nothrow) float cbrtf(float  );
-__declspec(__nothrow) long double cbrtl(long double );
-extern __declspec(__nothrow) float erff(float  );
-__declspec(__nothrow) long double erfl(long double );
-extern __declspec(__nothrow) float erfcf(float  );
-__declspec(__nothrow) long double erfcl(long double );
-extern __declspec(__nothrow) float expm1f(float  );
-__declspec(__nothrow) long double expm1l(long double );
-extern __declspec(__nothrow) float log1pf(float  );
-__declspec(__nothrow) long double log1pl(long double );
-extern __declspec(__nothrow) float hypotf(float  , float  );
-__declspec(__nothrow) long double hypotl(long double , long double );
-extern __declspec(__nothrow) float lgammaf(float  );
-__declspec(__nothrow) long double lgammal(long double );
-extern __declspec(__nothrow) float remainderf(float  , float  );
-__declspec(__nothrow) long double remainderl(long double , long double );
-extern __declspec(__nothrow) float rintf(float  );
-__declspec(__nothrow) long double rintl(long double );
-
-
-
-
-
-
- 
-extern __declspec(__nothrow) double exp2(double  );  
-extern __declspec(__nothrow) float exp2f(float  );
-__declspec(__nothrow) long double exp2l(long double );
-extern __declspec(__nothrow) double fdim(double  , double  );
-extern __declspec(__nothrow) float fdimf(float  , float  );
-__declspec(__nothrow) long double fdiml(long double , long double );
-#line 803 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-extern __declspec(__nothrow) double fma(double  , double  , double  );
-extern __declspec(__nothrow) float fmaf(float  , float  , float  );
-
-inline __declspec(__nothrow) long double fmal(long double __x, long double __y, long double __z)     { return (long double)fma((double)__x, (double)__y, (double)__z); }
-
-
-extern __declspec(__nothrow) __attribute__((const)) double fmax(double  , double  );
-extern __declspec(__nothrow) __attribute__((const)) float fmaxf(float  , float  );
-__declspec(__nothrow) long double fmaxl(long double , long double );
-extern __declspec(__nothrow) __attribute__((const)) double fmin(double  , double  );
-extern __declspec(__nothrow) __attribute__((const)) float fminf(float  , float  );
-__declspec(__nothrow) long double fminl(long double , long double );
-extern __declspec(__nothrow) double log2(double  );  
-extern __declspec(__nothrow) float log2f(float  );
-__declspec(__nothrow) long double log2l(long double );
-extern __declspec(__nothrow) long lrint(double  );
-extern __declspec(__nothrow) long lrintf(float  );
-
-inline __declspec(__nothrow) long lrintl(long double __x)     { return lrint((double)__x); }
-
-
-extern __declspec(__nothrow) long long llrint(double  );
-extern __declspec(__nothrow) long long llrintf(float  );
-
-inline __declspec(__nothrow) long long llrintl(long double __x)     { return llrint((double)__x); }
-
-
-extern __declspec(__nothrow) long lround(double  );
-extern __declspec(__nothrow) long lroundf(float  );
-
-inline __declspec(__nothrow) long lroundl(long double __x)     { return lround((double)__x); }
-
-
-extern __declspec(__nothrow) long long llround(double  );
-extern __declspec(__nothrow) long long llroundf(float  );
-
-inline __declspec(__nothrow) long long llroundl(long double __x)     { return llround((double)__x); }
-
-
-extern __declspec(__nothrow) __attribute__((const)) double nan(const char * );
-extern __declspec(__nothrow) __attribute__((const)) float nanf(const char * );
-
-inline __declspec(__nothrow) __attribute__((const)) long double nanl(const char *__t)     { return (long double)nan(__t); }
-#line 856 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-extern __declspec(__nothrow) __attribute__((const)) double nearbyint(double  );
-extern __declspec(__nothrow) __attribute__((const)) float nearbyintf(float  );
-__declspec(__nothrow) long double nearbyintl(long double );
-extern  double remquo(double  , double  , int * );
-extern  float remquof(float  , float  , int * );
-
-inline long double remquol(long double __x, long double __y, int *__q)     { return (long double)remquo((double)__x, (double)__y, __q); }
-
-
-extern __declspec(__nothrow) __attribute__((const)) double round(double  );
-extern __declspec(__nothrow) __attribute__((const)) float roundf(float  );
-__declspec(__nothrow) long double roundl(long double );
-extern __declspec(__nothrow) double tgamma(double  );  
-extern __declspec(__nothrow) float tgammaf(float  );
-__declspec(__nothrow) long double tgammal(long double );
-extern __declspec(__nothrow) __attribute__((const)) double trunc(double  );
-extern __declspec(__nothrow) __attribute__((const)) float truncf(float  );
-__declspec(__nothrow) long double truncl(long double );
-
-
-
-
-
-
-#line 896 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-
-#line 1087 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-
-
-
-
-
-
-
-
-
-
-
-#line 1317 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\math.h"
-
-
-
-
-
- 
-#line 19 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
- 
- 
- 
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-#line 27 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
-
-
-
-
-
-
-
-
- 
-
- 
- 
-#line 57 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
-    typedef struct __va_list { void *__ap; } va_list;
-
-   
-
-
-
-
-
-
- 
-
-
-   
-
-
-
-
-
-
-
-
-
-
- 
-
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-   
-
- 
-
-
-   
-
-
-
-
- 
-
-
-
-   
-
-
-
-
-
- 
-
-
-
-
-
-
-
-#line 138 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
-
-
-
-#line 147 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdarg.h"
-
- 
-
-#line 20 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-   
-
-#line 1 "..\\Driver\\HardWare\\OLED\\OLED.h"
-
-
-
- 
-
-#line 1 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 36 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-
-
-#line 7 "..\\Driver\\HardWare\\OLED\\OLED.h"
-
-
-
-
-
-
-
- 
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-void OLED_ClearPoint(unsigned char x,unsigned char y);
-void OLED_ColorTurn(unsigned char i);
-void OLED_DisplayTurn(unsigned char i);
-void I2C_Start(void);
-void I2C_Stop(void);
-void I2C_WaitAck(void);
-void Send_Byte(unsigned char dat);
-void OLED_WR_Byte(unsigned char dat,unsigned char mode);
-void OLED_DisPlay_On(void);
-void OLED_DisPlay_Off(void);
-void OLED_Refresh(void);
-void OLED_Clear(void);
-void OLED_DrawPoint(unsigned char x,unsigned char y);
-void OLED_DrawLine(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2);
-void OLED_DrawCircle(unsigned char x,unsigned char y,unsigned char r);
-void OLED_ShowChar(unsigned char x,unsigned char y,unsigned char chr,unsigned char size1);
-void OLED_ShowString(unsigned char x,unsigned char y,unsigned char *chr,unsigned char size1);
-void OLED_ShowNum(unsigned char x,unsigned char y,unsigned int num,unsigned char len,unsigned char size1);
-void OLED_ShowChinese(unsigned char x,unsigned char y,unsigned char num,unsigned char size1);
-void OLED_ScrollDisplay(unsigned char num,unsigned char space);
-void OLED_WR_BP(unsigned char x,unsigned char y);
-void OLED_ShowPicture(unsigned char x0,unsigned char y0,unsigned char x1,unsigned char y1,unsigned char BMP[]);
-
-void OLED_Init(void);
-void OLED_ShowFloatNum(int16_t X, int16_t Y, double Number, uint8_t IntLength, uint8_t FraLength, uint8_t FontSize);
-void OLED_Printf(int16_t X, int16_t Y, uint8_t FontSize, char *format, ...);
-
-
-
- 
-
-#line 23 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "..\\Driver\\HardWare\\USART\\USART.h"
-#line 49 "..\\Driver\\HardWare\\USART\\USART.h"
-
- 
-#line 24 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "..\\Driver\\HardWare\\SPI_FLASH\\SPI_FLASH.h"
-
-
-
-#line 5 "..\\Driver\\HardWare\\SPI_FLASH\\SPI_FLASH.h"
- 
-
- 
- 
-void spi_flash_init(void);
- 
-void spi_flash_sector_erase(uint32_t sector_addr);
- 
-void spi_flash_bulk_erase(void);
- 
-void spi_flash_page_write(uint8_t *pbuffer, uint32_t write_addr, uint16_t num_byte_to_write);
- 
-void spi_flash_buffer_write(uint8_t *pbuffer, uint32_t write_addr, uint32_t num_byte_to_write);
- 
-void spi_flash_buffer_read(uint8_t *pbuffer, uint32_t read_addr, uint16_t num_byte_to_read);
- 
-uint32_t spi_flash_read_id(void);
- 
-void spi_flash_start_read_sequence(uint32_t read_addr);
- 
-uint8_t spi_flash_read_byte(void);
- 
-uint8_t spi_flash_send_byte(uint8_t byte);
- 
-uint16_t spi_flash_send_halfword(uint16_t half_word);
- 
-void spi_flash_write_enable(void);
- 
-void spi_flash_wait_for_write_end(void);
-void spi_flash_buffer_erase(uint32_t sector_addr, uint32_t num_byte_to_erase);
-
-
-
-#line 25 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-
-
-#line 1 "..\\sysFunction\\bootloader.h"
-
-
-
-#line 5 "..\\sysFunction\\bootloader.h"
-#line 6 "..\\sysFunction\\bootloader.h"
-
-#line 16 "..\\sysFunction\\bootloader.h"
-
-
-
-
-
-
-
-
-
-
-
-
-
-typedef struct {
-    uint32_t magic;
-    uint16_t device_id;
-    uint8_t baud_code;
-    uint8_t boot_flag;
-    uint32_t checksum;
-} boot_param_t;
-
-typedef enum {
-    BOOT_STATUS_OK = 0U,
-    BOOT_STATUS_TIMEOUT,
-    BOOT_STATUS_ERROR,
-    BOOT_STATUS_CRC,
-    BOOT_STATUS_FLASH,
-    BOOT_STATUS_RANGE
-} boot_status_t;
-
-typedef struct {
-    char name[32];
-    uint32_t size;
-    uint32_t crc32;
-} boot_image_info_t;
-
-uint32_t GetTick(void);
-
-void bootloader_init(void);
-_Bool bootloader_update_requested(void);
-_Bool bootloader_boot_default(void);
-void bootloader_console(void);
-
-#line 28 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "..\\Driver\\System\\myDMA.h"
-
-
-
-#line 5 "..\\Driver\\System\\myDMA.h"
-#line 6 "..\\Driver\\System\\myDMA.h"
-
-
-
-extern uint8_t usart1_rx_buffer[1152U];
-extern uint8_t usart1_tx_buffer[256];
-extern uint16_t adc_value[2];
-
-
-void mydma_init_buffers(void);
-
-void dma_usart_tx_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t par, uint32_t mar);
-void dma_usart1_rx_config(void);
-void dma_enable(uint32_t dma_periph, dma_channel_enum channelx, uint16_t ndtr);
-
-void DMA_ADC_Init(void);
-void DMA_ADJ_Init(void);
-void USART1_DMA_All_Init(void);
-
-uint16_t get_usart1_rx_len(void);
-void reset_usart1_rx_dma(void);
-
-#line 29 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
- 
-#line 1 "..\\sysFunction\\Function.h"
-
-
-
-#line 5 "..\\sysFunction\\Function.h"
-
-extern uint8_t sampling_flag;
-extern uint8_t overlimit_flag;
-extern uint8_t hide_flag;
-
-void sysFunction_Init(void);
-void sysFunction_loop(void);
-
-
-#line 31 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "..\\sysFunction\\crc_utils.h"
-
-
-
-#line 5 "..\\sysFunction\\crc_utils.h"
-
-uint32_t crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
-uint32_t crc32_buffer(const uint8_t *data, uint32_t len);
-uint32_t crc32_flash(uint32_t addr, uint32_t len);
-uint16_t crc16_ccitt(const uint8_t *data, uint32_t len);
-uint16_t crc16_modbus(const uint8_t *data, uint32_t len);
-
-#line 32 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-
-
-
-
-
-
-#line 7 "..\\Driver\\HardWare\\USART\\USART.h"
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-extern volatile uint8_t data_recv;                 
-extern uint8_t usart1_rx_buf[128]; 
-extern volatile uint16_t usart1_rx_len;            
-extern volatile uint8_t usart1_rx_flag;             
-
- 
-void rs485_printf(const char *fmt, ...);
-
-
- 
-void USART1_Init(void);
-
-
-
- 
-void USART1_ClearRxBuf(void);
-
-
-
-
-
- 
-void USART1_SendData(uint16_t *buf, uint16_t len);
-
-
-
-
- 
-#line 2 "..\\Driver\\HardWare\\USART\\USART.c"
-
+#line 11 "..\\Driver\\HardWare\\USART\\USART.c"
 
 volatile uint8_t data_recv = 0;                 
 
@@ -15589,7 +14220,7 @@ static void USART1_ClearTxState(void)
 }
 
 
-void rs485_printf(const char *fmt, ...)
+int rs485_printf(const char *fmt, ...)
 {
     char buf[256];
     va_list ap;
@@ -15601,7 +14232,7 @@ void rs485_printf(const char *fmt, ...)
     __va_end(ap);
 
     if (n < 0) {
-        return;
+        return n;
     }
 
     uint16_t len = (uint16_t)strlen(buf);
@@ -15610,7 +14241,7 @@ void rs485_printf(const char *fmt, ...)
     }
     if (len == 0) {
         gpio_bit_reset(((((uint32_t)0x40020000U) + 0x00000000U) + 0x00001000U), ((uint32_t)((uint32_t)0x01U<<(8))));
-        return;  
+        return 0;  
     }
     
     
@@ -15628,6 +14259,7 @@ void rs485_printf(const char *fmt, ...)
     
 
     gpio_bit_reset(((((uint32_t)0x40020000U) + 0x00000000U) + 0x00001000U), ((uint32_t)((uint32_t)0x01U<<(8))));
+    return (int)len;
 }
 
 

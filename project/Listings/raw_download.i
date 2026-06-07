@@ -12839,7 +12839,49 @@ uint32_t ROM_word_read(uint32_t addr);
 
  
 #line 6 "..\\sysFunction\\raw_download.c"
+#line 1 "..\\Driver\\HardWare\\USART\\USART.h"
+
+
+
+ 
+
+#line 7 "..\\Driver\\HardWare\\USART\\USART.h"
+#line 8 "..\\Driver\\HardWare\\USART\\USART.h"
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern volatile uint8_t data_recv;                 
+extern uint8_t usart1_rx_buf[128]; 
+extern volatile uint16_t usart1_rx_len;            
+extern volatile uint8_t usart1_rx_flag;             
+
+ 
+int rs485_printf(const char *fmt, ...);
+void USART1_Init(void);
+
+void USART1_ClearRxBuf(void);
+
+void USART1_SendData(uint16_t *buf, uint16_t len);
+
+
+
+
+ 
 #line 7 "..\\sysFunction\\raw_download.c"
+#line 8 "..\\sysFunction\\raw_download.c"
 
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
  
@@ -13263,13 +13305,12 @@ extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  ,
 
  
 
-#line 9 "..\\sysFunction\\raw_download.c"
+#line 10 "..\\sysFunction\\raw_download.c"
 
 
 
 
 uint32_t GetTick(void);
-void USART1_ClearRxBuf(void);
 
 static uint32_t raw_dma_pos(void)
 {

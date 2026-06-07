@@ -23109,7 +23109,8 @@ N#define __USART1_H
 N
 N/************************* 头文件 *************************/
 N
-N#include "HeaderFiles.h"
+N#include "gd32f4xx_gpio.h"
+N#include <stdint.h>
 N
 N/************************* 宏定义 *************************/
 N
@@ -23133,22 +23134,11 @@ Nextern volatile uint16_t usart1_rx_len;            // 缓冲区已存储的字�
 Nextern volatile uint8_t usart1_rx_flag;             // 接收完成标志（IDLE 置1）
 N
 N/************************* 函数声明 *************************/
-Nvoid rs485_printf(const char *fmt, ...);
-N/**
-N * @brief 配置USART1串口
-N */
+Nint rs485_printf(const char *fmt, ...);
 Nvoid USART1_Init(void);
 N
-N/**
-N * @brief  清空USART1接收缓冲区
-N */
 Nvoid USART1_ClearRxBuf(void);
 N
-N/**
-N * @brief 发送数据
-N * @param buf 数据缓冲区指针
-N * @param len 发送数据长度
-N */
 Nvoid USART1_SendData(uint16_t *buf, uint16_t len);
 N
 N

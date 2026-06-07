@@ -15314,11 +15314,8 @@ __declspec(__nothrow) long double truncl(long double );
 
  
 
-#line 1 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 36 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-
-
 #line 7 "..\\Driver\\HardWare\\USART\\USART.h"
+#line 8 "..\\Driver\\HardWare\\USART\\USART.h"
 
  
 
@@ -15341,22 +15338,11 @@ extern volatile uint16_t usart1_rx_len;
 extern volatile uint8_t usart1_rx_flag;             
 
  
-void rs485_printf(const char *fmt, ...);
-
-
- 
+int rs485_printf(const char *fmt, ...);
 void USART1_Init(void);
 
-
-
- 
 void USART1_ClearRxBuf(void);
 
-
-
-
-
- 
 void USART1_SendData(uint16_t *buf, uint16_t len);
 
 
@@ -15366,6 +15352,10 @@ void USART1_SendData(uint16_t *buf, uint16_t len);
 #line 24 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
 #line 1 "..\\Driver\\HardWare\\SPI_FLASH\\SPI_FLASH.h"
 
+
+
+#line 1 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 36 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
 
 
 #line 5 "..\\Driver\\HardWare\\SPI_FLASH\\SPI_FLASH.h"
