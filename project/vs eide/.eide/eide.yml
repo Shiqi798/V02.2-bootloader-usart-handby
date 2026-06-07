@@ -23,8 +23,6 @@ virtualFolder:
         - path: ../../Driver/HardWare/OLED/OLED.c
         - path: ../../Driver/HardWare/OLED/OLED.h
         - path: ../../Driver/HardWare/OLED/OLEDfont.h
-        - path: ../../Driver/HardWare/SDCARD/sdcard.c
-        - path: ../../Driver/HardWare/SDCARD/sdcard.h
         - path: ../../Driver/HardWare/USART/USART.c
         - path: ../../Driver/HardWare/USART/USART.h
         - path: ../../Driver/HardWare/ROM/ROM.c

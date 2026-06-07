@@ -9,8 +9,8 @@ void sysFunction_Init(void)
     systick_config();
     USART1_Init();
     OLED_Init();
-    LED_Init();
-    Key_Init();
+//    LED_Init();
+//    Key_Init();
     bootloader_init();
 }
 

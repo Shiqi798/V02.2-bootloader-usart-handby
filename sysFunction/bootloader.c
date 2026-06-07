@@ -28,6 +28,8 @@
 #define BOOT_CMD_BROADCAST       0xFFFFU
 #define BOOT_CMD_ERROR           0xEEEEU
 
+#define BOOT_TEAM_ID_TEXT        "2026639584"
+#define BOOT_MODE_TEXT           "Bootloader"
 #define BOOT_WAIT_APP_MS         10000U
 #define BOOT_FRAME_POLL_MS       100U
 #define BOOT_FLASH_COPY_CHUNK    256U
@@ -57,13 +59,22 @@ static boot_param_t g_boot;
 static boot_image_info_t g_pending_image;
 static bool g_pending_valid = false;
 static bool g_stage_erased = false;
+static bool g_suppress_next_bad_frame = false;
 static uint8_t g_frame_ascii[MYDMA_USART1_RX_BUF_LEN];
 static uint8_t g_frame_bytes[MYDMA_USART1_RX_BUF_LEN / 2U];
 static uint8_t g_flash_buf[BOOT_FLASH_COPY_CHUNK];
 
+static void oled_show_bootloader(void)
+{
+    OLED_Clear();
+    OLED_Printf(0, 0, 16, BOOT_TEAM_ID_TEXT);
+    OLED_Printf(0, 16, 16, BOOT_MODE_TEXT);
+    OLED_Refresh();
+}
+
 static uint32_t param_checksum(const boot_param_t *param)
 {
-    return crc32_buffer((const uint8_t *)param, (uint32_t)offsetof(boot_param_t, checksum));
+    return (uint32_t)crc16_modbus((const uint8_t *)param, (uint32_t)offsetof(boot_param_t, checksum));
 }
 
 static bool device_id_ok(uint16_t device_id)
@@ -429,7 +440,7 @@ static void send_frame(uint8_t frame_type, uint16_t command, const uint8_t *cont
     }
     out[out_pos] = '\0';
 
-    printf("%s", out);
+    printf("%s\r\n", out);
 }
 
 static void send_ok(uint16_t command)
@@ -474,14 +485,12 @@ static boot_status_t receive_stage_image(void)
         return BOOT_STATUS_FLASH;
     }
 
-    OLED_Clear();
-    OLED_Printf(0, 0, 16, "Bootloader");
-    OLED_Printf(0, 16, 16, "RX BIN");
-    OLED_Refresh();
+    oled_show_bootloader();
 
     ret = raw_download_receive_image(BOOT_STAGE_ADDR, BOOT_STAGE_SIZE, &g_pending_image);
     protocol_rx_enable();
     g_stage_erased = false;
+    g_suppress_next_bad_frame = true;
 
     if (ret != BOOT_STATUS_OK) {
         return ret;
@@ -546,9 +555,15 @@ static boot_event_t process_frame_once(uint32_t timeout_ms)
     }
 
     if (status == BOOT_FRAME_BAD) {
+        if (g_suppress_next_bad_frame) {
+            g_suppress_next_bad_frame = false;
+            return BOOT_EVENT_KEEP_WAITING;
+        }
         send_error(BOOT_CMD_ERROR);
         return BOOT_EVENT_KEEP_WAITING;
     }
+
+    g_suppress_next_bad_frame = false;
 
     if ((frame.frame_type == BOOT_FRAME_TYPE_HEART) &&
         (frame.command == BOOT_CMD_BROADCAST)) {
@@ -612,17 +627,14 @@ static boot_event_t process_frame_once(uint32_t timeout_ms)
 
         send_ok(frame.command);
 
-        OLED_Clear();
-        OLED_Printf(0, 0, 16, "Bootloader");
-        OLED_Printf(0, 16, 16, "UPGRADE");
-        OLED_Refresh();
+        oled_show_bootloader();
 
         ret = execute_upgrade();
         if (ret == BOOT_STATUS_OK) {
             jump_raw(BOOT_APP_ADDR);
         }
 
-        send_error(frame.command);
+        oled_show_bootloader();
         break;
     }
 
@@ -680,17 +692,11 @@ void bootloader_console(void)
 
     g_pending_valid = false;
 
-    OLED_Clear();
-    OLED_Printf(0, 0, 16, "Bootloader");
-    OLED_Printf(0, 16, 16, "ERASE");
-    OLED_Refresh();
+    oled_show_bootloader();
 
     (void)prepare_stage_area();
 
-    OLED_Clear();
-    OLED_Printf(0, 0, 16, "Bootloader");
-    OLED_Printf(0, 16, 16, "WAIT");
-    OLED_Refresh();
+    oled_show_bootloader();
 
     printf("using command to interrupt start Application\r\n");
 

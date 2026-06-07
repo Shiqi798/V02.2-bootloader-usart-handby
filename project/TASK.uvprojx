@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,GD32F470</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Driver\HardWare\KEY;..\Driver\HardWare\LED;..\Driver\HardWare\OLED;..\Driver\HardWare\RTC;..\Driver\HardWare\SDCARD;..\Driver\HardWare\SPI_FLASH;..\Driver\HardWare\USART;..\Driver\HeaderFiles;..\Driver\Library;..\Driver\Start\CMSIS;..\Driver\Start\Startup;..\Driver\System\ADC;..\Driver\System\TIM6;..\User;..\Driver\Library\GD32F4xx_standard_peripheral\Include;..\Driver\Library\GD32F4xx_standard_peripheral\Source;..\Driver\Start\CMSIS\GD\GD32F4xx\Include;..\Driver\Start\CMSIS\GD\GD32F4xx\Source;..\sysFunction;..\Driver\Fatfs;..\Driver\System</IncludePath>
+              <IncludePath>..\Driver\HardWare\LED;..\Driver\HardWare\OLED;..\Driver\HardWare\RTC;..\Driver\HardWare\SPI_FLASH;..\Driver\HardWare\USART;..\Driver\HeaderFiles;..\Driver\Library;..\Driver\Start\CMSIS;..\Driver\Start\Startup;..\User;..\Driver\Library\GD32F4xx_standard_peripheral\Include;..\Driver\Library\GD32F4xx_standard_peripheral\Source;..\Driver\Start\CMSIS\GD\GD32F4xx\Include;..\Driver\Start\CMSIS\GD\GD32F4xx\Source;..\sysFunction;..\Driver\System;..\Driver;..\Driver\HardWare;..\Driver</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -402,26 +402,6 @@
           <GroupName>Hardware</GroupName>
           <Files>
             <File>
-              <FileName>Key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Driver\HardWare\KEY\Key.c</FilePath>
-            </File>
-            <File>
-              <FileName>Key.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Driver\HardWare\KEY\Key.h</FilePath>
-            </File>
-            <File>
-              <FileName>LED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Driver\HardWare\LED\LED.c</FilePath>
-            </File>
-            <File>
-              <FileName>LED.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Driver\HardWare\LED\LED.h</FilePath>
-            </File>
-            <File>
               <FileName>OLED.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Driver\HardWare\OLED\OLED.c</FilePath>
@@ -447,14 +427,14 @@
               <FilePath>..\Driver\HardWare\USART\USART.h</FilePath>
             </File>
             <File>
-              <FileName>diskio.c</FileName>
+              <FileName>ROM.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Driver\Fatfs\diskio.c</FilePath>
+              <FilePath>..\Driver\HardWare\ROM\ROM.c</FilePath>
             </File>
             <File>
-              <FileName>ff.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Driver\Fatfs\ff.c</FilePath>
+              <FileName>ROM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Driver\HardWare\ROM\ROM.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -592,16 +572,6 @@
               <FilePath>..\sysFunction\Function.h</FilePath>
             </File>
             <File>
-              <FileName>file_mgr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\sysfunction\file_mgr.c</FilePath>
-            </File>
-            <File>
-              <FileName>file_mgr.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\sysfunction\file_mgr.h</FilePath>
-            </File>
-            <File>
               <FileName>bootloader.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\sysFunction\bootloader.c</FilePath>
@@ -610,6 +580,26 @@
               <FileName>bootloader.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\sysFunction\bootloader.h</FilePath>
+            </File>
+            <File>
+              <FileName>crc_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\sysFunction\crc_utils.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc_utils.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\sysFunction\crc_utils.h</FilePath>
+            </File>
+            <File>
+              <FileName>raw_download.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\sysFunction\raw_download.c</FilePath>
+            </File>
+            <File>
+              <FileName>raw_download.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\sysFunction\raw_download.h</FilePath>
             </File>
           </Files>
         </Group>

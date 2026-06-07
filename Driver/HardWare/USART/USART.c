@@ -6,6 +6,13 @@ volatile uint8_t data_recv = 0;                 // 暂时留着清状态用
 volatile uint16_t usart1_rx_len = 0;            // 缓冲区已存储的字节数
 volatile uint8_t usart1_rx_flag = 0;
 
+static void USART1_ClearTxState(void)
+{
+    dma_channel_disable(DMA0, DMA_CH6);
+    dma_flag_clear(DMA0, DMA_CH6, DMA_FLAG_FTF);
+    usart_flag_clear(USART1, USART_FLAG_TC);
+}
+
 // 重定向 C 库 printf 到 USART（配合 DMA 改版）
 void rs485_printf(const char *fmt, ...)
 {
@@ -18,10 +25,7 @@ void rs485_printf(const char *fmt, ...)
     n = vsnprintf(buf, sizeof(buf), fmt, ap);
     va_end(ap);
 
-    RS485_TX_MODE();
-
     if (n < 0) {
-        RS485_RX_MODE();
         return;
     }
 
@@ -36,6 +40,8 @@ void rs485_printf(const char *fmt, ...)
     
     // 先拷到 DMA 专用的 TX buffer，免得局部变量 buf 出作用域后被覆写
     memcpy(usart1_tx_buffer, buf, len);
+    USART1_ClearTxState();
+    RS485_TX_MODE();
     dma_enable(DMA0, DMA_CH6, len);
     
     // 等待 DMA 完成
@@ -43,6 +49,7 @@ void rs485_printf(const char *fmt, ...)
     
     // 等待 USART 发送完成
     for (uint32_t i = 0; i < 100000 && usart_flag_get(USART1, USART_FLAG_TC) == RESET; i++);
+    USART1_ClearTxState();
     
 
     RS485_RX_MODE();
@@ -112,14 +119,19 @@ void USART1_SendData(uint16_t *buf, uint16_t len)
     if (len > sizeof(usart1_tx_buffer)) {
         len = sizeof(usart1_tx_buffer);
     }
+    if (len == 0U) {
+        return;
+    }
     for(uint16_t i=0; i<len; i++){
         usart1_tx_buffer[i] = (uint8_t)buf[i];
     }
     
+    USART1_ClearTxState();
     RS485_TX_MODE();
     dma_enable(DMA0, DMA_CH6, len);
     while(dma_flag_get(DMA0, DMA_CH6, DMA_FLAG_FTF) == RESET); 
     while(usart_flag_get(USART1, USART_FLAG_TC) == RESET);
+    USART1_ClearTxState();
     RS485_RX_MODE();
 }
 

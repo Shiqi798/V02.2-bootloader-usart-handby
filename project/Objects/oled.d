@@ -41,24 +41,3 @@
 .\objects\oled.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_ipa.h
 .\objects\oled.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_tli.h
 .\objects\oled.o: ..\User\systick.h
-.\objects\oled.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdio.h
-.\objects\oled.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h
-.\objects\oled.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\string.h
-.\objects\oled.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\math.h
-.\objects\oled.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdarg.h
-.\objects\oled.o: ..\Driver\HardWare\OLED\OLED.h
-.\objects\oled.o: ..\Driver\HardWare\USART\USART.h
-.\objects\oled.o: ..\Driver\HeaderFiles\HeaderFiles.h
-.\objects\oled.o: ..\Driver\HardWare\SPI_FLASH\SPI_FLASH.h
-.\objects\oled.o: ..\Driver\HardWare\SDCARD\sdcard.h
-.\objects\oled.o: ..\Driver\HardWare\LED\LED.h
-.\objects\oled.o: ..\Driver\Fatfs\ff.h
-.\objects\oled.o: ..\Driver\Fatfs\integer.h
-.\objects\oled.o: ..\Driver\Fatfs\ffconf.h
-.\objects\oled.o: ..\Driver\Fatfs\diskio.h
-.\objects\oled.o: ..\Driver\HardWare\KEY\Key.h
-.\objects\oled.o: ..\sysFunction\bootloader.h
-.\objects\oled.o: ..\Driver\System\myDMA.h
-.\objects\oled.o: ..\sysFunction\file_mgr.h
-.\objects\oled.o: ..\sysFunction\Function.h
-.\objects\oled.o: ..\Driver\HardWare\OLED\oledfont.h

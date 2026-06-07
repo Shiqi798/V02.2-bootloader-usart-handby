@@ -40,4 +40,3 @@
 .\objects\gd32f4xx_it.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_ipa.h
 .\objects\gd32f4xx_it.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_tli.h
 .\objects\gd32f4xx_it.o: ..\User\systick.h
-.\objects\gd32f4xx_it.o: ..\Driver\HardWare\SDCARD\sdcard.h
