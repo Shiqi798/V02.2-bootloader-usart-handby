@@ -292,7 +292,7 @@ typedef unsigned     long long uintmax_t;
 
 
 
- 
+
 #line 27 "..\\Protocol\\boot_protocol.h"
 
 
@@ -334,9 +334,12 @@ void boot_proto_send_heartbeat(uint16_t device_id);
 
 #line 5 "..\\Protocol\\boot_crc.h"
 
+ 
 uint32_t boot_crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
 uint32_t boot_crc32_buffer(const uint8_t *data, uint32_t len);
 uint32_t boot_crc32_flash(uint32_t addr, uint32_t len);
+
+ 
 uint16_t boot_crc16_ccitt(const uint8_t *data, uint32_t len);
 uint16_t boot_crc16_modbus(const uint8_t *data, uint32_t len);
 
@@ -13276,6 +13279,9 @@ uint32_t GetTick(void);
 
 
 
+
+
+
 static uint8_t g_proto_ascii[128U];
 static uint8_t g_proto_bytes[64U];
 
@@ -13403,6 +13409,8 @@ static void proto_append_hex_byte(char *out, uint32_t *pos, uint8_t value)
     out[(*pos)++] = hex[value & 0x0FU];
 }
 
+
+
 void boot_proto_rx_enable(void)
 {
     USART1_ClearRxBuf();
@@ -13443,6 +13451,8 @@ boot_proto_frame_status_t boot_proto_wait_frame(uint32_t timeout_ms,
 
     return BOOT_PROTO_FRAME_NONE;
 }
+
+
 
 void boot_proto_send_frame(uint16_t device_id,
                            uint8_t frame_type,

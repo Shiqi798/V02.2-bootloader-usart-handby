@@ -1,6 +1,5 @@
 .\objects\boot_app.o: ..\Function\boot_app.c
 .\objects\boot_app.o: ..\Function\boot_app.h
-.\objects\boot_app.o: ..\sysFunction\bootloader.h
 .\objects\boot_app.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\boot_app.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\boot_app.o: ..\Driver\HardWare\ROM\ROM.h

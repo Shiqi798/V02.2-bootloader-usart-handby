@@ -1,4 +1,454 @@
-L 1 "..\sysFunction\Function.c"
+L 1 "..\Function\function.c"
+N#include "function.h"
+L 1 "..\Function\function.h" 1
+N#ifndef __FUNCTION_H
+N#define __FUNCTION_H
+N
+N
+Nvoid boot_entry_init(void);  //初始化硬件+boot参数
+Nvoid boot_entry_loop(void);  //主循环
+N
+N#endif
+L 2 "..\Function\function.c" 2
+N
+N#include "boot_flow.h"
+L 1 "..\Function\boot_flow.h" 1
+N#ifndef __BOOT_FLOW_H
+N#define __BOOT_FLOW_H
+N
+N#include <stdbool.h>
+L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h" 1
+N/* stdbool.h: ISO/IEC 9899:1999 (C99), section 7.16 */
+N
+N/* Copyright (C) ARM Ltd., 2002
+N * All rights reserved
+N * RCS $Revision$
+N * Checkin $Date$
+N * Revising $Author: drodgman $
+N */
+N
+N#ifndef __bool_true_false_are_defined
+N#define __bool_true_false_are_defined 1
+N#define __ARMCLIB_VERSION 5060034
+N
+N  #ifndef __cplusplus /* In C++, 'bool', 'true' and 'false' and keywords */
+N    #define bool _Bool
+N    #define true 1
+N    #define false 0
+N  #else
+S    #ifdef __GNUC__
+S      /* GNU C++ supports direct inclusion of stdbool.h to provide C99
+S         compatibility by defining _Bool */
+S      #define _Bool bool
+S    #endif
+N  #endif
+N
+N#endif /* __bool_true_false_are_defined */
+N
+L 5 "..\Function\boot_flow.h" 2
+N
+N//=================================
+N//Boot流程
+N
+Nvoid boot_flow_init(void);
+Nbool boot_flow_update_requested(void);  //boot_flag == 0xA5
+X_Bool boot_flow_update_requested(void);  
+Nbool boot_flow_boot_default(void);     //先主区→再备份
+X_Bool boot_flow_boot_default(void);     
+Nvoid boot_flow_console(void);          //主循环
+N
+N#endif
+L 4 "..\Function\function.c" 2
+N#include "systick.h"
+L 1 "..\User\systick.h" 1
+N/*!
+N    \file    systick.h
+N    \brief   the header file of systick
+N
+N    \version 2020-09-04, V2.0.0, demo for GD32F4xx
+N*/
+N
+N/*
+N    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+N
+N    Redistribution and use in source and binary forms, with or without modification, 
+Nare permitted provided that the following conditions are met:
+N
+N    1. Redistributions of source code must retain the above copyright notice, this 
+N       list of conditions and the following disclaimer.
+N    2. Redistributions in binary form must reproduce the above copyright notice, 
+N       this list of conditions and the following disclaimer in the documentation 
+N       and/or other materials provided with the distribution.
+N    3. Neither the name of the copyright holder nor the names of its contributors 
+N       may be used to endorse or promote products derived from this software without 
+N       specific prior written permission.
+N
+N    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+NAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+NWARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+NIN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+NINDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+NNOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+NPROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+NWHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+NARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+NOF SUCH DAMAGE.
+N*/
+N
+N#ifndef SYS_TICK_H
+N#define SYS_TICK_H
+N
+N#include <stdint.h>
+L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h" 1
+N/* Copyright (C) ARM Ltd., 1999,2014 */
+N/* All rights reserved */
+N
+N/*
+N * RCS $Revision$
+N * Checkin $Date$
+N * Revising $Author: agrant $
+N */
+N
+N#ifndef __stdint_h
+N#define __stdint_h
+N#define __ARMCLIB_VERSION 5060034
+N
+N  #ifdef __INT64_TYPE__
+S    /* armclang predefines '__INT64_TYPE__' and '__INT64_C_SUFFIX__' */
+S    #define __INT64 __INT64_TYPE__
+N  #else
+N    /* armcc has builtin '__int64' which can be used in --strict mode */
+N    #define __INT64 __int64
+N    #define __INT64_C_SUFFIX__ ll
+N  #endif
+N  #define __PASTE2(x, y) x ## y
+N  #define __PASTE(x, y) __PASTE2(x, y)
+N  #define __INT64_C(x)  __ESCAPE__(__PASTE(x, __INT64_C_SUFFIX__))
+N  #define __UINT64_C(x)  __ESCAPE__(__PASTE(x ## u, __INT64_C_SUFFIX__))
+N  #if defined(__clang__) || (defined(__ARMCC_VERSION) && !defined(__STRICT_ANSI__))
+X  #if 0L || (1L && !0L)
+N    /* armclang and non-strict armcc allow 'long long' in system headers */
+N    #define __LONGLONG long long
+N  #else
+S    /* strict armcc has '__int64' */
+S    #define __LONGLONG __int64
+N  #endif
+N
+N  #ifndef __STDINT_DECLS
+N  #define __STDINT_DECLS
+N
+N    #undef __CLIBNS
+N
+N    #ifdef __cplusplus
+S      namespace std {
+S          #define __CLIBNS std::
+S          extern "C" {
+N    #else
+N      #define __CLIBNS
+N    #endif  /* __cplusplus */
+N
+N
+N/*
+N * 'signed' is redundant below, except for 'signed char' and if
+N * the typedef is used to declare a bitfield.
+N */
+N
+N    /* 7.18.1.1 */
+N
+N    /* exact-width signed integer types */
+Ntypedef   signed          char int8_t;
+Ntypedef   signed short     int int16_t;
+Ntypedef   signed           int int32_t;
+Ntypedef   signed       __INT64 int64_t;
+Xtypedef   signed       __int64 int64_t;
+N
+N    /* exact-width unsigned integer types */
+Ntypedef unsigned          char uint8_t;
+Ntypedef unsigned short     int uint16_t;
+Ntypedef unsigned           int uint32_t;
+Ntypedef unsigned       __INT64 uint64_t;
+Xtypedef unsigned       __int64 uint64_t;
+N
+N    /* 7.18.1.2 */
+N
+N    /* smallest type of at least n bits */
+N    /* minimum-width signed integer types */
+Ntypedef   signed          char int_least8_t;
+Ntypedef   signed short     int int_least16_t;
+Ntypedef   signed           int int_least32_t;
+Ntypedef   signed       __INT64 int_least64_t;
+Xtypedef   signed       __int64 int_least64_t;
+N
+N    /* minimum-width unsigned integer types */
+Ntypedef unsigned          char uint_least8_t;
+Ntypedef unsigned short     int uint_least16_t;
+Ntypedef unsigned           int uint_least32_t;
+Ntypedef unsigned       __INT64 uint_least64_t;
+Xtypedef unsigned       __int64 uint_least64_t;
+N
+N    /* 7.18.1.3 */
+N
+N    /* fastest minimum-width signed integer types */
+Ntypedef   signed           int int_fast8_t;
+Ntypedef   signed           int int_fast16_t;
+Ntypedef   signed           int int_fast32_t;
+Ntypedef   signed       __INT64 int_fast64_t;
+Xtypedef   signed       __int64 int_fast64_t;
+N
+N    /* fastest minimum-width unsigned integer types */
+Ntypedef unsigned           int uint_fast8_t;
+Ntypedef unsigned           int uint_fast16_t;
+Ntypedef unsigned           int uint_fast32_t;
+Ntypedef unsigned       __INT64 uint_fast64_t;
+Xtypedef unsigned       __int64 uint_fast64_t;
+N
+N    /* 7.18.1.4 integer types capable of holding object pointers */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+Stypedef   signed       __INT64 intptr_t;
+Stypedef unsigned       __INT64 uintptr_t;
+N#else
+Ntypedef   signed           int intptr_t;
+Ntypedef unsigned           int uintptr_t;
+N#endif
+N
+N    /* 7.18.1.5 greatest-width integer types */
+Ntypedef   signed     __LONGLONG intmax_t;
+Xtypedef   signed     long long intmax_t;
+Ntypedef unsigned     __LONGLONG uintmax_t;
+Xtypedef unsigned     long long uintmax_t;
+N
+N
+N#if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS)
+X#if !0L || 0L
+N
+N    /* 7.18.2.1 */
+N
+N    /* minimum values of exact-width signed integer types */
+N#define INT8_MIN                   -128
+N#define INT16_MIN                -32768
+N#define INT32_MIN          (~0x7fffffff)   /* -2147483648 is unsigned */
+N#define INT64_MIN  __INT64_C(~0x7fffffffffffffff) /* -9223372036854775808 is unsigned */
+N
+N    /* maximum values of exact-width signed integer types */
+N#define INT8_MAX                    127
+N#define INT16_MAX                 32767
+N#define INT32_MAX            2147483647
+N#define INT64_MAX  __INT64_C(9223372036854775807)
+N
+N    /* maximum values of exact-width unsigned integer types */
+N#define UINT8_MAX                   255
+N#define UINT16_MAX                65535
+N#define UINT32_MAX           4294967295u
+N#define UINT64_MAX __UINT64_C(18446744073709551615)
+N
+N    /* 7.18.2.2 */
+N
+N    /* minimum values of minimum-width signed integer types */
+N#define INT_LEAST8_MIN                   -128
+N#define INT_LEAST16_MIN                -32768
+N#define INT_LEAST32_MIN          (~0x7fffffff)
+N#define INT_LEAST64_MIN  __INT64_C(~0x7fffffffffffffff)
+N
+N    /* maximum values of minimum-width signed integer types */
+N#define INT_LEAST8_MAX                    127
+N#define INT_LEAST16_MAX                 32767
+N#define INT_LEAST32_MAX            2147483647
+N#define INT_LEAST64_MAX  __INT64_C(9223372036854775807)
+N
+N    /* maximum values of minimum-width unsigned integer types */
+N#define UINT_LEAST8_MAX                   255
+N#define UINT_LEAST16_MAX                65535
+N#define UINT_LEAST32_MAX           4294967295u
+N#define UINT_LEAST64_MAX __UINT64_C(18446744073709551615)
+N
+N    /* 7.18.2.3 */
+N
+N    /* minimum values of fastest minimum-width signed integer types */
+N#define INT_FAST8_MIN           (~0x7fffffff)
+N#define INT_FAST16_MIN          (~0x7fffffff)
+N#define INT_FAST32_MIN          (~0x7fffffff)
+N#define INT_FAST64_MIN  __INT64_C(~0x7fffffffffffffff)
+N
+N    /* maximum values of fastest minimum-width signed integer types */
+N#define INT_FAST8_MAX             2147483647
+N#define INT_FAST16_MAX            2147483647
+N#define INT_FAST32_MAX            2147483647
+N#define INT_FAST64_MAX  __INT64_C(9223372036854775807)
+N
+N    /* maximum values of fastest minimum-width unsigned integer types */
+N#define UINT_FAST8_MAX            4294967295u
+N#define UINT_FAST16_MAX           4294967295u
+N#define UINT_FAST32_MAX           4294967295u
+N#define UINT_FAST64_MAX __UINT64_C(18446744073709551615)
+N
+N    /* 7.18.2.4 */
+N
+N    /* minimum value of pointer-holding signed integer type */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define INTPTR_MIN INT64_MIN
+N#else
+N#define INTPTR_MIN INT32_MIN
+N#endif
+N
+N    /* maximum value of pointer-holding signed integer type */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define INTPTR_MAX INT64_MAX
+N#else
+N#define INTPTR_MAX INT32_MAX
+N#endif
+N
+N    /* maximum value of pointer-holding unsigned integer type */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define UINTPTR_MAX UINT64_MAX
+N#else
+N#define UINTPTR_MAX UINT32_MAX
+N#endif
+N
+N    /* 7.18.2.5 */
+N
+N    /* minimum value of greatest-width signed integer type */
+N#define INTMAX_MIN  __ESCAPE__(~0x7fffffffffffffffll)
+N
+N    /* maximum value of greatest-width signed integer type */
+N#define INTMAX_MAX  __ESCAPE__(9223372036854775807ll)
+N
+N    /* maximum value of greatest-width unsigned integer type */
+N#define UINTMAX_MAX __ESCAPE__(18446744073709551615ull)
+N
+N    /* 7.18.3 */
+N
+N    /* limits of ptrdiff_t */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define PTRDIFF_MIN INT64_MIN
+S#define PTRDIFF_MAX INT64_MAX
+N#else
+N#define PTRDIFF_MIN INT32_MIN
+N#define PTRDIFF_MAX INT32_MAX
+N#endif
+N
+N    /* limits of sig_atomic_t */
+N#define SIG_ATOMIC_MIN (~0x7fffffff)
+N#define SIG_ATOMIC_MAX   2147483647
+N
+N    /* limit of size_t */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define SIZE_MAX UINT64_MAX
+N#else
+N#define SIZE_MAX UINT32_MAX
+N#endif
+N
+N    /* limits of wchar_t */
+N    /* NB we have to undef and redef because they're defined in both
+N     * stdint.h and wchar.h */
+N#undef WCHAR_MIN
+N#undef WCHAR_MAX
+N
+N#if defined(__WCHAR32) || (defined(__ARM_SIZEOF_WCHAR_T) && __ARM_SIZEOF_WCHAR_T == 4)
+X#if 0L || (0L && __ARM_SIZEOF_WCHAR_T == 4)
+S  #define WCHAR_MIN   0
+S  #define WCHAR_MAX   0xffffffffU
+N#else
+N  #define WCHAR_MIN   0
+N  #define WCHAR_MAX   65535
+N#endif
+N
+N    /* limits of wint_t */
+N#define WINT_MIN (~0x7fffffff)
+N#define WINT_MAX 2147483647
+N
+N#endif /* __STDC_LIMIT_MACROS */
+N
+N#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS)
+X#if !0L || 0L
+N
+N    /* 7.18.4.1 macros for minimum-width integer constants */
+N#define INT8_C(x)   (x)
+N#define INT16_C(x)  (x)
+N#define INT32_C(x)  (x)
+N#define INT64_C(x)  __INT64_C(x)
+N
+N#define UINT8_C(x)  (x ## u)
+N#define UINT16_C(x) (x ## u)
+N#define UINT32_C(x) (x ## u)
+N#define UINT64_C(x) __UINT64_C(x)
+N
+N    /* 7.18.4.2 macros for greatest-width integer constants */
+N#define INTMAX_C(x)  __ESCAPE__(x ## ll)
+N#define UINTMAX_C(x) __ESCAPE__(x ## ull)
+N
+N#endif /* __STDC_CONSTANT_MACROS */
+N
+N    #ifdef __cplusplus
+S         }  /* extern "C" */
+S      }  /* namespace std */
+N    #endif /* __cplusplus */
+N  #endif /* __STDINT_DECLS */
+N
+N  #ifdef __cplusplus
+S    #ifndef __STDINT_NO_EXPORTS
+S      using ::std::int8_t;
+S      using ::std::int16_t;
+S      using ::std::int32_t;
+S      using ::std::int64_t;
+S      using ::std::uint8_t;
+S      using ::std::uint16_t;
+S      using ::std::uint32_t;
+S      using ::std::uint64_t;
+S      using ::std::int_least8_t;
+S      using ::std::int_least16_t;
+S      using ::std::int_least32_t;
+S      using ::std::int_least64_t;
+S      using ::std::uint_least8_t;
+S      using ::std::uint_least16_t;
+S      using ::std::uint_least32_t;
+S      using ::std::uint_least64_t;
+S      using ::std::int_fast8_t;
+S      using ::std::int_fast16_t;
+S      using ::std::int_fast32_t;
+S      using ::std::int_fast64_t;
+S      using ::std::uint_fast8_t;
+S      using ::std::uint_fast16_t;
+S      using ::std::uint_fast32_t;
+S      using ::std::uint_fast64_t;
+S      using ::std::intptr_t;
+S      using ::std::uintptr_t;
+S      using ::std::intmax_t;
+S      using ::std::uintmax_t;
+S    #endif
+N  #endif /* __cplusplus */
+N
+N#undef __INT64
+N#undef __LONGLONG
+N
+N#endif /* __stdint_h */
+N
+N/* end of stdint.h */
+L 39 "..\User\systick.h" 2
+N
+N/* configure systick */
+Nvoid systick_config(void);
+N/* delay a time in milliseconds */
+Nvoid delay_1ms(uint32_t count);
+N/* delay decrement */
+Nvoid delay_decrement(void);
+N
+Nuint32_t GetTick(void);
+N
+N#endif /* SYS_TICK_H */
+L 5 "..\Function\function.c" 2
+N#include "OLED.h"
+L 1 "..\Driver\HardWare\OLED\OLED.h" 1
+N#ifndef __OLED_H
+N#define __OLED_H
+N
+N/************************* ͷ�ļ� *************************/
+N
 N#include "HeaderFiles.h"
 L 1 "..\Driver\HeaderFiles\HeaderFiles.h" 1
 N#ifndef __HEADERFILES_H
@@ -498,337 +948,6 @@ S  #endif
 N#endif
 N
 N#include <stdint.h>                      /* standard types definitions                      */
-L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h" 1
-N/* Copyright (C) ARM Ltd., 1999,2014 */
-N/* All rights reserved */
-N
-N/*
-N * RCS $Revision$
-N * Checkin $Date$
-N * Revising $Author: agrant $
-N */
-N
-N#ifndef __stdint_h
-N#define __stdint_h
-N#define __ARMCLIB_VERSION 5060034
-N
-N  #ifdef __INT64_TYPE__
-S    /* armclang predefines '__INT64_TYPE__' and '__INT64_C_SUFFIX__' */
-S    #define __INT64 __INT64_TYPE__
-N  #else
-N    /* armcc has builtin '__int64' which can be used in --strict mode */
-N    #define __INT64 __int64
-N    #define __INT64_C_SUFFIX__ ll
-N  #endif
-N  #define __PASTE2(x, y) x ## y
-N  #define __PASTE(x, y) __PASTE2(x, y)
-N  #define __INT64_C(x)  __ESCAPE__(__PASTE(x, __INT64_C_SUFFIX__))
-N  #define __UINT64_C(x)  __ESCAPE__(__PASTE(x ## u, __INT64_C_SUFFIX__))
-N  #if defined(__clang__) || (defined(__ARMCC_VERSION) && !defined(__STRICT_ANSI__))
-X  #if 0L || (1L && !0L)
-N    /* armclang and non-strict armcc allow 'long long' in system headers */
-N    #define __LONGLONG long long
-N  #else
-S    /* strict armcc has '__int64' */
-S    #define __LONGLONG __int64
-N  #endif
-N
-N  #ifndef __STDINT_DECLS
-N  #define __STDINT_DECLS
-N
-N    #undef __CLIBNS
-N
-N    #ifdef __cplusplus
-S      namespace std {
-S          #define __CLIBNS std::
-S          extern "C" {
-N    #else
-N      #define __CLIBNS
-N    #endif  /* __cplusplus */
-N
-N
-N/*
-N * 'signed' is redundant below, except for 'signed char' and if
-N * the typedef is used to declare a bitfield.
-N */
-N
-N    /* 7.18.1.1 */
-N
-N    /* exact-width signed integer types */
-Ntypedef   signed          char int8_t;
-Ntypedef   signed short     int int16_t;
-Ntypedef   signed           int int32_t;
-Ntypedef   signed       __INT64 int64_t;
-Xtypedef   signed       __int64 int64_t;
-N
-N    /* exact-width unsigned integer types */
-Ntypedef unsigned          char uint8_t;
-Ntypedef unsigned short     int uint16_t;
-Ntypedef unsigned           int uint32_t;
-Ntypedef unsigned       __INT64 uint64_t;
-Xtypedef unsigned       __int64 uint64_t;
-N
-N    /* 7.18.1.2 */
-N
-N    /* smallest type of at least n bits */
-N    /* minimum-width signed integer types */
-Ntypedef   signed          char int_least8_t;
-Ntypedef   signed short     int int_least16_t;
-Ntypedef   signed           int int_least32_t;
-Ntypedef   signed       __INT64 int_least64_t;
-Xtypedef   signed       __int64 int_least64_t;
-N
-N    /* minimum-width unsigned integer types */
-Ntypedef unsigned          char uint_least8_t;
-Ntypedef unsigned short     int uint_least16_t;
-Ntypedef unsigned           int uint_least32_t;
-Ntypedef unsigned       __INT64 uint_least64_t;
-Xtypedef unsigned       __int64 uint_least64_t;
-N
-N    /* 7.18.1.3 */
-N
-N    /* fastest minimum-width signed integer types */
-Ntypedef   signed           int int_fast8_t;
-Ntypedef   signed           int int_fast16_t;
-Ntypedef   signed           int int_fast32_t;
-Ntypedef   signed       __INT64 int_fast64_t;
-Xtypedef   signed       __int64 int_fast64_t;
-N
-N    /* fastest minimum-width unsigned integer types */
-Ntypedef unsigned           int uint_fast8_t;
-Ntypedef unsigned           int uint_fast16_t;
-Ntypedef unsigned           int uint_fast32_t;
-Ntypedef unsigned       __INT64 uint_fast64_t;
-Xtypedef unsigned       __int64 uint_fast64_t;
-N
-N    /* 7.18.1.4 integer types capable of holding object pointers */
-N#if __sizeof_ptr == 8
-X#if 4 == 8
-Stypedef   signed       __INT64 intptr_t;
-Stypedef unsigned       __INT64 uintptr_t;
-N#else
-Ntypedef   signed           int intptr_t;
-Ntypedef unsigned           int uintptr_t;
-N#endif
-N
-N    /* 7.18.1.5 greatest-width integer types */
-Ntypedef   signed     __LONGLONG intmax_t;
-Xtypedef   signed     long long intmax_t;
-Ntypedef unsigned     __LONGLONG uintmax_t;
-Xtypedef unsigned     long long uintmax_t;
-N
-N
-N#if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS)
-X#if !0L || 0L
-N
-N    /* 7.18.2.1 */
-N
-N    /* minimum values of exact-width signed integer types */
-N#define INT8_MIN                   -128
-N#define INT16_MIN                -32768
-N#define INT32_MIN          (~0x7fffffff)   /* -2147483648 is unsigned */
-N#define INT64_MIN  __INT64_C(~0x7fffffffffffffff) /* -9223372036854775808 is unsigned */
-N
-N    /* maximum values of exact-width signed integer types */
-N#define INT8_MAX                    127
-N#define INT16_MAX                 32767
-N#define INT32_MAX            2147483647
-N#define INT64_MAX  __INT64_C(9223372036854775807)
-N
-N    /* maximum values of exact-width unsigned integer types */
-N#define UINT8_MAX                   255
-N#define UINT16_MAX                65535
-N#define UINT32_MAX           4294967295u
-N#define UINT64_MAX __UINT64_C(18446744073709551615)
-N
-N    /* 7.18.2.2 */
-N
-N    /* minimum values of minimum-width signed integer types */
-N#define INT_LEAST8_MIN                   -128
-N#define INT_LEAST16_MIN                -32768
-N#define INT_LEAST32_MIN          (~0x7fffffff)
-N#define INT_LEAST64_MIN  __INT64_C(~0x7fffffffffffffff)
-N
-N    /* maximum values of minimum-width signed integer types */
-N#define INT_LEAST8_MAX                    127
-N#define INT_LEAST16_MAX                 32767
-N#define INT_LEAST32_MAX            2147483647
-N#define INT_LEAST64_MAX  __INT64_C(9223372036854775807)
-N
-N    /* maximum values of minimum-width unsigned integer types */
-N#define UINT_LEAST8_MAX                   255
-N#define UINT_LEAST16_MAX                65535
-N#define UINT_LEAST32_MAX           4294967295u
-N#define UINT_LEAST64_MAX __UINT64_C(18446744073709551615)
-N
-N    /* 7.18.2.3 */
-N
-N    /* minimum values of fastest minimum-width signed integer types */
-N#define INT_FAST8_MIN           (~0x7fffffff)
-N#define INT_FAST16_MIN          (~0x7fffffff)
-N#define INT_FAST32_MIN          (~0x7fffffff)
-N#define INT_FAST64_MIN  __INT64_C(~0x7fffffffffffffff)
-N
-N    /* maximum values of fastest minimum-width signed integer types */
-N#define INT_FAST8_MAX             2147483647
-N#define INT_FAST16_MAX            2147483647
-N#define INT_FAST32_MAX            2147483647
-N#define INT_FAST64_MAX  __INT64_C(9223372036854775807)
-N
-N    /* maximum values of fastest minimum-width unsigned integer types */
-N#define UINT_FAST8_MAX            4294967295u
-N#define UINT_FAST16_MAX           4294967295u
-N#define UINT_FAST32_MAX           4294967295u
-N#define UINT_FAST64_MAX __UINT64_C(18446744073709551615)
-N
-N    /* 7.18.2.4 */
-N
-N    /* minimum value of pointer-holding signed integer type */
-N#if __sizeof_ptr == 8
-X#if 4 == 8
-S#define INTPTR_MIN INT64_MIN
-N#else
-N#define INTPTR_MIN INT32_MIN
-N#endif
-N
-N    /* maximum value of pointer-holding signed integer type */
-N#if __sizeof_ptr == 8
-X#if 4 == 8
-S#define INTPTR_MAX INT64_MAX
-N#else
-N#define INTPTR_MAX INT32_MAX
-N#endif
-N
-N    /* maximum value of pointer-holding unsigned integer type */
-N#if __sizeof_ptr == 8
-X#if 4 == 8
-S#define UINTPTR_MAX UINT64_MAX
-N#else
-N#define UINTPTR_MAX UINT32_MAX
-N#endif
-N
-N    /* 7.18.2.5 */
-N
-N    /* minimum value of greatest-width signed integer type */
-N#define INTMAX_MIN  __ESCAPE__(~0x7fffffffffffffffll)
-N
-N    /* maximum value of greatest-width signed integer type */
-N#define INTMAX_MAX  __ESCAPE__(9223372036854775807ll)
-N
-N    /* maximum value of greatest-width unsigned integer type */
-N#define UINTMAX_MAX __ESCAPE__(18446744073709551615ull)
-N
-N    /* 7.18.3 */
-N
-N    /* limits of ptrdiff_t */
-N#if __sizeof_ptr == 8
-X#if 4 == 8
-S#define PTRDIFF_MIN INT64_MIN
-S#define PTRDIFF_MAX INT64_MAX
-N#else
-N#define PTRDIFF_MIN INT32_MIN
-N#define PTRDIFF_MAX INT32_MAX
-N#endif
-N
-N    /* limits of sig_atomic_t */
-N#define SIG_ATOMIC_MIN (~0x7fffffff)
-N#define SIG_ATOMIC_MAX   2147483647
-N
-N    /* limit of size_t */
-N#if __sizeof_ptr == 8
-X#if 4 == 8
-S#define SIZE_MAX UINT64_MAX
-N#else
-N#define SIZE_MAX UINT32_MAX
-N#endif
-N
-N    /* limits of wchar_t */
-N    /* NB we have to undef and redef because they're defined in both
-N     * stdint.h and wchar.h */
-N#undef WCHAR_MIN
-N#undef WCHAR_MAX
-N
-N#if defined(__WCHAR32) || (defined(__ARM_SIZEOF_WCHAR_T) && __ARM_SIZEOF_WCHAR_T == 4)
-X#if 0L || (0L && __ARM_SIZEOF_WCHAR_T == 4)
-S  #define WCHAR_MIN   0
-S  #define WCHAR_MAX   0xffffffffU
-N#else
-N  #define WCHAR_MIN   0
-N  #define WCHAR_MAX   65535
-N#endif
-N
-N    /* limits of wint_t */
-N#define WINT_MIN (~0x7fffffff)
-N#define WINT_MAX 2147483647
-N
-N#endif /* __STDC_LIMIT_MACROS */
-N
-N#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS)
-X#if !0L || 0L
-N
-N    /* 7.18.4.1 macros for minimum-width integer constants */
-N#define INT8_C(x)   (x)
-N#define INT16_C(x)  (x)
-N#define INT32_C(x)  (x)
-N#define INT64_C(x)  __INT64_C(x)
-N
-N#define UINT8_C(x)  (x ## u)
-N#define UINT16_C(x) (x ## u)
-N#define UINT32_C(x) (x ## u)
-N#define UINT64_C(x) __UINT64_C(x)
-N
-N    /* 7.18.4.2 macros for greatest-width integer constants */
-N#define INTMAX_C(x)  __ESCAPE__(x ## ll)
-N#define UINTMAX_C(x) __ESCAPE__(x ## ull)
-N
-N#endif /* __STDC_CONSTANT_MACROS */
-N
-N    #ifdef __cplusplus
-S         }  /* extern "C" */
-S      }  /* namespace std */
-N    #endif /* __cplusplus */
-N  #endif /* __STDINT_DECLS */
-N
-N  #ifdef __cplusplus
-S    #ifndef __STDINT_NO_EXPORTS
-S      using ::std::int8_t;
-S      using ::std::int16_t;
-S      using ::std::int32_t;
-S      using ::std::int64_t;
-S      using ::std::uint8_t;
-S      using ::std::uint16_t;
-S      using ::std::uint32_t;
-S      using ::std::uint64_t;
-S      using ::std::int_least8_t;
-S      using ::std::int_least16_t;
-S      using ::std::int_least32_t;
-S      using ::std::int_least64_t;
-S      using ::std::uint_least8_t;
-S      using ::std::uint_least16_t;
-S      using ::std::uint_least32_t;
-S      using ::std::uint_least64_t;
-S      using ::std::int_fast8_t;
-S      using ::std::int_fast16_t;
-S      using ::std::int_fast32_t;
-S      using ::std::int_fast64_t;
-S      using ::std::uint_fast8_t;
-S      using ::std::uint_fast16_t;
-S      using ::std::uint_fast32_t;
-S      using ::std::uint_fast64_t;
-S      using ::std::intptr_t;
-S      using ::std::uintptr_t;
-S      using ::std::intmax_t;
-S      using ::std::uintmax_t;
-S    #endif
-N  #endif /* __cplusplus */
-N
-N#undef __INT64
-N#undef __LONGLONG
-N
-N#endif /* __stdint_h */
-N
-N/* end of stdint.h */
-L 187 "..\Driver\Start\CMSIS\core_cm4.h" 2
 N#include <core_cmInstr.h>                /* Core Instruction Access                         */
 L 1 "..\Driver\Start\CMSIS\core_cmInstr.h" 1
 N/**************************************************************************//**
@@ -19073,55 +19192,6 @@ L 6 "..\Driver\HeaderFiles\HeaderFiles.h" 2
 N#include "gd32f4xx_libopt.h"
 N#include "gd32f4xx_rcu.h"
 N#include "systick.h"
-L 1 "..\User\systick.h" 1
-N/*!
-N    \file    systick.h
-N    \brief   the header file of systick
-N
-N    \version 2020-09-04, V2.0.0, demo for GD32F4xx
-N*/
-N
-N/*
-N    Copyright (c) 2020, GigaDevice Semiconductor Inc.
-N
-N    Redistribution and use in source and binary forms, with or without modification, 
-Nare permitted provided that the following conditions are met:
-N
-N    1. Redistributions of source code must retain the above copyright notice, this 
-N       list of conditions and the following disclaimer.
-N    2. Redistributions in binary form must reproduce the above copyright notice, 
-N       this list of conditions and the following disclaimer in the documentation 
-N       and/or other materials provided with the distribution.
-N    3. Neither the name of the copyright holder nor the names of its contributors 
-N       may be used to endorse or promote products derived from this software without 
-N       specific prior written permission.
-N
-N    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-NAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-NWARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-NIN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-NINDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
-NNOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
-NPROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
-NWHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-NARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
-NOF SUCH DAMAGE.
-N*/
-N
-N#ifndef SYS_TICK_H
-N#define SYS_TICK_H
-N
-N#include <stdint.h>
-N
-N/* configure systick */
-Nvoid systick_config(void);
-N/* delay a time in milliseconds */
-Nvoid delay_1ms(uint32_t count);
-N/* delay decrement */
-Nvoid delay_decrement(void);
-N
-N#endif /* SYS_TICK_H */
-L 9 "..\Driver\HeaderFiles\HeaderFiles.h" 2
 N
 N
 N#include "ROM.h"
@@ -19133,35 +19203,6 @@ N#include "gd32f4xx.h"
 N#include "gd32f4xx_fmc.h"
 N
 N#include <stdbool.h>
-L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h" 1
-N/* stdbool.h: ISO/IEC 9899:1999 (C99), section 7.16 */
-N
-N/* Copyright (C) ARM Ltd., 2002
-N * All rights reserved
-N * RCS $Revision$
-N * Checkin $Date$
-N * Revising $Author: drodgman $
-N */
-N
-N#ifndef __bool_true_false_are_defined
-N#define __bool_true_false_are_defined 1
-N#define __ARMCLIB_VERSION 5060034
-N
-N  #ifndef __cplusplus /* In C++, 'bool', 'true' and 'false' and keywords */
-N    #define bool _Bool
-N    #define true 1
-N    #define false 0
-N  #else
-S    #ifdef __GNUC__
-S      /* GNU C++ supports direct inclusion of stdbool.h to provide C99
-S         compatibility by defining _Bool */
-S      #define _Bool bool
-S    #endif
-N  #endif
-N
-N#endif /* __bool_true_false_are_defined */
-N
-L 8 "..\Driver\HardWare\ROM\ROM.h" 2
 N#include <stdint.h>
 N
 N
@@ -22983,9 +23024,114 @@ N
 N#include "OLED.h"
 L 1 "..\Driver\HardWare\OLED\OLED.h" 1
 N#ifndef __OLED_H
-N#define __OLED_H
+S#define __OLED_H
+S
+S/************************* ͷ�ļ� *************************/
+S
+S#include "HeaderFiles.h"
+S
+S//-----------------OLED�˿ڶ���---------------- 
+S
+S
+S#define u8 unsigned char
+S#define u32 unsigned int
+S
+S/* ���Ŷ��� - ģ��IIC */
+S#define OLED_SCL_PORT    GPIOB
+S#define OLED_SCL_PIN     GPIO_PIN_8
+S#define OLED_SDA_PORT    GPIOB
+S#define OLED_SDA_PIN     GPIO_PIN_9
+S/* SCL��SDA���ſ��ƺ궨�� */
+S#define OLED_SCLK_Set()     gpio_bit_set(OLED_SCL_PORT, OLED_SCL_PIN)
+S#define OLED_SCLK_Clr()     gpio_bit_reset(OLED_SCL_PORT, OLED_SCL_PIN)
+S#define OLED_SDIN_Set()     gpio_bit_set(OLED_SDA_PORT, OLED_SDA_PIN)
+S#define OLED_SDIN_Clr()     gpio_bit_reset(OLED_SDA_PORT, OLED_SDA_PIN)
+S#define IIC_READ_SDA  gpio_input_bit_get(OLED_SDA_PORT, OLED_SDA_PIN)
+S
+S
+S#define OLED_CMD  0	//д����
+S#define OLED_DATA 1	//д����
+S
+Svoid OLED_ClearPoint(u8 x,u8 y);
+Svoid OLED_ColorTurn(u8 i);
+Svoid OLED_DisplayTurn(u8 i);
+Svoid I2C_Start(void);
+Svoid I2C_Stop(void);
+Svoid I2C_WaitAck(void);
+Svoid Send_Byte(u8 dat);
+Svoid OLED_WR_Byte(u8 dat,u8 mode);
+Svoid OLED_DisPlay_On(void);
+Svoid OLED_DisPlay_Off(void);
+Svoid OLED_Refresh(void);
+Svoid OLED_Clear(void);
+Svoid OLED_DrawPoint(u8 x,u8 y);
+Svoid OLED_DrawLine(u8 x1,u8 y1,u8 x2,u8 y2);
+Svoid OLED_DrawCircle(u8 x,u8 y,u8 r);
+Svoid OLED_ShowChar(u8 x,u8 y,u8 chr,u8 size1);
+Svoid OLED_ShowString(u8 x,u8 y,u8 *chr,u8 size1);
+Svoid OLED_ShowNum(u8 x,u8 y,u32 num,u8 len,u8 size1);
+Svoid OLED_ShowChinese(u8 x,u8 y,u8 num,u8 size1);
+Svoid OLED_ScrollDisplay(u8 num,u8 space);
+Svoid OLED_WR_BP(u8 x,u8 y);
+Svoid OLED_ShowPicture(u8 x0,u8 y0,u8 x1,u8 y1,u8 BMP[]);
+S
+Svoid OLED_Init(void);
+Svoid OLED_ShowFloatNum(int16_t X, int16_t Y, double Number, uint8_t IntLength, uint8_t FraLength, uint8_t FontSize);
+Svoid OLED_Printf(int16_t X, int16_t Y, uint8_t FontSize, char *format, ...);
+N#endif
 N
-N/************************* ͷ�ļ� *************************/
+N
+N/****************************End*****************************/
+N
+L 23 "..\Driver\HeaderFiles\HeaderFiles.h" 2
+N#include "USART.h"
+L 1 "..\Driver\HardWare\USART\USART.h" 1
+N#ifndef __USART1_H
+N#define __USART1_H
+N
+N/************************* 头文件 *************************/
+N
+N#include "gd32f4xx_gpio.h"
+N#include <stdint.h>
+N
+N/************************* 宏定义 *************************/
+N
+N#define USART1_RX_BUF_LEN 128  // 接收缓冲区长度（适配赛题最长指令）
+N//#define USART1_CMD_END    '\n' // 指令结束符（赛题串口指令以回车/换行结尾）
+N#define RS485_DIR_PIN    GPIO_PIN_8
+N#define RS485_DIR_PORT   GPIOE
+N// 发送模式（PE8 高电平）
+N#define RS485_TX_MODE()  gpio_bit_set(RS485_DIR_PORT, RS485_DIR_PIN)
+N// 接收模式（PE8 低电平，默认）
+N#define RS485_RX_MODE()  gpio_bit_reset(RS485_DIR_PORT, RS485_DIR_PIN)
+N
+N
+N#define printf  rs485_printf
+N
+N/************************ 全局变量 ************************/
+Nextern volatile uint8_t data_recv;                 // 单字节接收临时变量
+Nextern uint8_t usart1_rx_buf[USART1_RX_BUF_LEN]; // 串口接收缓冲区（核心）
+Xextern uint8_t usart1_rx_buf[128]; 
+Nextern volatile uint16_t usart1_rx_len;            // 缓冲区已存储的字节数
+Nextern volatile uint8_t usart1_rx_flag;             // 接收完成标志（IDLE 置1）
+N
+N/************************* 函数声明 *************************/
+Nint rs485_printf(const char *fmt, ...);
+Nvoid USART1_Init(void);
+N
+Nvoid USART1_ClearRxBuf(void);
+N
+Nvoid USART1_SendData(uint16_t *buf, uint16_t len);
+N
+N
+N#endif
+N
+N/**************************** 文件结束 *****************************/
+L 24 "..\Driver\HeaderFiles\HeaderFiles.h" 2
+N#include "SPI_FLASH.h"
+L 1 "..\Driver\HardWare\SPI_FLASH\SPI_FLASH.h" 1
+N#ifndef __SPI_FLASH_H
+N#define __SPI_FLASH_H
 N
 N#include "HeaderFiles.h"
 L 1 "..\Driver\HeaderFiles\HeaderFiles.h" 1
@@ -23015,14 +23161,85 @@ S#include "USART.h"
 S#include "SPI_FLASH.h"
 S//#include "LED.h"
 S//#include "Key.h"
-S#include "bootloader.h"
 S#include "myDMA.h"
-S/************************sysFunction************************/
-S#include "Function.h"
-S#include "crc_utils.h"
 S
 S
 S
+N#endif
+N
+N
+L 5 "..\Driver\HardWare\SPI_FLASH\SPI_FLASH.h" 2
+N/***********************************Defines*************************************/
+N
+N/************************************函数*****************************************/
+N/* initialize SPI1 GPIO and parameter */
+Nvoid spi_flash_init(void);
+N/* erase the specified flash sector */
+Nvoid spi_flash_sector_erase(uint32_t sector_addr);
+N/* erase the entire flash */
+Nvoid spi_flash_bulk_erase(void);
+N/* write more than one byte to the flash */
+Nvoid spi_flash_page_write(uint8_t *pbuffer, uint32_t write_addr, uint16_t num_byte_to_write);
+N/* write block of data to the flash */
+Nvoid spi_flash_buffer_write(uint8_t *pbuffer, uint32_t write_addr, uint32_t num_byte_to_write);
+N/* read a block of data from the flash */
+Nvoid spi_flash_buffer_read(uint8_t *pbuffer, uint32_t read_addr, uint16_t num_byte_to_read);
+N/* read flash identification */
+Nuint32_t spi_flash_read_id(void);
+N/* initiate a read data byte (read) sequence from the flash */
+Nvoid spi_flash_start_read_sequence(uint32_t read_addr);
+N/* read a byte from the SPI flash */
+Nuint8_t spi_flash_read_byte(void);
+N/* send a byte through the SPI interface and return the byte received from the SPI bus */
+Nuint8_t spi_flash_send_byte(uint8_t byte);
+N/* send a half word through the SPI interface and return the half word received from the SPI bus */
+Nuint16_t spi_flash_send_halfword(uint16_t half_word);
+N/* enable the write access to the flash */
+Nvoid spi_flash_write_enable(void);
+N/* poll the status of the write in progress (wip) flag in the flash's status register */
+Nvoid spi_flash_wait_for_write_end(void);
+Nvoid spi_flash_buffer_erase(uint32_t sector_addr, uint32_t num_byte_to_erase);
+N
+N
+N
+N#endif
+L 25 "..\Driver\HeaderFiles\HeaderFiles.h" 2
+N//#include "LED.h"
+N//#include "Key.h"
+N#include "myDMA.h"
+L 1 "..\Driver\System\myDMA.h" 1
+N#ifndef __MYDMA_H
+N#define __MYDMA_H
+N
+N#include "gd32f4xx_dma.h"
+N#include <stdint.h>
+N
+N#define MYDMA_USART1_RX_BUF_LEN 1152U
+N
+Nextern uint8_t usart1_rx_buffer[MYDMA_USART1_RX_BUF_LEN];
+Xextern uint8_t usart1_rx_buffer[1152U];
+Nextern uint8_t usart1_tx_buffer[256];
+Nextern uint16_t adc_value[2];
+N
+N//初始化缓冲区
+Nvoid mydma_init_buffers(void);
+N
+Nvoid dma_usart_tx_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t par, uint32_t mar);
+Nvoid dma_usart1_rx_config(void);
+Nvoid dma_enable(uint32_t dma_periph, dma_channel_enum channelx, uint16_t ndtr);
+N
+Nvoid DMA_ADC_Init(void);
+Nvoid DMA_ADJ_Init(void);
+Nvoid USART1_DMA_All_Init(void);
+N
+Nuint16_t get_usart1_rx_len(void);
+Nvoid reset_usart1_rx_dma(void);
+N
+N#endif
+L 28 "..\Driver\HeaderFiles\HeaderFiles.h" 2
+N
+N
+N
 N#endif
 N
 N
@@ -23096,274 +23313,41 @@ N
 N
 N/****************************End*****************************/
 N
-L 23 "..\Driver\HeaderFiles\HeaderFiles.h" 2
+L 6 "..\Function\function.c" 2
 N#include "USART.h"
-L 1 "..\Driver\HardWare\USART\USART.h" 1
-N#ifndef __USART1_H
-N#define __USART1_H
 N
-N/************************* 头文件 *************************/
+N//=============== 入口 ===============
 N
-N#include "gd32f4xx_gpio.h"
-N#include <stdint.h>
-N
-N/************************* 宏定义 *************************/
-N
-N#define USART1_RX_BUF_LEN 128  // 接收缓冲区长度（适配赛题最长指令）
-N//#define USART1_CMD_END    '\n' // 指令结束符（赛题串口指令以回车/换行结尾）
-N#define RS485_DIR_PIN    GPIO_PIN_8
-N#define RS485_DIR_PORT   GPIOE
-N// 发送模式（PE8 高电平）
-N#define RS485_TX_MODE()  gpio_bit_set(RS485_DIR_PORT, RS485_DIR_PIN)
-N// 接收模式（PE8 低电平，默认）
-N#define RS485_RX_MODE()  gpio_bit_reset(RS485_DIR_PORT, RS485_DIR_PIN)
-N
-N
-N#define printf  rs485_printf
-N
-N/************************ 全局变量 ************************/
-Nextern volatile uint8_t data_recv;                 // 单字节接收临时变量
-Nextern uint8_t usart1_rx_buf[USART1_RX_BUF_LEN]; // 串口接收缓冲区（核心）
-Xextern uint8_t usart1_rx_buf[128]; 
-Nextern volatile uint16_t usart1_rx_len;            // 缓冲区已存储的字节数
-Nextern volatile uint8_t usart1_rx_flag;             // 接收完成标志（IDLE 置1）
-N
-N/************************* 函数声明 *************************/
-Nint rs485_printf(const char *fmt, ...);
-Nvoid USART1_Init(void);
-N
-Nvoid USART1_ClearRxBuf(void);
-N
-Nvoid USART1_SendData(uint16_t *buf, uint16_t len);
-N
-N
-N#endif
-N
-N/**************************** 文件结束 *****************************/
-L 24 "..\Driver\HeaderFiles\HeaderFiles.h" 2
-N#include "SPI_FLASH.h"
-L 1 "..\Driver\HardWare\SPI_FLASH\SPI_FLASH.h" 1
-N#ifndef __SPI_FLASH_H
-N#define __SPI_FLASH_H
-N
-N#include "HeaderFiles.h"
-N/***********************************Defines*************************************/
-N
-N/************************************函数*****************************************/
-N/* initialize SPI1 GPIO and parameter */
-Nvoid spi_flash_init(void);
-N/* erase the specified flash sector */
-Nvoid spi_flash_sector_erase(uint32_t sector_addr);
-N/* erase the entire flash */
-Nvoid spi_flash_bulk_erase(void);
-N/* write more than one byte to the flash */
-Nvoid spi_flash_page_write(uint8_t *pbuffer, uint32_t write_addr, uint16_t num_byte_to_write);
-N/* write block of data to the flash */
-Nvoid spi_flash_buffer_write(uint8_t *pbuffer, uint32_t write_addr, uint32_t num_byte_to_write);
-N/* read a block of data from the flash */
-Nvoid spi_flash_buffer_read(uint8_t *pbuffer, uint32_t read_addr, uint16_t num_byte_to_read);
-N/* read flash identification */
-Nuint32_t spi_flash_read_id(void);
-N/* initiate a read data byte (read) sequence from the flash */
-Nvoid spi_flash_start_read_sequence(uint32_t read_addr);
-N/* read a byte from the SPI flash */
-Nuint8_t spi_flash_read_byte(void);
-N/* send a byte through the SPI interface and return the byte received from the SPI bus */
-Nuint8_t spi_flash_send_byte(uint8_t byte);
-N/* send a half word through the SPI interface and return the half word received from the SPI bus */
-Nuint16_t spi_flash_send_halfword(uint16_t half_word);
-N/* enable the write access to the flash */
-Nvoid spi_flash_write_enable(void);
-N/* poll the status of the write in progress (wip) flag in the flash's status register */
-Nvoid spi_flash_wait_for_write_end(void);
-Nvoid spi_flash_buffer_erase(uint32_t sector_addr, uint32_t num_byte_to_erase);
-N
-N
-N
-N#endif
-L 25 "..\Driver\HeaderFiles\HeaderFiles.h" 2
-N//#include "LED.h"
-N//#include "Key.h"
-N#include "bootloader.h"
-L 1 "..\sysFunction\bootloader.h" 1
-N#ifndef __BOOTLOADER_H
-N#define __BOOTLOADER_H
-N
-N#include <stdbool.h>
-N#include <stdint.h>
-N
-N#define BOOTLOADER_SIZE          0x00010000U
-N#define BOOT_PARAM_ADDR          0x08010000U
-N#define BOOT_PARAM_SIZE          0x00001000U
-N#define BOOT_APP_ADDR            0x08011000U
-N#define BOOT_APP_SIZE            0x00020000U
-N#define BOOT_BACKUP_ADDR         0x08031000U
-N#define BOOT_BACKUP_SIZE         0x00020000U
-N#define BOOT_STAGE_ADDR          0x08051000U
-N#define BOOT_STAGE_SIZE          0x00020000U
-N
-N#define BOOT_CONTROL_MAGIC       0x424F4F54U
-N#define BOOT_DEFAULT_DEVICE_ID   0x0001U
-N
-N#define BOOT_BAUD_4800           0x11U
-N#define BOOT_BAUD_9600           0x12U
-N#define BOOT_BAUD_19200          0x13U
-N#define BOOT_BAUD_115200         0x14U
-N#define BOOT_DEFAULT_BAUD_CODE   BOOT_BAUD_115200
-N
-N#define BOOT_FLAG_NORMAL         0x00U
-N#define BOOT_FLAG_UPDATE         0xA5U
-N
-Ntypedef struct {
-N    uint32_t magic;
-N    uint16_t device_id;
-N    uint8_t baud_code;
-N    uint8_t boot_flag;
-N    uint32_t checksum;
-N} boot_param_t;
-N
-Ntypedef enum {
-N    BOOT_STATUS_OK = 0U,
-N    BOOT_STATUS_TIMEOUT,
-N    BOOT_STATUS_ERROR,
-N    BOOT_STATUS_CRC,
-N    BOOT_STATUS_FLASH,
-N    BOOT_STATUS_RANGE
-N} boot_status_t;
-N
-Ntypedef struct {
-N    char name[32];
-N    uint32_t size;
-N    uint32_t crc32;
-N} boot_image_info_t;
-N
-Nuint32_t GetTick(void);
-N
-Nvoid bootloader_init(void);
-Nbool bootloader_update_requested(void);
-X_Bool bootloader_update_requested(void);
-Nbool bootloader_boot_default(void);
-X_Bool bootloader_boot_default(void);
-Nvoid bootloader_console(void);
-N
-N#endif
-L 28 "..\Driver\HeaderFiles\HeaderFiles.h" 2
-N#include "myDMA.h"
-L 1 "..\Driver\System\myDMA.h" 1
-N#ifndef __MYDMA_H
-N#define __MYDMA_H
-N
-N#include "gd32f4xx_dma.h"
-N#include <stdint.h>
-N
-N#define MYDMA_USART1_RX_BUF_LEN 1152U
-N
-Nextern uint8_t usart1_rx_buffer[MYDMA_USART1_RX_BUF_LEN];
-Xextern uint8_t usart1_rx_buffer[1152U];
-Nextern uint8_t usart1_tx_buffer[256];
-Nextern uint16_t adc_value[2];
-N
-N//初始化缓冲区
-Nvoid mydma_init_buffers(void);
-N
-Nvoid dma_usart_tx_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t par, uint32_t mar);
-Nvoid dma_usart1_rx_config(void);
-Nvoid dma_enable(uint32_t dma_periph, dma_channel_enum channelx, uint16_t ndtr);
-N
-Nvoid DMA_ADC_Init(void);
-Nvoid DMA_ADJ_Init(void);
-Nvoid USART1_DMA_All_Init(void);
-N
-Nuint16_t get_usart1_rx_len(void);
-Nvoid reset_usart1_rx_dma(void);
-N
-N#endif
-L 29 "..\Driver\HeaderFiles\HeaderFiles.h" 2
-N/************************sysFunction************************/
-N#include "Function.h"
-L 1 "..\sysFunction\Function.h" 1
-N#ifndef __FUNCTION_H
-N#define __FUNCTION_H
-N
-N#include "HeaderFiles.h"
-N
-Nextern uint8_t sampling_flag;
-Nextern uint8_t overlimit_flag;
-Nextern uint8_t hide_flag;
-N
-Nvoid sysFunction_Init(void);
-Nvoid sysFunction_loop(void);
-N// void app_update_commit_after_self_check(void);
-N
-N#endif
-L 31 "..\Driver\HeaderFiles\HeaderFiles.h" 2
-N#include "crc_utils.h"
-L 1 "..\sysFunction\crc_utils.h" 1
-N#ifndef __CRC_UTILS_H
-N#define __CRC_UTILS_H
-N
-N#include "HeaderFiles.h"
-N
-Nuint32_t crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
-Nuint32_t crc32_buffer(const uint8_t *data, uint32_t len);
-Nuint32_t crc32_flash(uint32_t addr, uint32_t len);
-Nuint16_t crc16_ccitt(const uint8_t *data, uint32_t len);
-Nuint16_t crc16_modbus(const uint8_t *data, uint32_t len);
-N
-N#endif
-L 32 "..\Driver\HeaderFiles\HeaderFiles.h" 2
-N
-N
-N
-N#endif
-N
-N
-L 2 "..\sysFunction\Function.c" 2
-N
-Nvoid nvic_config(void);
-Nuint8_t is_power_on_reset(void);
-N
-Nvoid sysFunction_Init(void)
+Nvoid boot_entry_init(void)
 N{
 N    systick_config();
 N    USART1_Init();
 N    OLED_Init();
-N//    LED_Init();
-N    bootloader_init();
+N    //OLED_Printf(0, 0, 16, "init ok");
+N    boot_flow_init();
 N}
 N
-Nvoid sysFunction_loop(void)
+N//------------------------------------------------------------------
+N//主循环：显示OLED → 等5秒 → 跳app / 进控制台
+N
+Nvoid boot_entry_loop(void)
 N{
+N    //赛题要求，OLED不能黑
 N    OLED_Printf(0, 0, 16, "2026639584");
 N    OLED_Printf(0, 16, 16, "Bootloader");
 N    OLED_Refresh();
 N
-N    if (!bootloader_update_requested()) {
+N    //没OTA请求就直接走人，等5秒让OLED亮够再跳
+N    if (!boot_flow_update_requested()) {
 N        uint32_t start = GetTick();
-N
-N        /* 等待5秒，显示bootloader信息后跳转到app */
 N        while (GetTick() - start < 5000U);
 N
-N        if (bootloader_boot_default()) {
+N        if (boot_flow_boot_default()) {
 N            while (1) {
 N            }
 N        }
 N    }
 N
-N    bootloader_console();
+N    //进控制台等OTA指令
+N    boot_flow_console();
 N}
-Nvoid nvic_config(void)
-N{
-N    nvic_priority_group_set(NVIC_PRIGROUP_PRE1_SUB3);
-X    nvic_priority_group_set(((uint32_t)0x600));
-N    nvic_irq_enable(SDIO_IRQn, 0, 0);
-N}
-N
-Nuint8_t is_power_on_reset(void)
-N{
-N    uint8_t ret = (rcu_flag_get(RCU_FLAG_PORRST) == SET) ? 1U : 0U;
-N
-N    rcu_all_reset_flag_clear();
-N    return ret;
-N}
-N

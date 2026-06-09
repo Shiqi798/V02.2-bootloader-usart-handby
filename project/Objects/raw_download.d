@@ -1,6 +1,7 @@
-.\objects\raw_download.o: ..\sysFunction\raw_download.c
-.\objects\raw_download.o: ..\sysFunction\raw_download.h
-.\objects\raw_download.o: ..\sysFunction\bootloader.h
+.\objects\raw_download.o: ..\Function\raw_download.c
+.\objects\raw_download.o: ..\Function\raw_download.h
+.\objects\raw_download.o: ..\Function\boot_upgrade.h
+.\objects\raw_download.o: ..\Function\boot_param.h
 .\objects\raw_download.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\raw_download.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\raw_download.o: ..\Protocol\boot_crc.h
@@ -46,4 +47,5 @@
 .\objects\raw_download.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_tli.h
 .\objects\raw_download.o: ..\Driver\HardWare\ROM\ROM.h
 .\objects\raw_download.o: ..\Driver\HardWare\USART\USART.h
+.\objects\raw_download.o: ..\User\systick.h
 .\objects\raw_download.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\string.h

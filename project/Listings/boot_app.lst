@@ -4,11 +4,6 @@ L 1 "..\Function\boot_app.h" 1
 N#ifndef __BOOT_APP_H
 N#define __BOOT_APP_H
 N
-N#include "bootloader.h"
-L 1 "..\sysFunction\bootloader.h" 1
-N#ifndef __BOOTLOADER_H
-N#define __BOOTLOADER_H
-N
 N#include <stdbool.h>
 L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h" 1
 N/* stdbool.h: ISO/IEC 9899:1999 (C99), section 7.16 */
@@ -38,7 +33,7 @@ N  #endif
 N
 N#endif /* __bool_true_false_are_defined */
 N
-L 5 "..\sysFunction\bootloader.h" 2
+L 5 "..\Function\boot_app.h" 2
 N#include <stdint.h>
 L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h" 1
 N/* Copyright (C) ARM Ltd., 1999,2014 */
@@ -370,71 +365,38 @@ N
 N#endif /* __stdint_h */
 N
 N/* end of stdint.h */
-L 6 "..\sysFunction\bootloader.h" 2
+L 6 "..\Function\boot_app.h" 2
 N
+N/* Bootloader 自身占用 */
 N#define BOOTLOADER_SIZE          0x00010000U
+N
+N/* 参数区（Flash Sector 4 前 4KB） */
 N#define BOOT_PARAM_ADDR          0x08010000U
 N#define BOOT_PARAM_SIZE          0x00001000U
+N
+N/* 应用程序主区（Sector 4 剩余 + Sector 5） */
 N#define BOOT_APP_ADDR            0x08011000U
 N#define BOOT_APP_SIZE            0x00020000U
+N
+N/* 应用程序备份区（Sector 6） */
 N#define BOOT_BACKUP_ADDR         0x08031000U
 N#define BOOT_BACKUP_SIZE         0x00020000U
+N
+N/* 固件暂存区（Sector 7） */
 N#define BOOT_STAGE_ADDR          0x08051000U
 N#define BOOT_STAGE_SIZE          0x00020000U
 N
-N#define BOOT_CONTROL_MAGIC       0x424F4F54U
-N#define BOOT_DEFAULT_DEVICE_ID   0x0001U
+N//--------------------------------
+N//函数声明
 N
-N#define BOOT_BAUD_4800           0x11U
-N#define BOOT_BAUD_9600           0x12U
-N#define BOOT_BAUD_19200          0x13U
-N#define BOOT_BAUD_115200         0x14U
-N#define BOOT_DEFAULT_BAUD_CODE   BOOT_BAUD_115200
-N
-N#define BOOT_FLAG_NORMAL         0x00U
-N#define BOOT_FLAG_UPDATE         0xA5U
-N
-Ntypedef struct {
-N    uint32_t magic;
-N    uint16_t device_id;
-N    uint8_t baud_code;
-N    uint8_t boot_flag;
-N    uint32_t checksum;
-N} boot_param_t;
-N
-Ntypedef enum {
-N    BOOT_STATUS_OK = 0U,
-N    BOOT_STATUS_TIMEOUT,
-N    BOOT_STATUS_ERROR,
-N    BOOT_STATUS_CRC,
-N    BOOT_STATUS_FLASH,
-N    BOOT_STATUS_RANGE
-N} boot_status_t;
-N
-Ntypedef struct {
-N    char name[32];
-N    uint32_t size;
-N    uint32_t crc32;
-N} boot_image_info_t;
-N
-Nuint32_t GetTick(void);
-N
-Nvoid bootloader_init(void);
-Nbool bootloader_update_requested(void);
-X_Bool bootloader_update_requested(void);
-Nbool bootloader_boot_default(void);
-X_Bool bootloader_boot_default(void);
-Nvoid bootloader_console(void);
-N
-N#endif
-L 5 "..\Function\boot_app.h" 2
-N
+N//向量表检查
 Nbool boot_app_vector_ok(uint32_t addr);
 X_Bool boot_app_vector_ok(uint32_t addr);
 Nbool boot_app_can_boot(void);
 X_Bool boot_app_can_boot(void);
 Nbool boot_app_backup_can_restore(void);
 X_Bool boot_app_backup_can_restore(void);
+N//关中断、清外设，跳转
 Nvoid boot_app_jump_raw(uint32_t addr);
 N
 N#endif
@@ -19209,12 +19171,14 @@ L 4 "..\Function\boot_app.c" 2
 N#include "gd32f4xx_dma.h"
 N#include "gd32f4xx_usart.h"
 N
+N//========================== 向量表校验 ==========================
+N
+N//SP在RAM范围，PC在Flash范围，排除空Flash
 Nbool boot_app_vector_ok(uint32_t addr)
 X_Bool boot_app_vector_ok(uint32_t addr)
 N{
 N    uint32_t sp = *(volatile uint32_t *)addr;
 N    uint32_t pc = *(volatile uint32_t *)(addr + 4U);
-N
 N    return (sp >= 0x20000000U) &&
 N           (sp <= 0x20030000U) &&
 N           ((sp & 3U) == 0U) &&
@@ -19239,12 +19203,15 @@ N    return boot_app_vector_ok(BOOT_BACKUP_ADDR);
 X    return boot_app_vector_ok(0x08031000U);
 N}
 N
+N//------
+N//跳转
+N
 Nvoid boot_app_jump_raw(uint32_t addr)
 N{
 N    uint32_t sp = *(volatile uint32_t *)addr;
 N    uint32_t pc = *(volatile uint32_t *)(addr + 4U);
 N
-N    //跳转前把Bootloader现场清掉，避免USART/DMA中断带进App
+N    //注意：跳转前必须清干净外设，否则app一进去就被boot的中断搞死
 N    __disable_irq();
 N    usart_interrupt_disable(USART1, USART_INT_IDLE);
 X    usart_interrupt_disable((((uint32_t)0x40000000U) + 0x00004400U), USART_INT_IDLE);
@@ -19268,7 +19235,6 @@ X        ((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->ICER[i] = 0xFFFFFFFFU;
 N        NVIC->ICPR[i] = 0xFFFFFFFFU;
 X        ((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->ICPR[i] = 0xFFFFFFFFU;
 N    }
-N
 N    SCB->VTOR = addr;
 X    ((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->VTOR = addr;
 N    __DSB();

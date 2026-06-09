@@ -1,12 +1,12 @@
 .\objects\boot_flow.o: ..\Function\boot_flow.c
 .\objects\boot_flow.o: ..\Function\boot_flow.h
-.\objects\boot_flow.o: ..\sysFunction\bootloader.h
 .\objects\boot_flow.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h
-.\objects\boot_flow.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\boot_flow.o: ..\Function\boot_app.h
+.\objects\boot_flow.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\boot_flow.o: ..\Function\boot_param.h
 .\objects\boot_flow.o: ..\Protocol\boot_protocol.h
 .\objects\boot_flow.o: ..\Function\boot_upgrade.h
+.\objects\boot_flow.o: ..\User\systick.h
 .\objects\boot_flow.o: ..\Driver\HardWare\USART\USART.h
 .\objects\boot_flow.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_gpio.h
 .\objects\boot_flow.o: ..\Driver\Start\CMSIS\GD\GD32F4xx\Include\gd32f4xx.h

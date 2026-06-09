@@ -3,10 +3,6 @@
 
 
 
-#line 1 "..\\sysFunction\\bootloader.h"
-
-
-
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
  
 
@@ -25,7 +21,7 @@
 
 
 
-#line 5 "..\\sysFunction\\bootloader.h"
+#line 5 "..\\Function\\boot_param.h"
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
  
  
@@ -282,53 +278,36 @@ typedef unsigned     long long uintmax_t;
 
 
  
-#line 6 "..\\sysFunction\\bootloader.h"
+#line 6 "..\\Function\\boot_param.h"
 
-#line 16 "..\\sysFunction\\bootloader.h"
-
-
+ 
 
 
+ 
 
 
-
-
+ 
 
 
 
 
 
+
+ 
+
+
+
+ 
 typedef struct {
     uint32_t magic;
     uint16_t device_id;
-    uint8_t baud_code;
-    uint8_t boot_flag;
+    uint8_t  baud_code;
+    uint8_t  boot_flag;
     uint32_t checksum;
 } boot_param_t;
 
-typedef enum {
-    BOOT_STATUS_OK = 0U,
-    BOOT_STATUS_TIMEOUT,
-    BOOT_STATUS_ERROR,
-    BOOT_STATUS_CRC,
-    BOOT_STATUS_FLASH,
-    BOOT_STATUS_RANGE
-} boot_status_t;
 
-typedef struct {
-    char name[32];
-    uint32_t size;
-    uint32_t crc32;
-} boot_image_info_t;
 
-uint32_t GetTick(void);
-
-void bootloader_init(void);
-_Bool bootloader_update_requested(void);
-_Bool bootloader_boot_default(void);
-void bootloader_console(void);
-
-#line 5 "..\\Function\\boot_param.h"
 
 uint32_t boot_param_checksum(const boot_param_t *param);
 
@@ -343,19 +322,59 @@ _Bool boot_param_set_boot_flag(boot_param_t *param, uint8_t boot_flag);
 
 #line 2 "..\\Function\\boot_param.c"
 
+#line 1 "..\\Function\\boot_app.h"
+
+
+
+#line 5 "..\\Function\\boot_app.h"
+#line 6 "..\\Function\\boot_app.h"
+
+ 
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+_Bool boot_app_vector_ok(uint32_t addr);
+_Bool boot_app_can_boot(void);
+_Bool boot_app_backup_can_restore(void);
+
+void boot_app_jump_raw(uint32_t addr);
+
+#line 4 "..\\Function\\boot_param.c"
 #line 1 "..\\Protocol\\boot_crc.h"
 
 
 
 #line 5 "..\\Protocol\\boot_crc.h"
 
+ 
 uint32_t boot_crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
 uint32_t boot_crc32_buffer(const uint8_t *data, uint32_t len);
 uint32_t boot_crc32_flash(uint32_t addr, uint32_t len);
+
+ 
 uint16_t boot_crc16_ccitt(const uint8_t *data, uint32_t len);
 uint16_t boot_crc16_modbus(const uint8_t *data, uint32_t len);
 
-#line 4 "..\\Function\\boot_param.c"
+#line 5 "..\\Function\\boot_param.c"
 #line 1 "..\\Driver\\HardWare\\ROM\\ROM.h"
 
 
@@ -12785,7 +12804,7 @@ uint32_t ROM_word_read(uint32_t addr);
 
 
  
-#line 5 "..\\Function\\boot_param.c"
+#line 6 "..\\Function\\boot_param.c"
 
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stddef.h"
  
@@ -12864,7 +12883,7 @@ uint32_t ROM_word_read(uint32_t addr);
 
  
 
-#line 7 "..\\Function\\boot_param.c"
+#line 8 "..\\Function\\boot_param.c"
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
  
  
@@ -13287,7 +13306,9 @@ extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  ,
 
  
 
-#line 8 "..\\Function\\boot_param.c"
+#line 9 "..\\Function\\boot_param.c"
+
+
 
 uint32_t boot_param_checksum(const boot_param_t *param)
 {
@@ -13303,10 +13324,8 @@ _Bool boot_param_device_id_ok(uint16_t device_id)
 
 _Bool boot_param_baud_code_ok(uint8_t baud_code)
 {
-    return (baud_code == 0x11U) ||
-           (baud_code == 0x12U) ||
-           (baud_code == 0x13U) ||
-           (baud_code == 0x14U);
+    return (baud_code == 0x11U) ||(baud_code == 0x12U) ||
+    (baud_code == 0x13U) ||(baud_code == 0x14U);
 }
 
 _Bool boot_param_boot_flag_ok(uint8_t boot_flag)
@@ -13316,13 +13335,12 @@ _Bool boot_param_boot_flag_ok(uint8_t boot_flag)
 
 void boot_param_default(boot_param_t *param)
 {
-    memset(param, 0, sizeof(*param));
-    param->magic = 0x424F4F54U;
-    param->device_id = 0x0001U;
-    param->baud_code = 0x14U;
-    param->boot_flag = 0x00U;
-    param->checksum = boot_param_checksum(param);
+    memset(param, 0, sizeof(*param));param->magic = 0x424F4F54U;
+    param->device_id = 0x0001U;param->baud_code = 0x14U;
+    param->boot_flag = 0x00U;param->checksum = boot_param_checksum(param);
 }
+
+
 
 _Bool boot_param_save(boot_param_t *param)
 {
@@ -13341,9 +13359,7 @@ _Bool boot_param_load(boot_param_t *param)
     memcpy(param, (const void *)0x08010000U, sizeof(*param));
 
     if ((param->magic == 0x424F4F54U) &&
-        (param->checksum == boot_param_checksum(param)) &&
-        boot_param_device_id_ok(param->device_id) &&
-        boot_param_baud_code_ok(param->baud_code) &&
+        (param->checksum == boot_param_checksum(param)) &&boot_param_device_id_ok(param->device_id) &&boot_param_baud_code_ok(param->baud_code) &&
         boot_param_boot_flag_ok(param->boot_flag)) {
         return 1;
     }

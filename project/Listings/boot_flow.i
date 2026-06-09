@@ -3,10 +3,6 @@
 
 
 
-#line 1 "..\\sysFunction\\bootloader.h"
-
-
-
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
  
 
@@ -25,7 +21,23 @@
 
 
 
-#line 5 "..\\sysFunction\\bootloader.h"
+#line 5 "..\\Function\\boot_flow.h"
+
+
+
+
+void boot_flow_init(void);
+_Bool boot_flow_update_requested(void);  
+_Bool boot_flow_boot_default(void);     
+void boot_flow_console(void);          
+
+#line 2 "..\\Function\\boot_flow.c"
+
+#line 1 "..\\Function\\boot_app.h"
+
+
+
+#line 5 "..\\Function\\boot_app.h"
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
  
  
@@ -282,70 +294,35 @@ typedef unsigned     long long uintmax_t;
 
 
  
-#line 6 "..\\sysFunction\\bootloader.h"
+#line 6 "..\\Function\\boot_app.h"
 
-#line 16 "..\\sysFunction\\bootloader.h"
-
-
+ 
 
 
-
+ 
 
 
 
+ 
+
+
+
+ 
+
+
+
+ 
 
 
 
 
 
-typedef struct {
-    uint32_t magic;
-    uint16_t device_id;
-    uint8_t baud_code;
-    uint8_t boot_flag;
-    uint32_t checksum;
-} boot_param_t;
 
-typedef enum {
-    BOOT_STATUS_OK = 0U,
-    BOOT_STATUS_TIMEOUT,
-    BOOT_STATUS_ERROR,
-    BOOT_STATUS_CRC,
-    BOOT_STATUS_FLASH,
-    BOOT_STATUS_RANGE
-} boot_status_t;
-
-typedef struct {
-    char name[32];
-    uint32_t size;
-    uint32_t crc32;
-} boot_image_info_t;
-
-uint32_t GetTick(void);
-
-void bootloader_init(void);
-_Bool bootloader_update_requested(void);
-_Bool bootloader_boot_default(void);
-void bootloader_console(void);
-
-#line 5 "..\\Function\\boot_flow.h"
-
-void boot_flow_init(void);
-_Bool boot_flow_update_requested(void);
-_Bool boot_flow_boot_default(void);
-void boot_flow_console(void);
-
-#line 2 "..\\Function\\boot_flow.c"
-
-#line 1 "..\\Function\\boot_app.h"
-
-
-
-#line 5 "..\\Function\\boot_app.h"
 
 _Bool boot_app_vector_ok(uint32_t addr);
 _Bool boot_app_can_boot(void);
 _Bool boot_app_backup_can_restore(void);
+
 void boot_app_jump_raw(uint32_t addr);
 
 #line 4 "..\\Function\\boot_flow.c"
@@ -354,6 +331,36 @@ void boot_app_jump_raw(uint32_t addr);
 
 
 #line 5 "..\\Function\\boot_param.h"
+#line 6 "..\\Function\\boot_param.h"
+
+ 
+
+
+ 
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+ 
+typedef struct {
+    uint32_t magic;
+    uint16_t device_id;
+    uint8_t  baud_code;
+    uint8_t  boot_flag;
+    uint32_t checksum;
+} boot_param_t;
+
+
+
 
 uint32_t boot_param_checksum(const boot_param_t *param);
 
@@ -386,7 +393,7 @@ _Bool boot_param_set_boot_flag(boot_param_t *param, uint8_t boot_flag);
 
 
 
- 
+
 #line 27 "..\\Protocol\\boot_protocol.h"
 
 
@@ -426,15 +433,37 @@ void boot_proto_send_heartbeat(uint16_t device_id);
 
 
 #line 5 "..\\Function\\boot_upgrade.h"
-#line 6 "..\\Function\\boot_upgrade.h"
+
+#line 7 "..\\Function\\boot_upgrade.h"
+#line 8 "..\\Function\\boot_upgrade.h"
 
 
+
+ 
+typedef enum {
+    BOOT_STATUS_OK = 0U,
+    BOOT_STATUS_TIMEOUT,
+    BOOT_STATUS_ERROR,
+    BOOT_STATUS_CRC,
+    BOOT_STATUS_FLASH,
+    BOOT_STATUS_RANGE
+} boot_status_t;
+
+ 
+typedef struct {
+    char name[32];
+    uint32_t size;
+    uint32_t crc32;
+} boot_image_info_t;
 
 typedef struct {
     boot_image_info_t pending_image;
     _Bool pending_valid;
     _Bool stage_erased;
 } boot_upgrade_ctx_t;
+
+
+
 
 void boot_upgrade_init(boot_upgrade_ctx_t *ctx);
 _Bool boot_upgrade_prepare_stage(boot_upgrade_ctx_t *ctx);
@@ -447,6 +476,56 @@ _Bool boot_upgrade_backup_app(void);
 _Bool boot_upgrade_restore_backup_to_app(void);
 
 #line 7 "..\\Function\\boot_flow.c"
+#line 1 "..\\User\\systick.h"
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+#line 39 "..\\User\\systick.h"
+
+ 
+void systick_config(void);
+ 
+void delay_1ms(uint32_t count);
+ 
+void delay_decrement(void);
+
+uint32_t GetTick(void);
+
+#line 8 "..\\Function\\boot_flow.c"
 #line 1 "..\\Driver\\HardWare\\USART\\USART.h"
 
 
@@ -12923,11 +13002,14 @@ void USART1_SendData(uint16_t *buf, uint16_t len);
 
 
  
-#line 8 "..\\Function\\boot_flow.c"
+#line 9 "..\\Function\\boot_flow.c"
 
 void OLED_Clear(void);
 void OLED_Refresh(void);
 void OLED_Printf(int16_t X, int16_t Y, uint8_t FontSize, char *format, ...);
+
+
+
 
 
 
@@ -12940,9 +13022,16 @@ typedef enum {
     BOOT_FLOW_EVENT_IMAGE_STAGED
 } boot_flow_event_t;
 
+
+
+
 static boot_param_t g_boot_param;
 static boot_upgrade_ctx_t g_upgrade_ctx;
 static _Bool g_suppress_next_bad_frame = 0;
+
+
+
+
 
 static void boot_flow_show_oled(void)
 {
@@ -12955,7 +13044,6 @@ static void boot_flow_show_oled(void)
 static void boot_flow_send_query_id(uint16_t command)
 {
     uint8_t content[2];
-
     content[0] = (uint8_t)(g_boot_param.device_id >> 8);
     content[1] = (uint8_t)g_boot_param.device_id;
     boot_proto_send_frame(g_boot_param.device_id, 0x02U,
@@ -12965,10 +13053,10 @@ static void boot_flow_send_query_id(uint16_t command)
 static void boot_flow_send_query_baud(uint16_t command)
 {
     uint8_t content = g_boot_param.baud_code;
-
     boot_proto_send_frame(g_boot_param.device_id, 0x02U,
                           command, &content, 1U);
 }
+
 
 static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
 {
@@ -12977,25 +13065,24 @@ static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
 
     status = boot_proto_wait_frame(timeout_ms, g_boot_param.device_id, &frame);
 
-    if (status == BOOT_PROTO_FRAME_NONE) {
+    if (status == BOOT_PROTO_FRAME_NONE)
         return BOOT_FLOW_EVENT_NONE;
-    }
-    if (status == BOOT_PROTO_FRAME_ID_MISMATCH) {
+    if (status == BOOT_PROTO_FRAME_ID_MISMATCH)
         return BOOT_FLOW_EVENT_KEEP_WAITING;
-    }
 
     if (status == BOOT_PROTO_FRAME_BAD) {
         if (g_suppress_next_bad_frame) {
             g_suppress_next_bad_frame = 0;
             return BOOT_FLOW_EVENT_KEEP_WAITING;
         }
-
+        
         boot_proto_send_error(g_boot_param.device_id, 0xEEEEU);
         return BOOT_FLOW_EVENT_KEEP_WAITING;
     }
 
     g_suppress_next_bad_frame = 0;
 
+    
     if ((frame.frame_type == 0x05U) &&
         (frame.command == 0xFFFFU)) {
         boot_proto_send_heartbeat(g_boot_param.device_id);
@@ -13018,12 +13105,10 @@ static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
 
     case 0x0502U: {
         boot_status_t ret;
-
         if (frame.content_len != 0U) {
             boot_proto_send_error(g_boot_param.device_id, frame.command);
             break;
         }
-
         boot_flow_show_oled();
         ret = boot_upgrade_receive_stage_image(&g_upgrade_ctx);
         if (ret == BOOT_STATUS_OK) {
@@ -13031,7 +13116,6 @@ static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
             g_suppress_next_bad_frame = 1;
             return BOOT_FLOW_EVENT_IMAGE_STAGED;
         }
-
         boot_proto_send_error(g_boot_param.device_id, frame.command);
         (void)boot_upgrade_prepare_stage(&g_upgrade_ctx);
         g_suppress_next_bad_frame = 1;
@@ -13040,17 +13124,14 @@ static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
 
     case 0x0503U: {
         boot_status_t ret;
-
         if (frame.content_len != 0U) {
             boot_proto_send_error(g_boot_param.device_id, frame.command);
             break;
         }
-
         if (!g_upgrade_ctx.pending_valid) {
             boot_proto_send_error(g_boot_param.device_id, frame.command);
             break;
         }
-
         
         boot_proto_send_ok(g_boot_param.device_id, frame.command);
 
@@ -13059,7 +13140,6 @@ static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
         if (ret == BOOT_STATUS_OK) {
             boot_app_jump_raw(0x08011000U);
         }
-
         boot_flow_show_oled();
         break;
     }
@@ -13068,9 +13148,9 @@ static boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
         boot_proto_send_error(g_boot_param.device_id, 0xEEEEU);
         break;
     }
-
     return BOOT_FLOW_EVENT_KEEP_WAITING;
 }
+
 
 static void boot_flow_print_wait_prompt(uint32_t remaining_sec, uint32_t *last_printed)
 {
@@ -13084,9 +13164,12 @@ static void boot_flow_print_wait_prompt(uint32_t remaining_sec, uint32_t *last_p
     }
 }
 
+
+
 void boot_flow_init(void)
 {
     (void)boot_param_load(&g_boot_param);
+    
     boot_upgrade_init(&g_upgrade_ctx);
     boot_proto_rx_enable();
 }
@@ -13096,20 +13179,20 @@ _Bool boot_flow_update_requested(void)
     return g_boot_param.boot_flag == 0xA5U;
 }
 
+
 _Bool boot_flow_boot_default(void)
 {
     if (boot_app_can_boot()) {
         boot_app_jump_raw(0x08011000U);
         return 1;
     }
-
     if (boot_upgrade_restore_backup_to_app()) {
         boot_app_jump_raw(0x08011000U);
         return 1;
     }
-
     return 0;
 }
+
 
 void boot_flow_console(void)
 {
@@ -13131,7 +13214,6 @@ void boot_flow_console(void)
     start = GetTick();
     while (1) {
         boot_flow_event_t event;
-
         if (countdown_active) {
             uint32_t elapsed = GetTick() - start;
             uint32_t remaining = (elapsed >= 10000U) ? 0U : (10U - (elapsed / 1000U));
@@ -13140,22 +13222,24 @@ void boot_flow_console(void)
             event = boot_flow_process_frame_once(100U);
 
             if (event == BOOT_FLOW_EVENT_IMAGE_STAGED) {
+                
                 countdown_active = 0;
             }
 
             if (elapsed >= 10000U) {
+                
                 if (g_boot_param.boot_flag == 0xA5U) {
                     (void)boot_param_set_boot_flag(&g_boot_param, 0x00U);
                 }
-
                 if (boot_flow_boot_default()) {
                     while (1) {
                     }
                 }
-
+                
                 countdown_active = 0;
             }
         } else {
+            
             (void)boot_flow_process_frame_once(1000U);
         }
     }

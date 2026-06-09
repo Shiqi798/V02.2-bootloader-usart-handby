@@ -379,7 +379,7 @@ N#define BOOT_PROTO_FRAME_RESP   0x02U
 N#define BOOT_PROTO_FRAME_HEART  0x05U
 N#define BOOT_PROTO_FRAME_ERROR  0xFFU
 N
-N/* Bootloader 当前关心的命令 */
+N//赛题指令
 N#define BOOT_PROTO_CMD_QUERY_ID   0x0111U
 N#define BOOT_PROTO_CMD_QUERY_BAUD 0x0112U
 N#define BOOT_PROTO_CMD_UPGRADE_READY 0x0502U
@@ -430,9 +430,12 @@ N#define __BOOT_CRC_H
 N
 N#include <stdint.h>
 N
+N/* CRC32 */
 Nuint32_t boot_crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
 Nuint32_t boot_crc32_buffer(const uint8_t *data, uint32_t len);
 Nuint32_t boot_crc32_flash(uint32_t addr, uint32_t len);
+N
+N/* CRC16 */
 Nuint16_t boot_crc16_ccitt(const uint8_t *data, uint32_t len);
 Nuint16_t boot_crc16_modbus(const uint8_t *data, uint32_t len);
 N
@@ -20243,6 +20246,9 @@ L 8 "..\Protocol\boot_protocol.c" 2
 N
 Nuint32_t GetTick(void);
 N
+N//==================== 协议层 ====================
+N
+N//ASCII帧最大长度（含空格），超过会截断
 N#define BOOT_PROTO_ASCII_MAX 128U
 N#define BOOT_PROTO_RAW_MAX   64U
 N#define BOOT_PROTO_MIN_LEN   13U
@@ -20387,6 +20393,8 @@ N    out[(*pos)++] = hex[(value >> 4) & 0x0FU];
 N    out[(*pos)++] = hex[value & 0x0FU];
 N}
 N
+N////////////////////////////接收接口////////////////////////////
+N
 Nvoid boot_proto_rx_enable(void)
 N{
 N    USART1_ClearRxBuf();
@@ -20429,6 +20437,8 @@ N    }
 N
 N    return BOOT_PROTO_FRAME_NONE;
 N}
+N
+N////////////////////////////发送接口////////////////////////////
 N
 Nvoid boot_proto_send_frame(uint16_t device_id,
 N                           uint8_t frame_type,

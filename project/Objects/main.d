@@ -52,7 +52,5 @@
 .\objects\main.o: ..\Driver\HeaderFiles\HeaderFiles.h
 .\objects\main.o: ..\Driver\HardWare\USART\USART.h
 .\objects\main.o: ..\Driver\HardWare\SPI_FLASH\SPI_FLASH.h
-.\objects\main.o: ..\sysFunction\bootloader.h
 .\objects\main.o: ..\Driver\System\myDMA.h
-.\objects\main.o: ..\sysFunction\Function.h
-.\objects\main.o: ..\sysFunction\crc_utils.h
+.\objects\main.o: ..\Function\function.h

@@ -23,10 +23,8 @@ bool boot_param_device_id_ok(uint16_t device_id)
 
 bool boot_param_baud_code_ok(uint8_t baud_code)
 {
-    return (baud_code == BOOT_BAUD_4800) ||
-           (baud_code == BOOT_BAUD_9600) ||
-           (baud_code == BOOT_BAUD_19200) ||
-           (baud_code == BOOT_BAUD_115200);
+    return (baud_code == BOOT_BAUD_4800) ||(baud_code == BOOT_BAUD_9600) ||
+    (baud_code == BOOT_BAUD_19200) ||(baud_code == BOOT_BAUD_115200);
 }
 
 bool boot_param_boot_flag_ok(uint8_t boot_flag)
@@ -36,12 +34,9 @@ bool boot_param_boot_flag_ok(uint8_t boot_flag)
 
 void boot_param_default(boot_param_t *param)
 {
-    memset(param, 0, sizeof(*param));
-    param->magic = BOOT_CONTROL_MAGIC;
-    param->device_id = BOOT_DEFAULT_DEVICE_ID;
-    param->baud_code = BOOT_DEFAULT_BAUD_CODE;
-    param->boot_flag = BOOT_FLAG_NORMAL;
-    param->checksum = boot_param_checksum(param);
+    memset(param, 0, sizeof(*param));param->magic = BOOT_CONTROL_MAGIC;
+    param->device_id = BOOT_DEFAULT_DEVICE_ID;param->baud_code = BOOT_DEFAULT_BAUD_CODE;
+    param->boot_flag = BOOT_FLAG_NORMAL;param->checksum = boot_param_checksum(param);
 }
 
 ////////////////////////////参数读写////////////////////////////
@@ -63,9 +58,7 @@ bool boot_param_load(boot_param_t *param)
     memcpy(param, (const void *)BOOT_PARAM_ADDR, sizeof(*param));
 
     if ((param->magic == BOOT_CONTROL_MAGIC) &&
-        (param->checksum == boot_param_checksum(param)) &&
-        boot_param_device_id_ok(param->device_id) &&
-        boot_param_baud_code_ok(param->baud_code) &&
+        (param->checksum == boot_param_checksum(param)) &&boot_param_device_id_ok(param->device_id) &&boot_param_baud_code_ok(param->baud_code) &&
         boot_param_boot_flag_ok(param->boot_flag)) {
         return true;
     }

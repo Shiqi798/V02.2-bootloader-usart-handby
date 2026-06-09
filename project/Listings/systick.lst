@@ -19146,6 +19146,8 @@ Nvoid delay_1ms(uint32_t count);
 N/* delay decrement */
 Nvoid delay_decrement(void);
 N
+Nuint32_t GetTick(void);
+N
 N#endif /* SYS_TICK_H */
 L 37 "..\User\systick.c" 2
 N

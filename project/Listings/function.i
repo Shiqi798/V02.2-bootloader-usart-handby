@@ -1,4 +1,359 @@
-#line 1 "..\\sysFunction\\Function.c"
+#line 1 "..\\Function\\function.c"
+#line 1 "..\\Function\\function.h"
+
+
+
+
+void boot_entry_init(void);  
+void boot_entry_loop(void);  
+
+#line 2 "..\\Function\\function.c"
+
+#line 1 "..\\Function\\boot_flow.h"
+
+
+
+#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+#line 25 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
+
+
+
+#line 5 "..\\Function\\boot_flow.h"
+
+
+
+
+void boot_flow_init(void);
+_Bool boot_flow_update_requested(void);  
+_Bool boot_flow_boot_default(void);     
+void boot_flow_console(void);          
+
+#line 4 "..\\Function\\function.c"
+#line 1 "..\\User\\systick.h"
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
+ 
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+     
+#line 27 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
+     
+
+
+
+
+
+
+
+
+
+
+
+#line 46 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
+
+
+
+
+
+ 
+
+     
+
+     
+typedef   signed          char int8_t;
+typedef   signed short     int int16_t;
+typedef   signed           int int32_t;
+typedef   signed       __int64 int64_t;
+
+     
+typedef unsigned          char uint8_t;
+typedef unsigned short     int uint16_t;
+typedef unsigned           int uint32_t;
+typedef unsigned       __int64 uint64_t;
+
+     
+
+     
+     
+typedef   signed          char int_least8_t;
+typedef   signed short     int int_least16_t;
+typedef   signed           int int_least32_t;
+typedef   signed       __int64 int_least64_t;
+
+     
+typedef unsigned          char uint_least8_t;
+typedef unsigned short     int uint_least16_t;
+typedef unsigned           int uint_least32_t;
+typedef unsigned       __int64 uint_least64_t;
+
+     
+
+     
+typedef   signed           int int_fast8_t;
+typedef   signed           int int_fast16_t;
+typedef   signed           int int_fast32_t;
+typedef   signed       __int64 int_fast64_t;
+
+     
+typedef unsigned           int uint_fast8_t;
+typedef unsigned           int uint_fast16_t;
+typedef unsigned           int uint_fast32_t;
+typedef unsigned       __int64 uint_fast64_t;
+
+     
+
+
+
+
+typedef   signed           int intptr_t;
+typedef unsigned           int uintptr_t;
+
+
+     
+typedef   signed     long long intmax_t;
+typedef unsigned     long long uintmax_t;
+
+
+
+
+     
+
+     
+
+
+
+
+
+     
+
+
+
+
+
+     
+
+
+
+
+
+     
+
+     
+
+
+
+
+
+     
+
+
+
+
+
+     
+
+
+
+
+
+     
+
+     
+
+
+
+
+
+     
+
+
+
+
+
+     
+
+
+
+
+
+     
+
+     
+
+
+
+
+
+
+     
+
+
+
+
+
+
+     
+
+
+
+
+
+
+     
+
+     
+
+
+     
+
+
+     
+
+
+     
+
+     
+#line 216 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
+
+     
+
+
+
+     
+
+
+
+
+
+
+     
+    
+ 
+
+
+
+#line 241 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
+
+     
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+#line 305 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
+
+
+
+
+
+
+ 
+#line 39 "..\\User\\systick.h"
+
+ 
+void systick_config(void);
+ 
+void delay_1ms(uint32_t count);
+ 
+void delay_decrement(void);
+
+uint32_t GetTick(void);
+
+#line 5 "..\\Function\\function.c"
+#line 1 "..\\Driver\\HardWare\\OLED\\OLED.h"
+
+
+
+ 
+
 #line 1 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
 
 
@@ -303,262 +658,6 @@ typedef enum IRQn
 
 #line 185 "..\\Driver\\Start\\CMSIS\\core_cm4.h"
 
-#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
- 
- 
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-     
-#line 27 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
-     
-
-
-
-
-
-
-
-
-
-
-
-#line 46 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
-
-
-
-
-
- 
-
-     
-
-     
-typedef   signed          char int8_t;
-typedef   signed short     int int16_t;
-typedef   signed           int int32_t;
-typedef   signed       __int64 int64_t;
-
-     
-typedef unsigned          char uint8_t;
-typedef unsigned short     int uint16_t;
-typedef unsigned           int uint32_t;
-typedef unsigned       __int64 uint64_t;
-
-     
-
-     
-     
-typedef   signed          char int_least8_t;
-typedef   signed short     int int_least16_t;
-typedef   signed           int int_least32_t;
-typedef   signed       __int64 int_least64_t;
-
-     
-typedef unsigned          char uint_least8_t;
-typedef unsigned short     int uint_least16_t;
-typedef unsigned           int uint_least32_t;
-typedef unsigned       __int64 uint_least64_t;
-
-     
-
-     
-typedef   signed           int int_fast8_t;
-typedef   signed           int int_fast16_t;
-typedef   signed           int int_fast32_t;
-typedef   signed       __int64 int_fast64_t;
-
-     
-typedef unsigned           int uint_fast8_t;
-typedef unsigned           int uint_fast16_t;
-typedef unsigned           int uint_fast32_t;
-typedef unsigned       __int64 uint_fast64_t;
-
-     
-
-
-
-
-typedef   signed           int intptr_t;
-typedef unsigned           int uintptr_t;
-
-
-     
-typedef   signed     long long intmax_t;
-typedef unsigned     long long uintmax_t;
-
-
-
-
-     
-
-     
-
-
-
-
-
-     
-
-
-
-
-
-     
-
-
-
-
-
-     
-
-     
-
-
-
-
-
-     
-
-
-
-
-
-     
-
-
-
-
-
-     
-
-     
-
-
-
-
-
-     
-
-
-
-
-
-     
-
-
-
-
-
-     
-
-     
-
-
-
-
-
-
-     
-
-
-
-
-
-
-     
-
-
-
-
-
-
-     
-
-     
-
-
-     
-
-
-     
-
-
-     
-
-     
-#line 216 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
-
-     
-
-
-
-     
-
-
-
-
-
-
-     
-    
- 
-
-
-
-#line 241 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
-
-     
-
-
-
-
-
-
-
-     
-
-
-
-
-
-
-
-
-
-
-     
-
-
-
-
-
-
-
-
-
-
-
-#line 305 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
-
-
-
-
-
-
- 
 #line 187 "..\\Driver\\Start\\CMSIS\\core_cm4.h"
 #line 1 "..\\Driver\\Start\\CMSIS\\core_cmInstr.h"
  
@@ -12663,53 +12762,6 @@ FlagStatus tli_flag_get(uint32_t flag);
 #line 6 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
 #line 7 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
 #line 8 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "..\\User\\systick.h"
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-#line 39 "..\\User\\systick.h"
-
- 
-void systick_config(void);
- 
-void delay_1ms(uint32_t count);
- 
-void delay_decrement(void);
-
 #line 9 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
 
 
@@ -12719,24 +12771,6 @@ void delay_decrement(void);
 
 #line 5 "..\\Driver\\HardWare\\ROM\\ROM.h"
 #line 6 "..\\Driver\\HardWare\\ROM\\ROM.h"
-
-#line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
- 
-
-
-
-
-
-
- 
-
-
-
-
-
-#line 25 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
-
-
 
 #line 8 "..\\Driver\\HardWare\\ROM\\ROM.h"
 #line 9 "..\\Driver\\HardWare\\ROM\\ROM.h"
@@ -15296,13 +15330,131 @@ __declspec(__nothrow) long double truncl(long double );
    
 
 #line 1 "..\\Driver\\HardWare\\OLED\\OLED.h"
+#line 57 "..\\Driver\\HardWare\\OLED\\OLED.h"
+
+
+ 
+
+#line 23 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "..\\Driver\\HardWare\\USART\\USART.h"
 
 
 
  
 
+#line 7 "..\\Driver\\HardWare\\USART\\USART.h"
+#line 8 "..\\Driver\\HardWare\\USART\\USART.h"
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern volatile uint8_t data_recv;                 
+extern uint8_t usart1_rx_buf[128]; 
+extern volatile uint16_t usart1_rx_len;            
+extern volatile uint8_t usart1_rx_flag;             
+
+ 
+int rs485_printf(const char *fmt, ...);
+void USART1_Init(void);
+
+void USART1_ClearRxBuf(void);
+
+void USART1_SendData(uint16_t *buf, uint16_t len);
+
+
+
+
+ 
+#line 24 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 1 "..\\Driver\\HardWare\\SPI_FLASH\\SPI_FLASH.h"
+
+
+
 #line 1 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 36 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 32 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+
+
+#line 5 "..\\Driver\\HardWare\\SPI_FLASH\\SPI_FLASH.h"
+ 
+
+ 
+ 
+void spi_flash_init(void);
+ 
+void spi_flash_sector_erase(uint32_t sector_addr);
+ 
+void spi_flash_bulk_erase(void);
+ 
+void spi_flash_page_write(uint8_t *pbuffer, uint32_t write_addr, uint16_t num_byte_to_write);
+ 
+void spi_flash_buffer_write(uint8_t *pbuffer, uint32_t write_addr, uint32_t num_byte_to_write);
+ 
+void spi_flash_buffer_read(uint8_t *pbuffer, uint32_t read_addr, uint16_t num_byte_to_read);
+ 
+uint32_t spi_flash_read_id(void);
+ 
+void spi_flash_start_read_sequence(uint32_t read_addr);
+ 
+uint8_t spi_flash_read_byte(void);
+ 
+uint8_t spi_flash_send_byte(uint8_t byte);
+ 
+uint16_t spi_flash_send_halfword(uint16_t half_word);
+ 
+void spi_flash_write_enable(void);
+ 
+void spi_flash_wait_for_write_end(void);
+void spi_flash_buffer_erase(uint32_t sector_addr, uint32_t num_byte_to_erase);
+
+
+
+#line 25 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+
+
+#line 1 "..\\Driver\\System\\myDMA.h"
+
+
+
+#line 5 "..\\Driver\\System\\myDMA.h"
+#line 6 "..\\Driver\\System\\myDMA.h"
+
+
+
+extern uint8_t usart1_rx_buffer[1152U];
+extern uint8_t usart1_tx_buffer[256];
+extern uint16_t adc_value[2];
+
+
+void mydma_init_buffers(void);
+
+void dma_usart_tx_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t par, uint32_t mar);
+void dma_usart1_rx_config(void);
+void dma_enable(uint32_t dma_periph, dma_channel_enum channelx, uint16_t ndtr);
+
+void DMA_ADC_Init(void);
+void DMA_ADJ_Init(void);
+void USART1_DMA_All_Init(void);
+
+uint16_t get_usart1_rx_len(void);
+void reset_usart1_rx_dma(void);
+
+#line 28 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+
+
+
+
 
 
 #line 7 "..\\Driver\\HardWare\\OLED\\OLED.h"
@@ -15360,250 +15512,41 @@ void OLED_Printf(int16_t X, int16_t Y, uint8_t FontSize, char *format, ...);
 
  
 
-#line 23 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "..\\Driver\\HardWare\\USART\\USART.h"
+#line 6 "..\\Function\\function.c"
+#line 7 "..\\Function\\function.c"
 
 
 
- 
-
-#line 7 "..\\Driver\\HardWare\\USART\\USART.h"
-#line 8 "..\\Driver\\HardWare\\USART\\USART.h"
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-extern volatile uint8_t data_recv;                 
-extern uint8_t usart1_rx_buf[128]; 
-extern volatile uint16_t usart1_rx_len;            
-extern volatile uint8_t usart1_rx_flag;             
-
- 
-int rs485_printf(const char *fmt, ...);
-void USART1_Init(void);
-
-void USART1_ClearRxBuf(void);
-
-void USART1_SendData(uint16_t *buf, uint16_t len);
-
-
-
-
- 
-#line 24 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "..\\Driver\\HardWare\\SPI_FLASH\\SPI_FLASH.h"
-
-
-
-#line 5 "..\\Driver\\HardWare\\SPI_FLASH\\SPI_FLASH.h"
- 
-
- 
- 
-void spi_flash_init(void);
- 
-void spi_flash_sector_erase(uint32_t sector_addr);
- 
-void spi_flash_bulk_erase(void);
- 
-void spi_flash_page_write(uint8_t *pbuffer, uint32_t write_addr, uint16_t num_byte_to_write);
- 
-void spi_flash_buffer_write(uint8_t *pbuffer, uint32_t write_addr, uint32_t num_byte_to_write);
- 
-void spi_flash_buffer_read(uint8_t *pbuffer, uint32_t read_addr, uint16_t num_byte_to_read);
- 
-uint32_t spi_flash_read_id(void);
- 
-void spi_flash_start_read_sequence(uint32_t read_addr);
- 
-uint8_t spi_flash_read_byte(void);
- 
-uint8_t spi_flash_send_byte(uint8_t byte);
- 
-uint16_t spi_flash_send_halfword(uint16_t half_word);
- 
-void spi_flash_write_enable(void);
- 
-void spi_flash_wait_for_write_end(void);
-void spi_flash_buffer_erase(uint32_t sector_addr, uint32_t num_byte_to_erase);
-
-
-
-#line 25 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-
-
-#line 1 "..\\sysFunction\\bootloader.h"
-
-
-
-#line 5 "..\\sysFunction\\bootloader.h"
-#line 6 "..\\sysFunction\\bootloader.h"
-
-#line 16 "..\\sysFunction\\bootloader.h"
-
-
-
-
-
-
-
-
-
-
-
-
-
-typedef struct {
-    uint32_t magic;
-    uint16_t device_id;
-    uint8_t baud_code;
-    uint8_t boot_flag;
-    uint32_t checksum;
-} boot_param_t;
-
-typedef enum {
-    BOOT_STATUS_OK = 0U,
-    BOOT_STATUS_TIMEOUT,
-    BOOT_STATUS_ERROR,
-    BOOT_STATUS_CRC,
-    BOOT_STATUS_FLASH,
-    BOOT_STATUS_RANGE
-} boot_status_t;
-
-typedef struct {
-    char name[32];
-    uint32_t size;
-    uint32_t crc32;
-} boot_image_info_t;
-
-uint32_t GetTick(void);
-
-void bootloader_init(void);
-_Bool bootloader_update_requested(void);
-_Bool bootloader_boot_default(void);
-void bootloader_console(void);
-
-#line 28 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "..\\Driver\\System\\myDMA.h"
-
-
-
-#line 5 "..\\Driver\\System\\myDMA.h"
-#line 6 "..\\Driver\\System\\myDMA.h"
-
-
-
-extern uint8_t usart1_rx_buffer[1152U];
-extern uint8_t usart1_tx_buffer[256];
-extern uint16_t adc_value[2];
-
-
-void mydma_init_buffers(void);
-
-void dma_usart_tx_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t par, uint32_t mar);
-void dma_usart1_rx_config(void);
-void dma_enable(uint32_t dma_periph, dma_channel_enum channelx, uint16_t ndtr);
-
-void DMA_ADC_Init(void);
-void DMA_ADJ_Init(void);
-void USART1_DMA_All_Init(void);
-
-uint16_t get_usart1_rx_len(void);
-void reset_usart1_rx_dma(void);
-
-#line 29 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
- 
-#line 1 "..\\sysFunction\\Function.h"
-
-
-
-#line 5 "..\\sysFunction\\Function.h"
-
-extern uint8_t sampling_flag;
-extern uint8_t overlimit_flag;
-extern uint8_t hide_flag;
-
-void sysFunction_Init(void);
-void sysFunction_loop(void);
-
-
-#line 31 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "..\\sysFunction\\crc_utils.h"
-
-
-
-#line 5 "..\\sysFunction\\crc_utils.h"
-
-uint32_t crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
-uint32_t crc32_buffer(const uint8_t *data, uint32_t len);
-uint32_t crc32_flash(uint32_t addr, uint32_t len);
-uint16_t crc16_ccitt(const uint8_t *data, uint32_t len);
-uint16_t crc16_modbus(const uint8_t *data, uint32_t len);
-
-#line 32 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-
-
-
-
-
-
-#line 2 "..\\sysFunction\\Function.c"
-
-void nvic_config(void);
-uint8_t is_power_on_reset(void);
-
-void sysFunction_Init(void)
+void boot_entry_init(void)
 {
     systick_config();
     USART1_Init();
     OLED_Init();
-
-    bootloader_init();
+    
+    boot_flow_init();
 }
 
-void sysFunction_loop(void)
+
+
+
+void boot_entry_loop(void)
 {
+    
     OLED_Printf(0, 0, 16, "2026639584");
     OLED_Printf(0, 16, 16, "Bootloader");
     OLED_Refresh();
 
-    if (!bootloader_update_requested()) {
+    
+    if (!boot_flow_update_requested()) {
         uint32_t start = GetTick();
-
-         
         while (GetTick() - start < 5000U);
 
-        if (bootloader_boot_default()) {
+        if (boot_flow_boot_default()) {
             while (1) {
             }
         }
     }
 
-    bootloader_console();
+    
+    boot_flow_console();
 }
-void nvic_config(void)
-{
-    nvic_priority_group_set(((uint32_t)0x600));
-    nvic_irq_enable(SDIO_IRQn, 0, 0);
-}
-
-uint8_t is_power_on_reset(void)
-{
-    uint8_t ret = (rcu_flag_get(RCU_FLAG_PORRST) == SET) ? 1U : 0U;
-
-    rcu_all_reset_flag_clear();
-    return ret;
-}
-

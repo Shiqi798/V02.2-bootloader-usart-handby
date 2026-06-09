@@ -1,8 +1,8 @@
 .\objects\boot_param.o: ..\Function\boot_param.c
 .\objects\boot_param.o: ..\Function\boot_param.h
-.\objects\boot_param.o: ..\sysFunction\bootloader.h
 .\objects\boot_param.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\boot_param.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\boot_param.o: ..\Function\boot_app.h
 .\objects\boot_param.o: ..\Protocol\boot_crc.h
 .\objects\boot_param.o: ..\Driver\HardWare\ROM\ROM.h
 .\objects\boot_param.o: ..\Driver\Start\CMSIS\GD\GD32F4xx\Include\gd32f4xx.h

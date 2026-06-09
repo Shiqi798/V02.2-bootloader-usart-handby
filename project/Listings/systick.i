@@ -12737,6 +12737,8 @@ void delay_1ms(uint32_t count);
  
 void delay_decrement(void);
 
+uint32_t GetTick(void);
+
 #line 37 "..\\User\\systick.c"
 
 volatile static uint32_t delay;

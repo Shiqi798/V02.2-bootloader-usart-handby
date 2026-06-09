@@ -4,11 +4,6 @@ L 1 "..\Function\boot_flow.h" 1
 N#ifndef __BOOT_FLOW_H
 N#define __BOOT_FLOW_H
 N
-N#include "bootloader.h"
-L 1 "..\sysFunction\bootloader.h" 1
-N#ifndef __BOOTLOADER_H
-N#define __BOOTLOADER_H
-N
 N#include <stdbool.h>
 L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h" 1
 N/* stdbool.h: ISO/IEC 9899:1999 (C99), section 7.16 */
@@ -38,7 +33,27 @@ N  #endif
 N
 N#endif /* __bool_true_false_are_defined */
 N
-L 5 "..\sysFunction\bootloader.h" 2
+L 5 "..\Function\boot_flow.h" 2
+N
+N//=================================
+N//Boot流程
+N
+Nvoid boot_flow_init(void);
+Nbool boot_flow_update_requested(void);  //boot_flag == 0xA5
+X_Bool boot_flow_update_requested(void);  
+Nbool boot_flow_boot_default(void);     //先主区→再备份
+X_Bool boot_flow_boot_default(void);     
+Nvoid boot_flow_console(void);          //主循环
+N
+N#endif
+L 2 "..\Function\boot_flow.c" 2
+N
+N#include "boot_app.h"
+L 1 "..\Function\boot_app.h" 1
+N#ifndef __BOOT_APP_H
+N#define __BOOT_APP_H
+N
+N#include <stdbool.h>
 N#include <stdint.h>
 L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h" 1
 N/* Copyright (C) ARM Ltd., 1999,2014 */
@@ -370,88 +385,38 @@ N
 N#endif /* __stdint_h */
 N
 N/* end of stdint.h */
-L 6 "..\sysFunction\bootloader.h" 2
+L 6 "..\Function\boot_app.h" 2
 N
+N/* Bootloader 自身占用 */
 N#define BOOTLOADER_SIZE          0x00010000U
+N
+N/* 参数区（Flash Sector 4 前 4KB） */
 N#define BOOT_PARAM_ADDR          0x08010000U
 N#define BOOT_PARAM_SIZE          0x00001000U
+N
+N/* 应用程序主区（Sector 4 剩余 + Sector 5） */
 N#define BOOT_APP_ADDR            0x08011000U
 N#define BOOT_APP_SIZE            0x00020000U
+N
+N/* 应用程序备份区（Sector 6） */
 N#define BOOT_BACKUP_ADDR         0x08031000U
 N#define BOOT_BACKUP_SIZE         0x00020000U
+N
+N/* 固件暂存区（Sector 7） */
 N#define BOOT_STAGE_ADDR          0x08051000U
 N#define BOOT_STAGE_SIZE          0x00020000U
 N
-N#define BOOT_CONTROL_MAGIC       0x424F4F54U
-N#define BOOT_DEFAULT_DEVICE_ID   0x0001U
+N//--------------------------------
+N//函数声明
 N
-N#define BOOT_BAUD_4800           0x11U
-N#define BOOT_BAUD_9600           0x12U
-N#define BOOT_BAUD_19200          0x13U
-N#define BOOT_BAUD_115200         0x14U
-N#define BOOT_DEFAULT_BAUD_CODE   BOOT_BAUD_115200
-N
-N#define BOOT_FLAG_NORMAL         0x00U
-N#define BOOT_FLAG_UPDATE         0xA5U
-N
-Ntypedef struct {
-N    uint32_t magic;
-N    uint16_t device_id;
-N    uint8_t baud_code;
-N    uint8_t boot_flag;
-N    uint32_t checksum;
-N} boot_param_t;
-N
-Ntypedef enum {
-N    BOOT_STATUS_OK = 0U,
-N    BOOT_STATUS_TIMEOUT,
-N    BOOT_STATUS_ERROR,
-N    BOOT_STATUS_CRC,
-N    BOOT_STATUS_FLASH,
-N    BOOT_STATUS_RANGE
-N} boot_status_t;
-N
-Ntypedef struct {
-N    char name[32];
-N    uint32_t size;
-N    uint32_t crc32;
-N} boot_image_info_t;
-N
-Nuint32_t GetTick(void);
-N
-Nvoid bootloader_init(void);
-Nbool bootloader_update_requested(void);
-X_Bool bootloader_update_requested(void);
-Nbool bootloader_boot_default(void);
-X_Bool bootloader_boot_default(void);
-Nvoid bootloader_console(void);
-N
-N#endif
-L 5 "..\Function\boot_flow.h" 2
-N
-Nvoid boot_flow_init(void);
-Nbool boot_flow_update_requested(void);
-X_Bool boot_flow_update_requested(void);
-Nbool boot_flow_boot_default(void);
-X_Bool boot_flow_boot_default(void);
-Nvoid boot_flow_console(void);
-N
-N#endif
-L 2 "..\Function\boot_flow.c" 2
-N
-N#include "boot_app.h"
-L 1 "..\Function\boot_app.h" 1
-N#ifndef __BOOT_APP_H
-N#define __BOOT_APP_H
-N
-N#include "bootloader.h"
-N
+N//向量表检查
 Nbool boot_app_vector_ok(uint32_t addr);
 X_Bool boot_app_vector_ok(uint32_t addr);
 Nbool boot_app_can_boot(void);
 X_Bool boot_app_can_boot(void);
 Nbool boot_app_backup_can_restore(void);
 X_Bool boot_app_backup_can_restore(void);
+N//关中断、清外设，跳转
 Nvoid boot_app_jump_raw(uint32_t addr);
 N
 N#endif
@@ -461,7 +426,37 @@ L 1 "..\Function\boot_param.h" 1
 N#ifndef __BOOT_PARAM_H
 N#define __BOOT_PARAM_H
 N
-N#include "bootloader.h"
+N#include <stdbool.h>
+N#include <stdint.h>
+N
+N/* 赛题参数区魔术字 */
+N#define BOOT_CONTROL_MAGIC       0x424F4F54U
+N
+N/* 默认设备信息 */
+N#define BOOT_DEFAULT_DEVICE_ID   0x0001U
+N
+N/* 波特率枚举值（赛题帧内用） */
+N#define BOOT_BAUD_4800           0x11U
+N#define BOOT_BAUD_9600           0x12U
+N#define BOOT_BAUD_19200          0x13U
+N#define BOOT_BAUD_115200         0x14U
+N#define BOOT_DEFAULT_BAUD_CODE   BOOT_BAUD_115200
+N
+N/* boot_flag 取值 */
+N#define BOOT_FLAG_NORMAL         0x00U
+N#define BOOT_FLAG_UPDATE         0xA5U
+N
+N/* 参数区结构体（持久化到 Flash BOOT_PARAM_ADDR） */
+Ntypedef struct {
+N    uint32_t magic;
+N    uint16_t device_id;
+N    uint8_t  baud_code;
+N    uint8_t  boot_flag;
+N    uint32_t checksum;
+N} boot_param_t;
+N
+N//===========================================================
+N//函数
 N
 Nuint32_t boot_param_checksum(const boot_param_t *param);
 N
@@ -502,7 +497,7 @@ N#define BOOT_PROTO_FRAME_RESP   0x02U
 N#define BOOT_PROTO_FRAME_HEART  0x05U
 N#define BOOT_PROTO_FRAME_ERROR  0xFFU
 N
-N/* Bootloader 当前关心的命令 */
+N//赛题指令
 N#define BOOT_PROTO_CMD_QUERY_ID   0x0111U
 N#define BOOT_PROTO_CMD_QUERY_BAUD 0x0112U
 N#define BOOT_PROTO_CMD_UPGRADE_READY 0x0502U
@@ -550,10 +545,29 @@ L 1 "..\Function\boot_upgrade.h" 1
 N#ifndef __BOOT_UPGRADE_H
 N#define __BOOT_UPGRADE_H
 N
-N#include "bootloader.h"
 N#include "boot_param.h"
 N
+N#include <stdbool.h>
+N#include <stdint.h>
+N
 N#define BOOT_IMAGE_MAGIC_SIZE 4U
+N
+N/* Bootloader 状态码 */
+Ntypedef enum {
+N    BOOT_STATUS_OK = 0U,
+N    BOOT_STATUS_TIMEOUT,
+N    BOOT_STATUS_ERROR,
+N    BOOT_STATUS_CRC,
+N    BOOT_STATUS_FLASH,
+N    BOOT_STATUS_RANGE
+N} boot_status_t;
+N
+N/* 暂存/升级的固件信息 */
+Ntypedef struct {
+N    char name[32];
+N    uint32_t size;
+N    uint32_t crc32;
+N} boot_image_info_t;
 N
 Ntypedef struct {
 N    boot_image_info_t pending_image;
@@ -562,6 +576,9 @@ X    _Bool pending_valid;
 N    bool stage_erased;
 X    _Bool stage_erased;
 N} boot_upgrade_ctx_t;
+N
+N//------------------------------
+N//函数
 N
 Nvoid boot_upgrade_init(boot_upgrade_ctx_t *ctx);
 Nbool boot_upgrade_prepare_stage(boot_upgrade_ctx_t *ctx);
@@ -579,6 +596,58 @@ X_Bool boot_upgrade_restore_backup_to_app(void);
 N
 N#endif
 L 7 "..\Function\boot_flow.c" 2
+N#include "systick.h"
+L 1 "..\User\systick.h" 1
+N/*!
+N    \file    systick.h
+N    \brief   the header file of systick
+N
+N    \version 2020-09-04, V2.0.0, demo for GD32F4xx
+N*/
+N
+N/*
+N    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+N
+N    Redistribution and use in source and binary forms, with or without modification, 
+Nare permitted provided that the following conditions are met:
+N
+N    1. Redistributions of source code must retain the above copyright notice, this 
+N       list of conditions and the following disclaimer.
+N    2. Redistributions in binary form must reproduce the above copyright notice, 
+N       this list of conditions and the following disclaimer in the documentation 
+N       and/or other materials provided with the distribution.
+N    3. Neither the name of the copyright holder nor the names of its contributors 
+N       may be used to endorse or promote products derived from this software without 
+N       specific prior written permission.
+N
+N    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+NAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+NWARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+NIN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+NINDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+NNOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+NPROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+NWHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+NARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+NOF SUCH DAMAGE.
+N*/
+N
+N#ifndef SYS_TICK_H
+N#define SYS_TICK_H
+N
+N#include <stdint.h>
+N
+N/* configure systick */
+Nvoid systick_config(void);
+N/* delay a time in milliseconds */
+Nvoid delay_1ms(uint32_t count);
+N/* delay decrement */
+Nvoid delay_decrement(void);
+N
+Nuint32_t GetTick(void);
+N
+N#endif /* SYS_TICK_H */
+L 8 "..\Function\boot_flow.c" 2
 N#include "USART.h"
 L 1 "..\Driver\HardWare\USART\USART.h" 1
 N#ifndef __USART1_H
@@ -19763,28 +19832,38 @@ N
 N#endif
 N
 N/**************************** 文件结束 *****************************/
-L 8 "..\Function\boot_flow.c" 2
+L 9 "..\Function\boot_flow.c" 2
 N
 Nvoid OLED_Clear(void);
 Nvoid OLED_Refresh(void);
 Nvoid OLED_Printf(int16_t X, int16_t Y, uint8_t FontSize, char *format, ...);
+N
+N//=============== 常量 ===============
 N
 N#define BOOT_TEAM_ID_TEXT "2026639584"
 N#define BOOT_MODE_TEXT "Bootloader"
 N#define BOOT_WAIT_APP_MS 10000U
 N#define BOOT_FRAME_POLL_MS 100U
 N
+N//事件
 Ntypedef enum {
 N    BOOT_FLOW_EVENT_NONE = 0U,
 N    BOOT_FLOW_EVENT_KEEP_WAITING,
 N    BOOT_FLOW_EVENT_IMAGE_STAGED
 N} boot_flow_event_t;
 N
+N//--------------------------------
+N//静态变量
+N
 Nstatic boot_param_t g_boot_param;
 Nstatic boot_upgrade_ctx_t g_upgrade_ctx;
 Nstatic bool g_suppress_next_bad_frame = false;
 Xstatic _Bool g_suppress_next_bad_frame = 0;
 N
+N//--------------------------------
+N//内部函数
+N
+N//赛题要求：OLED显示队伍编号和Bootloader
 Nstatic void boot_flow_show_oled(void)
 N{
 N    OLED_Clear();
@@ -19798,7 +19877,6 @@ N
 Nstatic void boot_flow_send_query_id(uint16_t command)
 N{
 N    uint8_t content[2];
-N
 N    content[0] = (uint8_t)(g_boot_param.device_id >> 8);
 N    content[1] = (uint8_t)g_boot_param.device_id;
 N    boot_proto_send_frame(g_boot_param.device_id, BOOT_PROTO_FRAME_RESP,
@@ -19809,12 +19887,12 @@ N
 Nstatic void boot_flow_send_query_baud(uint16_t command)
 N{
 N    uint8_t content = g_boot_param.baud_code;
-N
 N    boot_proto_send_frame(g_boot_param.device_id, BOOT_PROTO_FRAME_RESP,
 X    boot_proto_send_frame(g_boot_param.device_id, 0x02U,
 N                          command, &content, 1U);
 N}
 N
+N//帧处理：0101/0112/0502/0503/心跳
 Nstatic boot_flow_event_t boot_flow_process_frame_once(uint32_t timeout_ms)
 N{
 N    boot_proto_frame_t frame;
@@ -19822,12 +19900,10 @@ N    boot_proto_frame_status_t status;
 N
 N    status = boot_proto_wait_frame(timeout_ms, g_boot_param.device_id, &frame);
 N
-N    if (status == BOOT_PROTO_FRAME_NONE) {
+N    if (status == BOOT_PROTO_FRAME_NONE)
 N        return BOOT_FLOW_EVENT_NONE;
-N    }
-N    if (status == BOOT_PROTO_FRAME_ID_MISMATCH) {
+N    if (status == BOOT_PROTO_FRAME_ID_MISMATCH)
 N        return BOOT_FLOW_EVENT_KEEP_WAITING;
-N    }
 N
 N    if (status == BOOT_PROTO_FRAME_BAD) {
 N        if (g_suppress_next_bad_frame) {
@@ -19835,7 +19911,7 @@ N            g_suppress_next_bad_frame = false;
 X            g_suppress_next_bad_frame = 0;
 N            return BOOT_FLOW_EVENT_KEEP_WAITING;
 N        }
-N
+N        //printf("bad frame\r\n");
 N        boot_proto_send_error(g_boot_param.device_id, BOOT_PROTO_CMD_ERROR);
 X        boot_proto_send_error(g_boot_param.device_id, 0xEEEEU);
 N        return BOOT_FLOW_EVENT_KEEP_WAITING;
@@ -19844,6 +19920,7 @@ N
 N    g_suppress_next_bad_frame = false;
 X    g_suppress_next_bad_frame = 0;
 N
+N    //心跳回复
 N    if ((frame.frame_type == BOOT_PROTO_FRAME_HEART) &&
 X    if ((frame.frame_type == 0x05U) &&
 N        (frame.command == BOOT_PROTO_CMD_BROADCAST)) {
@@ -19873,12 +19950,10 @@ N
 N    case BOOT_PROTO_CMD_UPGRADE_READY: {
 X    case 0x0502U: {
 N        boot_status_t ret;
-N
 N        if (frame.content_len != 0U) {
 N            boot_proto_send_error(g_boot_param.device_id, frame.command);
 N            break;
 N        }
-N
 N        boot_flow_show_oled();
 N        ret = boot_upgrade_receive_stage_image(&g_upgrade_ctx);
 N        if (ret == BOOT_STATUS_OK) {
@@ -19887,7 +19962,6 @@ N            g_suppress_next_bad_frame = true;
 X            g_suppress_next_bad_frame = 1;
 N            return BOOT_FLOW_EVENT_IMAGE_STAGED;
 N        }
-N
 N        boot_proto_send_error(g_boot_param.device_id, frame.command);
 N        (void)boot_upgrade_prepare_stage(&g_upgrade_ctx);
 N        g_suppress_next_bad_frame = true;
@@ -19898,18 +19972,15 @@ N
 N    case BOOT_PROTO_CMD_UPGRADE_EXEC: {
 X    case 0x0503U: {
 N        boot_status_t ret;
-N
 N        if (frame.content_len != 0U) {
 N            boot_proto_send_error(g_boot_param.device_id, frame.command);
 N            break;
 N        }
-N
 N        if (!g_upgrade_ctx.pending_valid) {
 N            boot_proto_send_error(g_boot_param.device_id, frame.command);
 N            break;
 N        }
-N
-N        //升级前先把OK发完，Flash搬运会卡一段时间
+N        //先把OK发了再搬运，Flash擦写会卡一会儿
 N        boot_proto_send_ok(g_boot_param.device_id, frame.command);
 N
 N        boot_flow_show_oled();
@@ -19918,7 +19989,6 @@ N        if (ret == BOOT_STATUS_OK) {
 N            boot_app_jump_raw(BOOT_APP_ADDR);
 X            boot_app_jump_raw(0x08011000U);
 N        }
-N
 N        boot_flow_show_oled();
 N        break;
 N    }
@@ -19928,10 +19998,10 @@ N        boot_proto_send_error(g_boot_param.device_id, BOOT_PROTO_CMD_ERROR);
 X        boot_proto_send_error(g_boot_param.device_id, 0xEEEEU);
 N        break;
 N    }
-N
 N    return BOOT_FLOW_EVENT_KEEP_WAITING;
 N}
 N
+N//只在10/7/4/1秒时打印
 Nstatic void boot_flow_print_wait_prompt(uint32_t remaining_sec, uint32_t *last_printed)
 N{
 N    if (((remaining_sec == 10U) ||
@@ -19944,9 +20014,12 @@ N        *last_printed = remaining_sec;
 N    }
 N}
 N
+N//=================== 公共接口 ===================
+N
 Nvoid boot_flow_init(void)
 N{
 N    (void)boot_param_load(&g_boot_param);
+N    //printf("boot_flag=0x%02X\r\n", g_boot_param.boot_flag);
 N    boot_upgrade_init(&g_upgrade_ctx);
 N    boot_proto_rx_enable();
 N}
@@ -19958,6 +20031,7 @@ N    return g_boot_param.boot_flag == BOOT_FLAG_UPDATE;
 X    return g_boot_param.boot_flag == 0xA5U;
 N}
 N
+N//先试主区，主区坏了试备份
 Nbool boot_flow_boot_default(void)
 X_Bool boot_flow_boot_default(void)
 N{
@@ -19967,18 +20041,17 @@ X        boot_app_jump_raw(0x08011000U);
 N        return true;
 X        return 1;
 N    }
-N
 N    if (boot_upgrade_restore_backup_to_app()) {
 N        boot_app_jump_raw(BOOT_APP_ADDR);
 X        boot_app_jump_raw(0x08011000U);
 N        return true;
 X        return 1;
 N    }
-N
 N    return false;
 X    return 0;
 N}
 N
+N//控制台主循环
 Nvoid boot_flow_console(void)
 N{
 N    uint32_t start;
@@ -20002,7 +20075,6 @@ N
 N    start = GetTick();
 N    while (1) {
 N        boot_flow_event_t event;
-N
 N        if (countdown_active) {
 N            uint32_t elapsed = GetTick() - start;
 N            uint32_t remaining = (elapsed >= BOOT_WAIT_APP_MS) ? 0U : (10U - (elapsed / 1000U));
@@ -20013,27 +20085,29 @@ N            event = boot_flow_process_frame_once(BOOT_FRAME_POLL_MS);
 X            event = boot_flow_process_frame_once(100U);
 N
 N            if (event == BOOT_FLOW_EVENT_IMAGE_STAGED) {
+N                //收到0502，停掉倒计时等0503
 N                countdown_active = false;
 X                countdown_active = 0;
 N            }
 N
 N            if (elapsed >= BOOT_WAIT_APP_MS) {
 X            if (elapsed >= 10000U) {
+N                //倒计时结束，清标志跳app
 N                if (g_boot_param.boot_flag == BOOT_FLAG_UPDATE) {
 X                if (g_boot_param.boot_flag == 0xA5U) {
 N                    (void)boot_param_set_boot_flag(&g_boot_param, BOOT_FLAG_NORMAL);
 X                    (void)boot_param_set_boot_flag(&g_boot_param, 0x00U);
 N                }
-N
 N                if (boot_flow_boot_default()) {
 N                    while (1) {
 N                    }
 N                }
-N
+N                //app挂了，继续等指令
 N                countdown_active = false;
 X                countdown_active = 0;
 N            }
 N        } else {
+N            //倒计时结束或已经暂存完，无限等
 N            (void)boot_flow_process_frame_once(1000U);
 N        }
 N    }

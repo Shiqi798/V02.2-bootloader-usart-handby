@@ -1,13 +1,18 @@
-L 1 "..\sysFunction\raw_download.c"
+L 1 "..\Function\raw_download.c"
 N#include "raw_download.h"
-L 1 "..\sysFunction\raw_download.h" 1
+L 1 "..\Function\raw_download.h" 1
 N#ifndef __RAW_DOWNLOAD_H
 N#define __RAW_DOWNLOAD_H
 N
-N#include "bootloader.h"
-L 1 "..\sysFunction\bootloader.h" 1
-N#ifndef __BOOTLOADER_H
-N#define __BOOTLOADER_H
+N#include "boot_upgrade.h"
+L 1 "..\Function\boot_upgrade.h" 1
+N#ifndef __BOOT_UPGRADE_H
+N#define __BOOT_UPGRADE_H
+N
+N#include "boot_param.h"
+L 1 "..\Function\boot_param.h" 1
+N#ifndef __BOOT_PARAM_H
+N#define __BOOT_PARAM_H
 N
 N#include <stdbool.h>
 L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h" 1
@@ -38,7 +43,7 @@ N  #endif
 N
 N#endif /* __bool_true_false_are_defined */
 N
-L 5 "..\sysFunction\bootloader.h" 2
+L 5 "..\Function\boot_param.h" 2
 N#include <stdint.h>
 L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h" 1
 N/* Copyright (C) ARM Ltd., 1999,2014 */
@@ -370,38 +375,63 @@ N
 N#endif /* __stdint_h */
 N
 N/* end of stdint.h */
-L 6 "..\sysFunction\bootloader.h" 2
+L 6 "..\Function\boot_param.h" 2
 N
-N#define BOOTLOADER_SIZE          0x00010000U
-N#define BOOT_PARAM_ADDR          0x08010000U
-N#define BOOT_PARAM_SIZE          0x00001000U
-N#define BOOT_APP_ADDR            0x08011000U
-N#define BOOT_APP_SIZE            0x00020000U
-N#define BOOT_BACKUP_ADDR         0x08031000U
-N#define BOOT_BACKUP_SIZE         0x00020000U
-N#define BOOT_STAGE_ADDR          0x08051000U
-N#define BOOT_STAGE_SIZE          0x00020000U
-N
+N/* 赛题参数区魔术字 */
 N#define BOOT_CONTROL_MAGIC       0x424F4F54U
+N
+N/* 默认设备信息 */
 N#define BOOT_DEFAULT_DEVICE_ID   0x0001U
 N
+N/* 波特率枚举值（赛题帧内用） */
 N#define BOOT_BAUD_4800           0x11U
 N#define BOOT_BAUD_9600           0x12U
 N#define BOOT_BAUD_19200          0x13U
 N#define BOOT_BAUD_115200         0x14U
 N#define BOOT_DEFAULT_BAUD_CODE   BOOT_BAUD_115200
 N
+N/* boot_flag 取值 */
 N#define BOOT_FLAG_NORMAL         0x00U
 N#define BOOT_FLAG_UPDATE         0xA5U
 N
+N/* 参数区结构体（持久化到 Flash BOOT_PARAM_ADDR） */
 Ntypedef struct {
 N    uint32_t magic;
 N    uint16_t device_id;
-N    uint8_t baud_code;
-N    uint8_t boot_flag;
+N    uint8_t  baud_code;
+N    uint8_t  boot_flag;
 N    uint32_t checksum;
 N} boot_param_t;
 N
+N//===========================================================
+N//函数
+N
+Nuint32_t boot_param_checksum(const boot_param_t *param);
+N
+Nbool boot_param_device_id_ok(uint16_t device_id);
+X_Bool boot_param_device_id_ok(uint16_t device_id);
+Nbool boot_param_baud_code_ok(uint8_t baud_code);
+X_Bool boot_param_baud_code_ok(uint8_t baud_code);
+Nbool boot_param_boot_flag_ok(uint8_t boot_flag);
+X_Bool boot_param_boot_flag_ok(uint8_t boot_flag);
+N
+Nvoid boot_param_default(boot_param_t *param);
+Nbool boot_param_save(boot_param_t *param);
+X_Bool boot_param_save(boot_param_t *param);
+Nbool boot_param_load(boot_param_t *param);
+X_Bool boot_param_load(boot_param_t *param);
+Nbool boot_param_set_boot_flag(boot_param_t *param, uint8_t boot_flag);
+X_Bool boot_param_set_boot_flag(boot_param_t *param, uint8_t boot_flag);
+N
+N#endif
+L 5 "..\Function\boot_upgrade.h" 2
+N
+N#include <stdbool.h>
+N#include <stdint.h>
+N
+N#define BOOT_IMAGE_MAGIC_SIZE 4U
+N
+N/* Bootloader 状态码 */
 Ntypedef enum {
 N    BOOT_STATUS_OK = 0U,
 N    BOOT_STATUS_TIMEOUT,
@@ -411,28 +441,46 @@ N    BOOT_STATUS_FLASH,
 N    BOOT_STATUS_RANGE
 N} boot_status_t;
 N
+N/* 暂存/升级的固件信息 */
 Ntypedef struct {
 N    char name[32];
 N    uint32_t size;
 N    uint32_t crc32;
 N} boot_image_info_t;
 N
-Nuint32_t GetTick(void);
+Ntypedef struct {
+N    boot_image_info_t pending_image;
+N    bool pending_valid;
+X    _Bool pending_valid;
+N    bool stage_erased;
+X    _Bool stage_erased;
+N} boot_upgrade_ctx_t;
 N
-Nvoid bootloader_init(void);
-Nbool bootloader_update_requested(void);
-X_Bool bootloader_update_requested(void);
-Nbool bootloader_boot_default(void);
-X_Bool bootloader_boot_default(void);
-Nvoid bootloader_console(void);
+N//------------------------------
+N//函数
+N
+Nvoid boot_upgrade_init(boot_upgrade_ctx_t *ctx);
+Nbool boot_upgrade_prepare_stage(boot_upgrade_ctx_t *ctx);
+X_Bool boot_upgrade_prepare_stage(boot_upgrade_ctx_t *ctx);
+Nbool boot_upgrade_staged_image_ok(const boot_image_info_t *info);
+X_Bool boot_upgrade_staged_image_ok(const boot_image_info_t *info);
+N
+Nboot_status_t boot_upgrade_receive_stage_image(boot_upgrade_ctx_t *ctx);
+Nboot_status_t boot_upgrade_execute(boot_upgrade_ctx_t *ctx, boot_param_t *param);
+N
+Nbool boot_upgrade_backup_app(void);
+X_Bool boot_upgrade_backup_app(void);
+Nbool boot_upgrade_restore_backup_to_app(void);
+X_Bool boot_upgrade_restore_backup_to_app(void);
 N
 N#endif
-L 5 "..\sysFunction\raw_download.h" 2
+L 5 "..\Function\raw_download.h" 2
 N
+N//通过USART1 DMA接收原始bin文件，存入Flash addr处
 Nboot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_image_info_t *info);
 N
 N#endif
-L 2 "..\sysFunction\raw_download.c" 2
+L 2 "..\Function\raw_download.c" 2
 N
 N#include "boot_crc.h"
 L 1 "..\Protocol\boot_crc.h" 1
@@ -441,14 +489,17 @@ N#define __BOOT_CRC_H
 N
 N#include <stdint.h>
 N
+N/* CRC32 */
 Nuint32_t boot_crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
 Nuint32_t boot_crc32_buffer(const uint8_t *data, uint32_t len);
 Nuint32_t boot_crc32_flash(uint32_t addr, uint32_t len);
+N
+N/* CRC16 */
 Nuint16_t boot_crc16_ccitt(const uint8_t *data, uint32_t len);
 Nuint16_t boot_crc16_modbus(const uint8_t *data, uint32_t len);
 N
 N#endif
-L 4 "..\sysFunction\raw_download.c" 2
+L 4 "..\Function\raw_download.c" 2
 N#include "myDMA.h"
 L 1 "..\Driver\System\myDMA.h" 1
 N#ifndef __MYDMA_H
@@ -19654,7 +19705,7 @@ Nuint16_t get_usart1_rx_len(void);
 Nvoid reset_usart1_rx_dma(void);
 N
 N#endif
-L 5 "..\sysFunction\raw_download.c" 2
+L 5 "..\Function\raw_download.c" 2
 N#include "ROM.h"
 L 1 "..\Driver\HardWare\ROM\ROM.h" 1
 N#ifndef __ROM_H
@@ -19687,7 +19738,7 @@ N
 N
 N#endif
 N/****************************End*****************************/
-L 6 "..\sysFunction\raw_download.c" 2
+L 6 "..\Function\raw_download.c" 2
 N#include "USART.h"
 L 1 "..\Driver\HardWare\USART\USART.h" 1
 N#ifndef __USART1_H
@@ -19731,8 +19782,60 @@ N
 N#endif
 N
 N/**************************** 文件结束 *****************************/
-L 7 "..\sysFunction\raw_download.c" 2
+L 7 "..\Function\raw_download.c" 2
 N#include "gd32f4xx_usart.h"
+N#include "systick.h"
+L 1 "..\User\systick.h" 1
+N/*!
+N    \file    systick.h
+N    \brief   the header file of systick
+N
+N    \version 2020-09-04, V2.0.0, demo for GD32F4xx
+N*/
+N
+N/*
+N    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+N
+N    Redistribution and use in source and binary forms, with or without modification, 
+Nare permitted provided that the following conditions are met:
+N
+N    1. Redistributions of source code must retain the above copyright notice, this 
+N       list of conditions and the following disclaimer.
+N    2. Redistributions in binary form must reproduce the above copyright notice, 
+N       this list of conditions and the following disclaimer in the documentation 
+N       and/or other materials provided with the distribution.
+N    3. Neither the name of the copyright holder nor the names of its contributors 
+N       may be used to endorse or promote products derived from this software without 
+N       specific prior written permission.
+N
+N    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+NAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+NWARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+NIN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+NINDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+NNOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+NPROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+NWHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+NARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
+NOF SUCH DAMAGE.
+N*/
+N
+N#ifndef SYS_TICK_H
+N#define SYS_TICK_H
+N
+N#include <stdint.h>
+N
+N/* configure systick */
+Nvoid systick_config(void);
+N/* delay a time in milliseconds */
+Nvoid delay_1ms(uint32_t count);
+N/* delay decrement */
+Nvoid delay_decrement(void);
+N
+Nuint32_t GetTick(void);
+N
+N#endif /* SYS_TICK_H */
+L 9 "..\Function\raw_download.c" 2
 N
 N#include <string.h>
 L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\string.h" 1
@@ -20284,13 +20387,15 @@ N#endif
 N
 N/* end of string.h */
 N
-L 10 "..\sysFunction\raw_download.c" 2
+L 11 "..\Function\raw_download.c" 2
 N
+N//================== raw bin接收 ==================
+N
+N//等第一字节最多3分钟，之后3秒无数据认为结束
 N#define RAW_FIRST_BYTE_TIMEOUT_MS  180000U
 N#define RAW_END_SILENCE_MS           3000U
 N
-Nuint32_t GetTick(void);
-N
+N//DMA环形缓冲区的当前读位置
 Nstatic uint32_t raw_dma_pos(void)
 N{
 N    uint32_t pos = get_usart1_rx_len();
@@ -20321,7 +20426,7 @@ N    memset(info, 0, sizeof(*info));
 N    memset(word, 0xFF, sizeof(word));
 N    strncpy(info->name, "raw.bin", sizeof(info->name) - 1U);
 N
-N    //raw模式不解析协议，只从USART DMA里把bin捞出来
+N    /* raw模式不解析协议，只从USART DMA里把bin捞出来 */
 N    usart_interrupt_disable(USART1, USART_INT_IDLE);
 X    usart_interrupt_disable((((uint32_t)0x40000000U) + 0x00004400U), USART_INT_IDLE);
 N    USART1_ClearRxBuf();
@@ -20382,7 +20487,7 @@ N    if (size == 0U) {
 N        return BOOT_STATUS_TIMEOUT;
 N    }
 N
-N    //Flash按word写，最后不足4字节用0xFF补齐但不算进固件长度
+N    /* Flash按word写，最后不足4字节用0xFF补齐但不算进固件长度 */
 N    if (word_len != 0U) {
 N        while (word_len < sizeof(word)) {
 N            word[word_len++] = 0xFFU;

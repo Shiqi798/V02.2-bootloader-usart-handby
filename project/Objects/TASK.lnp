@@ -22,16 +22,14 @@
 ".\objects\gd32f4xx_syscfg.o"
 ".\objects\gd32f4xx_usart.o"
 ".\objects\system_gd32f4xx.o"
-".\objects\function.o"
-".\objects\bootloader.o"
-".\objects\crc_utils.o"
-".\objects\raw_download.o"
 ".\objects\boot_crc.o"
 ".\objects\boot_protocol.o"
 ".\objects\boot_app.o"
 ".\objects\boot_flow.o"
 ".\objects\boot_param.o"
 ".\objects\boot_upgrade.o"
+".\objects\function.o"
+".\objects\raw_download.o"
 --library_type=microlib --strict --scatter ".\Objects\TASK.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

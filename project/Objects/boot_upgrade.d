@@ -1,12 +1,11 @@
 .\objects\boot_upgrade.o: ..\Function\boot_upgrade.c
 .\objects\boot_upgrade.o: ..\Function\boot_upgrade.h
-.\objects\boot_upgrade.o: ..\sysFunction\bootloader.h
+.\objects\boot_upgrade.o: ..\Function\boot_param.h
 .\objects\boot_upgrade.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\boot_upgrade.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h
-.\objects\boot_upgrade.o: ..\Function\boot_param.h
 .\objects\boot_upgrade.o: ..\Function\boot_app.h
 .\objects\boot_upgrade.o: ..\Protocol\boot_protocol.h
-.\objects\boot_upgrade.o: ..\sysFunction\raw_download.h
+.\objects\boot_upgrade.o: ..\Function\raw_download.h
 .\objects\boot_upgrade.o: ..\Driver\HardWare\ROM\ROM.h
 .\objects\boot_upgrade.o: ..\Driver\Start\CMSIS\GD\GD32F4xx\Include\gd32f4xx.h
 .\objects\boot_upgrade.o: ..\Driver\Start\CMSIS\core_cm4.h

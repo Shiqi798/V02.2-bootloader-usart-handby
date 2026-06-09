@@ -12710,6 +12710,8 @@ void delay_1ms(uint32_t count);
  
 void delay_decrement(void);
 
+uint32_t GetTick(void);
+
 #line 9 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
 
 
@@ -15302,7 +15304,7 @@ __declspec(__nothrow) long double truncl(long double );
  
 
 #line 1 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 36 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 32 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
 
 
 #line 7 "..\\Driver\\HardWare\\OLED\\OLED.h"
@@ -15444,58 +15446,6 @@ void spi_flash_buffer_erase(uint32_t sector_addr, uint32_t num_byte_to_erase);
 #line 25 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
 
 
-#line 1 "..\\sysFunction\\bootloader.h"
-
-
-
-#line 5 "..\\sysFunction\\bootloader.h"
-#line 6 "..\\sysFunction\\bootloader.h"
-
-#line 16 "..\\sysFunction\\bootloader.h"
-
-
-
-
-
-
-
-
-
-
-
-
-
-typedef struct {
-    uint32_t magic;
-    uint16_t device_id;
-    uint8_t baud_code;
-    uint8_t boot_flag;
-    uint32_t checksum;
-} boot_param_t;
-
-typedef enum {
-    BOOT_STATUS_OK = 0U,
-    BOOT_STATUS_TIMEOUT,
-    BOOT_STATUS_ERROR,
-    BOOT_STATUS_CRC,
-    BOOT_STATUS_FLASH,
-    BOOT_STATUS_RANGE
-} boot_status_t;
-
-typedef struct {
-    char name[32];
-    uint32_t size;
-    uint32_t crc32;
-} boot_image_info_t;
-
-uint32_t GetTick(void);
-
-void bootloader_init(void);
-_Bool bootloader_update_requested(void);
-_Bool bootloader_boot_default(void);
-void bootloader_console(void);
-
-#line 28 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
 #line 1 "..\\Driver\\System\\myDMA.h"
 
 
@@ -15523,36 +15473,7 @@ void USART1_DMA_All_Init(void);
 uint16_t get_usart1_rx_len(void);
 void reset_usart1_rx_dma(void);
 
-#line 29 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
- 
-#line 1 "..\\sysFunction\\Function.h"
-
-
-
-#line 5 "..\\sysFunction\\Function.h"
-
-extern uint8_t sampling_flag;
-extern uint8_t overlimit_flag;
-extern uint8_t hide_flag;
-
-void sysFunction_Init(void);
-void sysFunction_loop(void);
-
-
-#line 31 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
-#line 1 "..\\sysFunction\\crc_utils.h"
-
-
-
-#line 5 "..\\sysFunction\\crc_utils.h"
-
-uint32_t crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
-uint32_t crc32_buffer(const uint8_t *data, uint32_t len);
-uint32_t crc32_flash(uint32_t addr, uint32_t len);
-uint16_t crc16_ccitt(const uint8_t *data, uint32_t len);
-uint16_t crc16_modbus(const uint8_t *data, uint32_t len);
-
-#line 32 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
+#line 28 "..\\Driver\\HeaderFiles\\HeaderFiles.h"
 
 
 
@@ -15560,6 +15481,16 @@ uint16_t crc16_modbus(const uint8_t *data, uint32_t len);
 
 
 #line 2 "..\\User\\main.c"
+#line 1 "..\\Function\\function.h"
+
+
+
+
+void boot_entry_init(void);  
+void boot_entry_loop(void);  
+
+#line 3 "..\\User\\main.c"
+
 
 volatile uint32_t sys_tick = 0;
 
@@ -15575,7 +15506,7 @@ uint32_t GetTick(void)
 
 int main(void)
 {
-    sysFunction_Init();
-    sysFunction_loop();
+    boot_entry_init();
+    boot_entry_loop();
 
 }

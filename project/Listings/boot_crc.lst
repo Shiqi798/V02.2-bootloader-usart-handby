@@ -337,15 +337,21 @@ N
 N/* end of stdint.h */
 L 5 "..\Protocol\boot_crc.h" 2
 N
+N/* CRC32 */
 Nuint32_t boot_crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
 Nuint32_t boot_crc32_buffer(const uint8_t *data, uint32_t len);
 Nuint32_t boot_crc32_flash(uint32_t addr, uint32_t len);
+N
+N/* CRC16 */
 Nuint16_t boot_crc16_ccitt(const uint8_t *data, uint32_t len);
 Nuint16_t boot_crc16_modbus(const uint8_t *data, uint32_t len);
 N
 N#endif
 L 2 "..\Protocol\boot_crc.c" 2
 N
+N//================== CRC ==================
+N
+N/* CRC32（赛题固件校验用） */
 Nuint32_t boot_crc32_step(uint32_t crc, const uint8_t *data, uint32_t len)
 N{
 N    for (uint32_t i = 0U; i < len; i++) {
@@ -368,6 +374,7 @@ N{
 N    return boot_crc32_buffer((const uint8_t *)addr, len);
 N}
 N
+N/* CRC16（赛题帧校验用） */
 Nuint16_t boot_crc16_ccitt(const uint8_t *data, uint32_t len)
 N{
 N    uint16_t crc = 0U;

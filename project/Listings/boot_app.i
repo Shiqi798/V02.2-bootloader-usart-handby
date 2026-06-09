@@ -3,10 +3,6 @@
 
 
 
-#line 1 "..\\sysFunction\\bootloader.h"
-
-
-
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdbool.h"
  
 
@@ -25,7 +21,7 @@
 
 
 
-#line 5 "..\\sysFunction\\bootloader.h"
+#line 5 "..\\Function\\boot_app.h"
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
  
  
@@ -282,57 +278,35 @@ typedef unsigned     long long uintmax_t;
 
 
  
-#line 6 "..\\sysFunction\\bootloader.h"
+#line 6 "..\\Function\\boot_app.h"
 
-#line 16 "..\\sysFunction\\bootloader.h"
-
-
+ 
 
 
-
+ 
 
 
 
+ 
+
+
+
+ 
+
+
+
+ 
 
 
 
 
 
-typedef struct {
-    uint32_t magic;
-    uint16_t device_id;
-    uint8_t baud_code;
-    uint8_t boot_flag;
-    uint32_t checksum;
-} boot_param_t;
 
-typedef enum {
-    BOOT_STATUS_OK = 0U,
-    BOOT_STATUS_TIMEOUT,
-    BOOT_STATUS_ERROR,
-    BOOT_STATUS_CRC,
-    BOOT_STATUS_FLASH,
-    BOOT_STATUS_RANGE
-} boot_status_t;
-
-typedef struct {
-    char name[32];
-    uint32_t size;
-    uint32_t crc32;
-} boot_image_info_t;
-
-uint32_t GetTick(void);
-
-void bootloader_init(void);
-_Bool bootloader_update_requested(void);
-_Bool bootloader_boot_default(void);
-void bootloader_console(void);
-
-#line 5 "..\\Function\\boot_app.h"
 
 _Bool boot_app_vector_ok(uint32_t addr);
 _Bool boot_app_can_boot(void);
 _Bool boot_app_backup_can_restore(void);
+
 void boot_app_jump_raw(uint32_t addr);
 
 #line 2 "..\\Function\\boot_app.c"
@@ -12770,11 +12744,13 @@ uint32_t ROM_word_read(uint32_t addr);
 #line 5 "..\\Function\\boot_app.c"
 #line 6 "..\\Function\\boot_app.c"
 
+
+
+
 _Bool boot_app_vector_ok(uint32_t addr)
 {
     uint32_t sp = *(volatile uint32_t *)addr;
     uint32_t pc = *(volatile uint32_t *)(addr + 4U);
-
     return (sp >= 0x20000000U) &&
            (sp <= 0x20030000U) &&
            ((sp & 3U) == 0U) &&
@@ -12792,6 +12768,9 @@ _Bool boot_app_backup_can_restore(void)
 {
     return boot_app_vector_ok(0x08031000U);
 }
+
+
+
 
 void boot_app_jump_raw(uint32_t addr)
 {
@@ -12813,7 +12792,6 @@ void boot_app_jump_raw(uint32_t addr)
         ((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->ICER[i] = 0xFFFFFFFFU;
         ((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->ICPR[i] = 0xFFFFFFFFU;
     }
-
     ((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->VTOR = addr;
     __dsb(0xF);
     __isb(0xF);

@@ -19120,6 +19120,8 @@ Nvoid delay_1ms(uint32_t count);
 N/* delay decrement */
 Nvoid delay_decrement(void);
 N
+Nuint32_t GetTick(void);
+N
 N#endif /* SYS_TICK_H */
 L 9 "..\Driver\HeaderFiles\HeaderFiles.h" 2
 N
@@ -23015,11 +23017,7 @@ S#include "USART.h"
 S#include "SPI_FLASH.h"
 S//#include "LED.h"
 S//#include "Key.h"
-S#include "bootloader.h"
 S#include "myDMA.h"
-S/************************sysFunction************************/
-S#include "Function.h"
-S#include "crc_utils.h"
 S
 S
 S
@@ -23184,70 +23182,6 @@ N#endif
 L 25 "..\Driver\HeaderFiles\HeaderFiles.h" 2
 N//#include "LED.h"
 N//#include "Key.h"
-N#include "bootloader.h"
-L 1 "..\sysFunction\bootloader.h" 1
-N#ifndef __BOOTLOADER_H
-N#define __BOOTLOADER_H
-N
-N#include <stdbool.h>
-N#include <stdint.h>
-N
-N#define BOOTLOADER_SIZE          0x00010000U
-N#define BOOT_PARAM_ADDR          0x08010000U
-N#define BOOT_PARAM_SIZE          0x00001000U
-N#define BOOT_APP_ADDR            0x08011000U
-N#define BOOT_APP_SIZE            0x00020000U
-N#define BOOT_BACKUP_ADDR         0x08031000U
-N#define BOOT_BACKUP_SIZE         0x00020000U
-N#define BOOT_STAGE_ADDR          0x08051000U
-N#define BOOT_STAGE_SIZE          0x00020000U
-N
-N#define BOOT_CONTROL_MAGIC       0x424F4F54U
-N#define BOOT_DEFAULT_DEVICE_ID   0x0001U
-N
-N#define BOOT_BAUD_4800           0x11U
-N#define BOOT_BAUD_9600           0x12U
-N#define BOOT_BAUD_19200          0x13U
-N#define BOOT_BAUD_115200         0x14U
-N#define BOOT_DEFAULT_BAUD_CODE   BOOT_BAUD_115200
-N
-N#define BOOT_FLAG_NORMAL         0x00U
-N#define BOOT_FLAG_UPDATE         0xA5U
-N
-Ntypedef struct {
-N    uint32_t magic;
-N    uint16_t device_id;
-N    uint8_t baud_code;
-N    uint8_t boot_flag;
-N    uint32_t checksum;
-N} boot_param_t;
-N
-Ntypedef enum {
-N    BOOT_STATUS_OK = 0U,
-N    BOOT_STATUS_TIMEOUT,
-N    BOOT_STATUS_ERROR,
-N    BOOT_STATUS_CRC,
-N    BOOT_STATUS_FLASH,
-N    BOOT_STATUS_RANGE
-N} boot_status_t;
-N
-Ntypedef struct {
-N    char name[32];
-N    uint32_t size;
-N    uint32_t crc32;
-N} boot_image_info_t;
-N
-Nuint32_t GetTick(void);
-N
-Nvoid bootloader_init(void);
-Nbool bootloader_update_requested(void);
-X_Bool bootloader_update_requested(void);
-Nbool bootloader_boot_default(void);
-X_Bool bootloader_boot_default(void);
-Nvoid bootloader_console(void);
-N
-N#endif
-L 28 "..\Driver\HeaderFiles\HeaderFiles.h" 2
 N#include "myDMA.h"
 L 1 "..\Driver\System\myDMA.h" 1
 N#ifndef __MYDMA_H
@@ -23278,40 +23212,7 @@ Nuint16_t get_usart1_rx_len(void);
 Nvoid reset_usart1_rx_dma(void);
 N
 N#endif
-L 29 "..\Driver\HeaderFiles\HeaderFiles.h" 2
-N/************************sysFunction************************/
-N#include "Function.h"
-L 1 "..\sysFunction\Function.h" 1
-N#ifndef __FUNCTION_H
-N#define __FUNCTION_H
-N
-N#include "HeaderFiles.h"
-N
-Nextern uint8_t sampling_flag;
-Nextern uint8_t overlimit_flag;
-Nextern uint8_t hide_flag;
-N
-Nvoid sysFunction_Init(void);
-Nvoid sysFunction_loop(void);
-N// void app_update_commit_after_self_check(void);
-N
-N#endif
-L 31 "..\Driver\HeaderFiles\HeaderFiles.h" 2
-N#include "crc_utils.h"
-L 1 "..\sysFunction\crc_utils.h" 1
-N#ifndef __CRC_UTILS_H
-N#define __CRC_UTILS_H
-N
-N#include "HeaderFiles.h"
-N
-Nuint32_t crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
-Nuint32_t crc32_buffer(const uint8_t *data, uint32_t len);
-Nuint32_t crc32_flash(uint32_t addr, uint32_t len);
-Nuint16_t crc16_ccitt(const uint8_t *data, uint32_t len);
-Nuint16_t crc16_modbus(const uint8_t *data, uint32_t len);
-N
-N#endif
-L 32 "..\Driver\HeaderFiles\HeaderFiles.h" 2
+L 28 "..\Driver\HeaderFiles\HeaderFiles.h" 2
 N
 N
 N
@@ -23319,7 +23220,19 @@ N#endif
 N
 N
 L 2 "..\User\main.c" 2
+N#include "function.h"
+L 1 "..\Function\function.h" 1
+N#ifndef __FUNCTION_H
+N#define __FUNCTION_H
 N
+N
+Nvoid boot_entry_init(void);  //初始化硬件+boot参数
+Nvoid boot_entry_loop(void);  //主循环
+N
+N#endif
+L 3 "..\User\main.c" 2
+N
+N//系统节拍，1ms递增
 Nvolatile uint32_t sys_tick = 0;
 N
 Nvoid SysTick_Handler(void)
@@ -23334,7 +23247,7 @@ N}
 N
 Nint main(void)
 N{
-N    sysFunction_Init();
-N    sysFunction_loop();
+N    boot_entry_init();
+N    boot_entry_loop();
 N
 N}

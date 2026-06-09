@@ -4,11 +4,6 @@ L 1 "..\Function\boot_param.h" 1
 N#ifndef __BOOT_PARAM_H
 N#define __BOOT_PARAM_H
 N
-N#include "bootloader.h"
-L 1 "..\sysFunction\bootloader.h" 1
-N#ifndef __BOOTLOADER_H
-N#define __BOOTLOADER_H
-N
 N#include <stdbool.h>
 L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h" 1
 N/* stdbool.h: ISO/IEC 9899:1999 (C99), section 7.16 */
@@ -38,7 +33,7 @@ N  #endif
 N
 N#endif /* __bool_true_false_are_defined */
 N
-L 5 "..\sysFunction\bootloader.h" 2
+L 5 "..\Function\boot_param.h" 2
 N#include <stdint.h>
 L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h" 1
 N/* Copyright (C) ARM Ltd., 1999,2014 */
@@ -370,64 +365,36 @@ N
 N#endif /* __stdint_h */
 N
 N/* end of stdint.h */
-L 6 "..\sysFunction\bootloader.h" 2
+L 6 "..\Function\boot_param.h" 2
 N
-N#define BOOTLOADER_SIZE          0x00010000U
-N#define BOOT_PARAM_ADDR          0x08010000U
-N#define BOOT_PARAM_SIZE          0x00001000U
-N#define BOOT_APP_ADDR            0x08011000U
-N#define BOOT_APP_SIZE            0x00020000U
-N#define BOOT_BACKUP_ADDR         0x08031000U
-N#define BOOT_BACKUP_SIZE         0x00020000U
-N#define BOOT_STAGE_ADDR          0x08051000U
-N#define BOOT_STAGE_SIZE          0x00020000U
-N
+N/* 赛题参数区魔术字 */
 N#define BOOT_CONTROL_MAGIC       0x424F4F54U
+N
+N/* 默认设备信息 */
 N#define BOOT_DEFAULT_DEVICE_ID   0x0001U
 N
+N/* 波特率枚举值（赛题帧内用） */
 N#define BOOT_BAUD_4800           0x11U
 N#define BOOT_BAUD_9600           0x12U
 N#define BOOT_BAUD_19200          0x13U
 N#define BOOT_BAUD_115200         0x14U
 N#define BOOT_DEFAULT_BAUD_CODE   BOOT_BAUD_115200
 N
+N/* boot_flag 取值 */
 N#define BOOT_FLAG_NORMAL         0x00U
 N#define BOOT_FLAG_UPDATE         0xA5U
 N
+N/* 参数区结构体（持久化到 Flash BOOT_PARAM_ADDR） */
 Ntypedef struct {
 N    uint32_t magic;
 N    uint16_t device_id;
-N    uint8_t baud_code;
-N    uint8_t boot_flag;
+N    uint8_t  baud_code;
+N    uint8_t  boot_flag;
 N    uint32_t checksum;
 N} boot_param_t;
 N
-Ntypedef enum {
-N    BOOT_STATUS_OK = 0U,
-N    BOOT_STATUS_TIMEOUT,
-N    BOOT_STATUS_ERROR,
-N    BOOT_STATUS_CRC,
-N    BOOT_STATUS_FLASH,
-N    BOOT_STATUS_RANGE
-N} boot_status_t;
-N
-Ntypedef struct {
-N    char name[32];
-N    uint32_t size;
-N    uint32_t crc32;
-N} boot_image_info_t;
-N
-Nuint32_t GetTick(void);
-N
-Nvoid bootloader_init(void);
-Nbool bootloader_update_requested(void);
-X_Bool bootloader_update_requested(void);
-Nbool bootloader_boot_default(void);
-X_Bool bootloader_boot_default(void);
-Nvoid bootloader_console(void);
-N
-N#endif
-L 5 "..\Function\boot_param.h" 2
+N//===========================================================
+N//函数
 N
 Nuint32_t boot_param_checksum(const boot_param_t *param);
 N
@@ -449,6 +416,48 @@ N
 N#endif
 L 2 "..\Function\boot_param.c" 2
 N
+N#include "boot_app.h"
+L 1 "..\Function\boot_app.h" 1
+N#ifndef __BOOT_APP_H
+N#define __BOOT_APP_H
+N
+N#include <stdbool.h>
+N#include <stdint.h>
+N
+N/* Bootloader 自身占用 */
+N#define BOOTLOADER_SIZE          0x00010000U
+N
+N/* 参数区（Flash Sector 4 前 4KB） */
+N#define BOOT_PARAM_ADDR          0x08010000U
+N#define BOOT_PARAM_SIZE          0x00001000U
+N
+N/* 应用程序主区（Sector 4 剩余 + Sector 5） */
+N#define BOOT_APP_ADDR            0x08011000U
+N#define BOOT_APP_SIZE            0x00020000U
+N
+N/* 应用程序备份区（Sector 6） */
+N#define BOOT_BACKUP_ADDR         0x08031000U
+N#define BOOT_BACKUP_SIZE         0x00020000U
+N
+N/* 固件暂存区（Sector 7） */
+N#define BOOT_STAGE_ADDR          0x08051000U
+N#define BOOT_STAGE_SIZE          0x00020000U
+N
+N//--------------------------------
+N//函数声明
+N
+N//向量表检查
+Nbool boot_app_vector_ok(uint32_t addr);
+X_Bool boot_app_vector_ok(uint32_t addr);
+Nbool boot_app_can_boot(void);
+X_Bool boot_app_can_boot(void);
+Nbool boot_app_backup_can_restore(void);
+X_Bool boot_app_backup_can_restore(void);
+N//关中断、清外设，跳转
+Nvoid boot_app_jump_raw(uint32_t addr);
+N
+N#endif
+L 4 "..\Function\boot_param.c" 2
 N#include "boot_crc.h"
 L 1 "..\Protocol\boot_crc.h" 1
 N#ifndef __BOOT_CRC_H
@@ -456,14 +465,17 @@ N#define __BOOT_CRC_H
 N
 N#include <stdint.h>
 N
+N/* CRC32 */
 Nuint32_t boot_crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
 Nuint32_t boot_crc32_buffer(const uint8_t *data, uint32_t len);
 Nuint32_t boot_crc32_flash(uint32_t addr, uint32_t len);
+N
+N/* CRC16 */
 Nuint16_t boot_crc16_ccitt(const uint8_t *data, uint32_t len);
 Nuint16_t boot_crc16_modbus(const uint8_t *data, uint32_t len);
 N
 N#endif
-L 4 "..\Function\boot_param.c" 2
+L 5 "..\Function\boot_param.c" 2
 N#include "ROM.h"
 L 1 "..\Driver\HardWare\ROM\ROM.h" 1
 N#ifndef __ROM_H
@@ -19229,7 +19241,7 @@ N
 N
 N#endif
 N/****************************End*****************************/
-L 5 "..\Function\boot_param.c" 2
+L 6 "..\Function\boot_param.c" 2
 N
 N#include <stddef.h>
 L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stddef.h" 1
@@ -19357,7 +19369,7 @@ N#endif
 N
 N/* end of stddef.h */
 N
-L 7 "..\Function\boot_param.c" 2
+L 8 "..\Function\boot_param.c" 2
 N#include <string.h>
 L 1 "D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\string.h" 1
 N/* string.h: ANSI 'C' (X3J11 Oct 88) library header, section 4.11 */
@@ -19908,11 +19920,13 @@ N#endif
 N
 N/* end of string.h */
 N
-L 8 "..\Function\boot_param.c" 2
+L 9 "..\Function\boot_param.c" 2
+N
+N////////////////////////参数校验//////////////////////
 N
 Nuint32_t boot_param_checksum(const boot_param_t *param)
 N{
-N    //当前工程先沿用旧实现，文档里的CRC32后面再统一
+N    //crc16
 N    return (uint32_t)boot_crc16_modbus((const uint8_t *)param,
 N                                       (uint32_t)offsetof(boot_param_t, checksum));
 X                                       (uint32_t)(( size_t)__INTADDR__(&(((boot_param_t *)0)->checksum))));
@@ -19927,14 +19941,10 @@ N
 Nbool boot_param_baud_code_ok(uint8_t baud_code)
 X_Bool boot_param_baud_code_ok(uint8_t baud_code)
 N{
-N    return (baud_code == BOOT_BAUD_4800) ||
-X    return (baud_code == 0x11U) ||
-N           (baud_code == BOOT_BAUD_9600) ||
-X           (baud_code == 0x12U) ||
-N           (baud_code == BOOT_BAUD_19200) ||
-X           (baud_code == 0x13U) ||
-N           (baud_code == BOOT_BAUD_115200);
-X           (baud_code == 0x14U);
+N    return (baud_code == BOOT_BAUD_4800) ||(baud_code == BOOT_BAUD_9600) ||
+X    return (baud_code == 0x11U) ||(baud_code == 0x12U) ||
+N    (baud_code == BOOT_BAUD_19200) ||(baud_code == BOOT_BAUD_115200);
+X    (baud_code == 0x13U) ||(baud_code == 0x14U);
 N}
 N
 Nbool boot_param_boot_flag_ok(uint8_t boot_flag)
@@ -19946,17 +19956,15 @@ N}
 N
 Nvoid boot_param_default(boot_param_t *param)
 N{
-N    memset(param, 0, sizeof(*param));
-N    param->magic = BOOT_CONTROL_MAGIC;
-X    param->magic = 0x424F4F54U;
-N    param->device_id = BOOT_DEFAULT_DEVICE_ID;
-X    param->device_id = 0x0001U;
-N    param->baud_code = BOOT_DEFAULT_BAUD_CODE;
-X    param->baud_code = 0x14U;
-N    param->boot_flag = BOOT_FLAG_NORMAL;
-X    param->boot_flag = 0x00U;
-N    param->checksum = boot_param_checksum(param);
+N    memset(param, 0, sizeof(*param));param->magic = BOOT_CONTROL_MAGIC;
+X    memset(param, 0, sizeof(*param));param->magic = 0x424F4F54U;
+N    param->device_id = BOOT_DEFAULT_DEVICE_ID;param->baud_code = BOOT_DEFAULT_BAUD_CODE;
+X    param->device_id = 0x0001U;param->baud_code = 0x14U;
+N    param->boot_flag = BOOT_FLAG_NORMAL;param->checksum = boot_param_checksum(param);
+X    param->boot_flag = 0x00U;param->checksum = boot_param_checksum(param);
 N}
+N
+N////////////////////////////参数读写////////////////////////////
 N
 Nbool boot_param_save(boot_param_t *param)
 X_Bool boot_param_save(boot_param_t *param)
@@ -19982,9 +19990,7 @@ X    memcpy(param, (const void *)0x08010000U, sizeof(*param));
 N
 N    if ((param->magic == BOOT_CONTROL_MAGIC) &&
 X    if ((param->magic == 0x424F4F54U) &&
-N        (param->checksum == boot_param_checksum(param)) &&
-N        boot_param_device_id_ok(param->device_id) &&
-N        boot_param_baud_code_ok(param->baud_code) &&
+N        (param->checksum == boot_param_checksum(param)) &&boot_param_device_id_ok(param->device_id) &&boot_param_baud_code_ok(param->baud_code) &&
 N        boot_param_boot_flag_ok(param->boot_flag)) {
 N        return true;
 X        return 1;

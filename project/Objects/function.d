@@ -1,8 +1,13 @@
-.\objects\function.o: ..\sysFunction\Function.c
+.\objects\function.o: ..\Function\function.c
+.\objects\function.o: ..\Function\function.h
+.\objects\function.o: ..\Function\boot_flow.h
+.\objects\function.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\function.o: ..\User\systick.h
+.\objects\function.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\function.o: ..\Driver\HardWare\OLED\OLED.h
 .\objects\function.o: ..\Driver\HeaderFiles\HeaderFiles.h
 .\objects\function.o: ..\Driver\Start\CMSIS\GD\GD32F4xx\Include\gd32f4xx.h
 .\objects\function.o: ..\Driver\Start\CMSIS\core_cm4.h
-.\objects\function.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\function.o: ..\Driver\Start\CMSIS\core_cmInstr.h
 .\objects\function.o: ..\Driver\Start\CMSIS\core_cmFunc.h
 .\objects\function.o: ..\Driver\Start\CMSIS\core_cm4_simd.h
@@ -39,9 +44,7 @@
 .\objects\function.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_exmc.h
 .\objects\function.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_ipa.h
 .\objects\function.o: ..\Driver\Library\GD32F4xx_standard_peripheral\Include\gd32f4xx_tli.h
-.\objects\function.o: ..\User\systick.h
 .\objects\function.o: ..\Driver\HardWare\ROM\ROM.h
-.\objects\function.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\function.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\ctype.h
 .\objects\function.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stddef.h
 .\objects\function.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdio.h
@@ -49,10 +52,7 @@
 .\objects\function.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\math.h
 .\objects\function.o: D:\AsusMCenterDownload\keil5 MDK\core\ARM\ARMCC\Bin\..\include\stdarg.h
 .\objects\function.o: ..\Driver\HardWare\OLED\OLED.h
-.\objects\function.o: ..\Driver\HeaderFiles\HeaderFiles.h
 .\objects\function.o: ..\Driver\HardWare\USART\USART.h
 .\objects\function.o: ..\Driver\HardWare\SPI_FLASH\SPI_FLASH.h
-.\objects\function.o: ..\sysFunction\bootloader.h
+.\objects\function.o: ..\Driver\HeaderFiles\HeaderFiles.h
 .\objects\function.o: ..\Driver\System\myDMA.h
-.\objects\function.o: ..\sysFunction\Function.h
-.\objects\function.o: ..\sysFunction\crc_utils.h

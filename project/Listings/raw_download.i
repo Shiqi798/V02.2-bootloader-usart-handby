@@ -1,9 +1,13 @@
-#line 1 "..\\sysFunction\\raw_download.c"
-#line 1 "..\\sysFunction\\raw_download.h"
+#line 1 "..\\Function\\raw_download.c"
+#line 1 "..\\Function\\raw_download.h"
 
 
 
-#line 1 "..\\sysFunction\\bootloader.h"
+#line 1 "..\\Function\\boot_upgrade.h"
+
+
+
+#line 1 "..\\Function\\boot_param.h"
 
 
 
@@ -25,7 +29,7 @@
 
 
 
-#line 5 "..\\sysFunction\\bootloader.h"
+#line 5 "..\\Function\\boot_param.h"
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
  
  
@@ -282,30 +286,56 @@ typedef unsigned     long long uintmax_t;
 
 
  
-#line 6 "..\\sysFunction\\bootloader.h"
+#line 6 "..\\Function\\boot_param.h"
 
-#line 16 "..\\sysFunction\\bootloader.h"
-
-
+ 
 
 
+ 
 
 
-
-
+ 
 
 
 
 
 
+
+ 
+
+
+
+ 
 typedef struct {
     uint32_t magic;
     uint16_t device_id;
-    uint8_t baud_code;
-    uint8_t boot_flag;
+    uint8_t  baud_code;
+    uint8_t  boot_flag;
     uint32_t checksum;
 } boot_param_t;
 
+
+
+
+uint32_t boot_param_checksum(const boot_param_t *param);
+
+_Bool boot_param_device_id_ok(uint16_t device_id);
+_Bool boot_param_baud_code_ok(uint8_t baud_code);
+_Bool boot_param_boot_flag_ok(uint8_t boot_flag);
+
+void boot_param_default(boot_param_t *param);
+_Bool boot_param_save(boot_param_t *param);
+_Bool boot_param_load(boot_param_t *param);
+_Bool boot_param_set_boot_flag(boot_param_t *param, uint8_t boot_flag);
+
+#line 5 "..\\Function\\boot_upgrade.h"
+
+#line 7 "..\\Function\\boot_upgrade.h"
+#line 8 "..\\Function\\boot_upgrade.h"
+
+
+
+ 
 typedef enum {
     BOOT_STATUS_OK = 0U,
     BOOT_STATUS_TIMEOUT,
@@ -315,24 +345,38 @@ typedef enum {
     BOOT_STATUS_RANGE
 } boot_status_t;
 
+ 
 typedef struct {
     char name[32];
     uint32_t size;
     uint32_t crc32;
 } boot_image_info_t;
 
-uint32_t GetTick(void);
+typedef struct {
+    boot_image_info_t pending_image;
+    _Bool pending_valid;
+    _Bool stage_erased;
+} boot_upgrade_ctx_t;
 
-void bootloader_init(void);
-_Bool bootloader_update_requested(void);
-_Bool bootloader_boot_default(void);
-void bootloader_console(void);
 
-#line 5 "..\\sysFunction\\raw_download.h"
+
+
+void boot_upgrade_init(boot_upgrade_ctx_t *ctx);
+_Bool boot_upgrade_prepare_stage(boot_upgrade_ctx_t *ctx);
+_Bool boot_upgrade_staged_image_ok(const boot_image_info_t *info);
+
+boot_status_t boot_upgrade_receive_stage_image(boot_upgrade_ctx_t *ctx);
+boot_status_t boot_upgrade_execute(boot_upgrade_ctx_t *ctx, boot_param_t *param);
+
+_Bool boot_upgrade_backup_app(void);
+_Bool boot_upgrade_restore_backup_to_app(void);
+
+#line 5 "..\\Function\\raw_download.h"
+
 
 boot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_image_info_t *info);
 
-#line 2 "..\\sysFunction\\raw_download.c"
+#line 2 "..\\Function\\raw_download.c"
 
 #line 1 "..\\Protocol\\boot_crc.h"
 
@@ -340,13 +384,16 @@ boot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_
 
 #line 5 "..\\Protocol\\boot_crc.h"
 
+ 
 uint32_t boot_crc32_step(uint32_t crc, const uint8_t *data, uint32_t len);
 uint32_t boot_crc32_buffer(const uint8_t *data, uint32_t len);
 uint32_t boot_crc32_flash(uint32_t addr, uint32_t len);
+
+ 
 uint16_t boot_crc16_ccitt(const uint8_t *data, uint32_t len);
 uint16_t boot_crc16_modbus(const uint8_t *data, uint32_t len);
 
-#line 4 "..\\sysFunction\\raw_download.c"
+#line 4 "..\\Function\\raw_download.c"
 #line 1 "..\\Driver\\System\\myDMA.h"
 
 
@@ -12808,7 +12855,7 @@ void USART1_DMA_All_Init(void);
 uint16_t get_usart1_rx_len(void);
 void reset_usart1_rx_dma(void);
 
-#line 5 "..\\sysFunction\\raw_download.c"
+#line 5 "..\\Function\\raw_download.c"
 #line 1 "..\\Driver\\HardWare\\ROM\\ROM.h"
 
 
@@ -12838,7 +12885,7 @@ uint32_t ROM_word_read(uint32_t addr);
 
 
  
-#line 6 "..\\sysFunction\\raw_download.c"
+#line 6 "..\\Function\\raw_download.c"
 #line 1 "..\\Driver\\HardWare\\USART\\USART.h"
 
 
@@ -12880,8 +12927,58 @@ void USART1_SendData(uint16_t *buf, uint16_t len);
 
 
  
-#line 7 "..\\sysFunction\\raw_download.c"
-#line 8 "..\\sysFunction\\raw_download.c"
+#line 7 "..\\Function\\raw_download.c"
+#line 8 "..\\Function\\raw_download.c"
+#line 1 "..\\User\\systick.h"
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+#line 39 "..\\User\\systick.h"
+
+ 
+void systick_config(void);
+ 
+void delay_1ms(uint32_t count);
+ 
+void delay_decrement(void);
+
+uint32_t GetTick(void);
+
+#line 9 "..\\Function\\raw_download.c"
 
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\string.h"
  
@@ -13305,12 +13402,14 @@ extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  ,
 
  
 
-#line 10 "..\\sysFunction\\raw_download.c"
+#line 11 "..\\Function\\raw_download.c"
 
 
 
 
-uint32_t GetTick(void);
+
+
+
 
 static uint32_t raw_dma_pos(void)
 {
@@ -13339,7 +13438,7 @@ boot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_
     memset(word, 0xFF, sizeof(word));
     strncpy(info->name, "raw.bin", sizeof(info->name) - 1U);
 
-    
+     
     usart_interrupt_disable((((uint32_t)0x40000000U) + 0x00004400U), USART_INT_IDLE);
     USART1_ClearRxBuf();
     reset_usart1_rx_dma();
@@ -13395,7 +13494,7 @@ boot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_
         return BOOT_STATUS_TIMEOUT;
     }
 
-    
+     
     if (word_len != 0U) {
         while (word_len < sizeof(word)) {
             word[word_len++] = 0xFFU;

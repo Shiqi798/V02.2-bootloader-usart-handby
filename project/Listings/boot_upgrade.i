@@ -3,7 +3,7 @@
 
 
 
-#line 1 "..\\sysFunction\\bootloader.h"
+#line 1 "..\\Function\\boot_param.h"
 
 
 
@@ -25,7 +25,7 @@
 
 
 
-#line 5 "..\\sysFunction\\bootloader.h"
+#line 5 "..\\Function\\boot_param.h"
 #line 1 "D:\\AsusMCenterDownload\\keil5 MDK\\core\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
  
  
@@ -282,58 +282,36 @@ typedef unsigned     long long uintmax_t;
 
 
  
-#line 6 "..\\sysFunction\\bootloader.h"
+#line 6 "..\\Function\\boot_param.h"
 
-#line 16 "..\\sysFunction\\bootloader.h"
-
-
+ 
 
 
+ 
 
 
-
-
+ 
 
 
 
 
 
+
+ 
+
+
+
+ 
 typedef struct {
     uint32_t magic;
     uint16_t device_id;
-    uint8_t baud_code;
-    uint8_t boot_flag;
+    uint8_t  baud_code;
+    uint8_t  boot_flag;
     uint32_t checksum;
 } boot_param_t;
 
-typedef enum {
-    BOOT_STATUS_OK = 0U,
-    BOOT_STATUS_TIMEOUT,
-    BOOT_STATUS_ERROR,
-    BOOT_STATUS_CRC,
-    BOOT_STATUS_FLASH,
-    BOOT_STATUS_RANGE
-} boot_status_t;
-
-typedef struct {
-    char name[32];
-    uint32_t size;
-    uint32_t crc32;
-} boot_image_info_t;
-
-uint32_t GetTick(void);
-
-void bootloader_init(void);
-_Bool bootloader_update_requested(void);
-_Bool bootloader_boot_default(void);
-void bootloader_console(void);
-
-#line 5 "..\\Function\\boot_upgrade.h"
-#line 1 "..\\Function\\boot_param.h"
 
 
-
-#line 5 "..\\Function\\boot_param.h"
 
 uint32_t boot_param_checksum(const boot_param_t *param);
 
@@ -346,15 +324,38 @@ _Bool boot_param_save(boot_param_t *param);
 _Bool boot_param_load(boot_param_t *param);
 _Bool boot_param_set_boot_flag(boot_param_t *param, uint8_t boot_flag);
 
-#line 6 "..\\Function\\boot_upgrade.h"
+#line 5 "..\\Function\\boot_upgrade.h"
+
+#line 7 "..\\Function\\boot_upgrade.h"
+#line 8 "..\\Function\\boot_upgrade.h"
 
 
+
+ 
+typedef enum {
+    BOOT_STATUS_OK = 0U,
+    BOOT_STATUS_TIMEOUT,
+    BOOT_STATUS_ERROR,
+    BOOT_STATUS_CRC,
+    BOOT_STATUS_FLASH,
+    BOOT_STATUS_RANGE
+} boot_status_t;
+
+ 
+typedef struct {
+    char name[32];
+    uint32_t size;
+    uint32_t crc32;
+} boot_image_info_t;
 
 typedef struct {
     boot_image_info_t pending_image;
     _Bool pending_valid;
     _Bool stage_erased;
 } boot_upgrade_ctx_t;
+
+
+
 
 void boot_upgrade_init(boot_upgrade_ctx_t *ctx);
 _Bool boot_upgrade_prepare_stage(boot_upgrade_ctx_t *ctx);
@@ -373,10 +374,35 @@ _Bool boot_upgrade_restore_backup_to_app(void);
 
 
 #line 5 "..\\Function\\boot_app.h"
+#line 6 "..\\Function\\boot_app.h"
+
+ 
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
 
 _Bool boot_app_vector_ok(uint32_t addr);
 _Bool boot_app_can_boot(void);
 _Bool boot_app_backup_can_restore(void);
+
 void boot_app_jump_raw(uint32_t addr);
 
 #line 4 "..\\Function\\boot_upgrade.c"
@@ -399,7 +425,7 @@ void boot_app_jump_raw(uint32_t addr);
 
 
 
- 
+
 #line 27 "..\\Protocol\\boot_protocol.h"
 
 
@@ -434,11 +460,12 @@ void boot_proto_send_error(uint16_t device_id, uint16_t command);
 void boot_proto_send_heartbeat(uint16_t device_id);
 
 #line 5 "..\\Function\\boot_upgrade.c"
-#line 1 "..\\sysFunction\\raw_download.h"
+#line 1 "..\\Function\\raw_download.h"
 
 
 
-#line 5 "..\\sysFunction\\raw_download.h"
+#line 5 "..\\Function\\raw_download.h"
+
 
 boot_status_t raw_download_receive_image(uint32_t addr, uint32_t max_size, boot_image_info_t *info);
 
@@ -13297,6 +13324,8 @@ extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  ,
  
 
 #line 9 "..\\Function\\boot_upgrade.c"
+
+
 
 
 
